@@ -1,5 +1,7 @@
 # dku-ml-server-management
  단국대학교 머신러닝 서버 통합 관리시스템
+ 
+ 발주/단국대학교 SW중심대학사업단
 
 ### 프로젝트 목적
 
@@ -20,13 +22,11 @@
 - 프론트엔드
     - React, HTML5/CSS5/JS
 - 데이터베이스
-    - Redis, MySQL
+    - Redis, MySQL(Sequelize)
 - 서버 인프라
     - Docker, Rundeck
 
-→ 최종적으로 완성된 프로젝트를 Docker 이미지로 만들어 자동 빌드/배포 스크립트를 구축하여 Rundeck을 통해 배포할 예정
-
-### 프로그램 로직
+### 프로그램 로직 (RAW)
 
 1. 교수자가 웹 페이지에서 일정 기간 서버 예약 신청 → 관리자 승인
     - 관리자 승인 후 예약 승인 문서(PDF) 발급
