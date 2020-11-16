@@ -37,23 +37,31 @@ const useStyles = makeStyles((theme) => ({
   menuWrapper: {},
 }));
 
-const menus = [
-  {
-    id: 1,
-    name: "예약신청",
-    link: "/client/apply_reservation",
-  },
-  {
-    id: 2,
-    name: "예약확인",
-    link: "/client/confirm_reservation",
-  },
-  {
-    id: 3,
-    name: "이용문의",
-    link: "/client/ask",
-  },
-];
+const menus = {
+  client: [
+    {
+      id: 1,
+      name: "예약하기",
+      link: "/client/apply_reservation",
+    },
+    {
+      id: 2,
+      name: "반납하기",
+      link: "/client/apply_return",
+    },
+
+    {
+      id: 3,
+      name: "예약확인",
+      link: "/client/confirm_reservation",
+    },
+    {
+      id: 4,
+      name: "이용문의",
+      link: "/client/ask",
+    },
+  ],
+};
 
 function Header() {
   const classes = useStyles();
@@ -75,7 +83,7 @@ function Header() {
                 </Button>
               </div>
               <div className={classes.menuWrapper}>
-                {menus.map((menu) => (
+                {menus.client.map((menu) => (
                   <Button
                     className={classes.menuButton}
                     key={menu.id}

@@ -5,11 +5,14 @@ import "./index.css";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import App from "./App";
-import SignUp from "./user/SignUp";
 import MainPage from "./MainPage";
+import SignUp from "./user/SignUp";
+
 import ServerStatus from "./client/ServerStatus";
 import ApplyReservation from "./client/ApplyReservation";
+import ApplyReturn from "./client/ApplyReturn";
 import ConfirmReservation from "./client/ConfirmReservation";
+import Ask from "./client/Ask";
 
 const theme = createMuiTheme({
   typography: {
@@ -33,7 +36,9 @@ ReactDOM.render(
       <Route path="/client" component={App}>
         <IndexRoute component={ServerStatus} />
         <Route path="apply_reservation" component={ApplyReservation} />
+        <Route path="apply_return" component={ApplyReturn} />
         <Route path="confirm_reservation" component={ConfirmReservation} />
+        <Route path="ask" component={Ask} />
       </Route>
     </Router>
   </MuiThemeProvider>,

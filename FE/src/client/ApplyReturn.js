@@ -12,8 +12,8 @@ import {
   MenuItem,
   FormControl,
 } from "@material-ui/core";
-import moment from "moment";
 import MuiAlert from "@material-ui/lab/Alert";
+import Rating from "@material-ui/lab/Rating";
 import { makeStyles } from "@material-ui/core/styles";
 import SnackMessage from "./components/SnackMessage";
 function Alert(props) {
@@ -40,17 +40,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const initialReservation = {
-  start: new moment().format("YYYY-MM-DD"),
-  end: new moment().format("YYYY-MM-DD"),
-  serverId: 1,
-  purpose: "",
+const initialReturn = {
+  reservationId: null,
+  uses: "",
+  rating: 5,
+  review: "",
 };
 
-export default function ApplyReservation() {
+export default function ApplyReturn() {
   const classes = useStyles();
 
-  const [reservation, setReservation] = useState(initialReservation);
+  const [myReturn, setMyReturn] = useState(initialReturn);
   const [alertOpen, setAlertOpen] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -64,9 +64,9 @@ export default function ApplyReservation() {
   const handleChange = useCallback(
     (e) => {
       const { name, value } = e.target;
-      setReservation({ ...reservation, [name]: value });
+      setMyReturn({ ...myReturn, [name]: value });
     },
-    [reservation]
+    [myReturn]
   );
 
   return (
@@ -83,75 +83,85 @@ export default function ApplyReservation() {
           </Alert>
         </Snackbar>
         <Typography component="h1" variant="h5">
-          서버 예약신청
+          서버 반납신청
         </Typography>
         <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="start"
-                id="date"
-                type="date"
-                variant="outlined"
-                value={reservation.start}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                label="시작일"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="end"
-                id="date"
-                type="date"
-                variant="outlined"
-                value={reservation.end}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                label="반납일"
-                fullWidth
-                required
-              />
-            </Grid>
+          <Grid container spacing={2} style={{ alignItems: "center" }}>
             <Grid item xs={12}>
               <FormControl variant="outlined" fullWidth required>
-                <InputLabel>서버 선택</InputLabel>
+                <InputLabel>반납건 선택</InputLabel>
                 <Select
-                  name="serverId"
-                  value={reservation.serverId}
+                  name="reservationId"
+                  value={myReturn.reservationId}
                   onChange={handleChange}
-                  label="서버 선택"
+                  label="반납건 선택"
                   required
                 >
                   <MenuItem value="">
-                    <em>서버 선택</em>
+                    <em>반납건 선택</em>
                   </MenuItem>
-                  <MenuItem value={1}>서버 1 - Ubuntu</MenuItem>
-                  <MenuItem value={2}>서버 2 - Ubuntu</MenuItem>
-                  <MenuItem value={3}>서버 3 - CentOS</MenuItem>
+                  <MenuItem value={1}>~2019-11-16 Ubuntu</MenuItem>
+                  <MenuItem value={2}>~2019-11-23 CentOS</MenuItem>
+                  <MenuItem value={3}>~2019-11-26 Ubuntu</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="purpose"
+                name="uses"
                 variant="outlined"
-                label="사용 목적"
+                label="사용 상세"
                 multiline
-                value={reservation.purpose}
+                value={myReturn.uses}
                 onChange={handleChange}
                 fullWidth
                 required
               />
             </Grid>
             <Grid item xs={12}>
-              <SnackMessage message="사용 목적이 명확하지 않거나 적절하지 않다고 판단될 경우 승인을 거부당할 수 있습니다. 신청 내용을 정확히 확인 후 신청해주세요." />
+              <Typography
+                style={{
+                  fontSize: 19,
+                  fontWeight: 500,
+                  textAlign: "center",
+                  paddingTop: 10,
+                }}
+              >
+                서비스 만족도 조사 (선택사항)
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                style={{
+                  fontSize: 17,
+                  textAlign: "right",
+                  marginRight: 33,
+                  paddingBottom: 3,
+                }}
+              >
+                만족도 별점
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Rating
+                name="rating"
+                value={myReturn.rating}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="review"
+                variant="outlined"
+                label="서비스 이용 후기"
+                multiline
+                value={myReturn.review}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <SnackMessage message="서버를 초기 상태로 원복하지 않거나 반납일을 초과하는 경우 페널티가 부여됩니다. 서비스 이용에 불편함이 있으셨다면 이용 후기에 내용을 적어주세요." />
             </Grid>
           </Grid>
 
@@ -163,7 +173,7 @@ export default function ApplyReservation() {
             size="large"
             className={classes.submit}
           >
-            서버 예약신청
+            서버 반납신청
           </Button>
         </form>
       </div>
