@@ -8,7 +8,7 @@ module.exports = {
                 ...req.body.user,
             })
             .then((result) => res.json({ userId: result.dataValues.userId }))
-            .catch((error) => res.status(409).json({ error })),
+            .catch((error) => res.json({ error })),
 
     post_signin: async (req, res) => {
         const { userId, password } = req.body.user;
