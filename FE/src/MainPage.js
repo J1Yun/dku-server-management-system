@@ -123,7 +123,7 @@ export default function SignInSide() {
           <Avatar className={classes.avatar}>
             <ComputerIcon />
           </Avatar>
-          <Typography variant="h5" style={{ fontWeight: 600 }}>
+          <Typography style={{ fontSize: 25, fontWeight: 600 }}>
             단국대학교 서버관리시스템
           </Typography>
           <form className={classes.form} noValidate>

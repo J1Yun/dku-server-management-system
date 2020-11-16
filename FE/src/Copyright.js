@@ -8,8 +8,11 @@ export default function Copyright() {
       align="center"
       style={{ marginTop: 45, marginBottom: 50 }}
     >
-      {"Copyright © DANKOOK UNIVERSITY"}
-      <Link color="inherit" href="/"></Link> {new Date().getFullYear()}
+      {"Copyright © "}
+      <Link color="inherit" href="/">
+        {"DANKOOK UNIVERSITY"}
+      </Link>{" "}
+      {new Date().getFullYear()}
       {"."}
     </Typography>
   );

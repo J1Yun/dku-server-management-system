@@ -28,12 +28,23 @@ const useRowStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(applyDate, startDate, endDate, os, applyOk, history) {
+function createData(
+  userDepartment,
+  userName,
+  applyDate,
+  startDate,
+  endDate,
+  serverId,
+  applyOk,
+  history
+) {
   return {
+    userDepartment,
+    userName,
     applyDate,
     startDate,
     endDate,
-    os,
+    serverId,
     applyOk,
     history,
   };
@@ -56,22 +67,22 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row" align="center">
-          {row.applyDate}
-        </TableCell>
+        <TableCell align="center">{row.userDepartment}</TableCell>
+        <TableCell align="center">{row.userName}</TableCell>
+        <TableCell align="center">{row.applyDate}</TableCell>
         <TableCell align="center">{row.startDate}</TableCell>
         <TableCell align="center">{row.endDate}</TableCell>
-        <TableCell align="center">{row.os}</TableCell>
+        <TableCell align="center">{row.serverId}</TableCell>
         <TableCell align="center">
           {row.applyOk === 0 ? (
-            <span style={{ color: "crimson" }}>미승인</span>
+            <span style={{ color: "crimson" }}>승인대기</span>
           ) : (
-            <span style={{ color: "green" }}>승인</span>
+            <span style={{ color: "green" }}>승인됨</span>
           )}
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -105,10 +116,12 @@ function Row(props) {
 
 const rows = [
   createData(
+    "소프트웨어학과",
+    "허전진",
     new moment().format("YYYY-MM-DD"),
     new moment().format("YYYY-MM-DD"),
     new moment().format("YYYY-MM-DD"),
-    "Ubuntu 18.04",
+    1,
     1,
     [
       {
@@ -122,10 +135,12 @@ const rows = [
     ]
   ),
   createData(
+    "소프트웨어학과",
+    "조정민",
     new moment().format("YYYY-MM-DD"),
     new moment().format("YYYY-MM-DD"),
     new moment().format("YYYY-MM-DD"),
-    "CentOS 7",
+    2,
     0,
     [
       {
@@ -136,7 +151,7 @@ const rows = [
   ),
 ];
 
-export default function ConfirmReservation() {
+export default function Confirm() {
   const classes = useRowStyles();
   return (
     <TableContainer component={Paper} className={classes.tableWrapper}>
@@ -144,10 +159,12 @@ export default function ConfirmReservation() {
         <TableHead>
           <TableRow>
             <TableCell align="center">상세내역</TableCell>
+            <TableCell align="center">소속</TableCell>
+            <TableCell align="center">성명</TableCell>
             <TableCell align="center">예약 신청일</TableCell>
             <TableCell align="center">시작일</TableCell>
             <TableCell align="center">반납일</TableCell>
-            <TableCell align="center">OS</TableCell>
+            <TableCell align="center">서버ID</TableCell>
             <TableCell align="center">승인여부</TableCell>
           </TableRow>
         </TableHead>

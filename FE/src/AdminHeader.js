@@ -37,33 +37,25 @@ const useStyles = makeStyles((theme) => ({
   menuWrapper: {},
 }));
 
-const menus = {
-  client: [
-    {
-      id: 1,
-      name: "예약하기",
-      link: "/client/apply_reservation",
-    },
-    {
-      id: 2,
-      name: "반납하기",
-      link: "/client/apply_return",
-    },
+const menus = [
+  {
+    id: 1,
+    name: "대시보드",
+    link: "/admin/dashboard",
+  },
+  {
+    id: 2,
+    name: "승인처리",
+    link: "/admin/confirm",
+  },
+  {
+    id: 3,
+    name: "회원조회",
+    link: "/admin/members",
+  },
+];
 
-    {
-      id: 3,
-      name: "예약확인",
-      link: "/client/confirm_reservation",
-    },
-    {
-      id: 4,
-      name: "이용문의",
-      link: "/client/ask",
-    },
-  ],
-};
-
-function Header() {
+export default function AdminHeader() {
   const classes = useStyles();
 
   return (
@@ -75,15 +67,15 @@ function Header() {
               <div className={classes.logoWrapper}>
                 <Button
                   component={Link}
-                  to="/client"
+                  to="/admin"
                   className={classes.logo}
                   style={{ color: "white" }}
                 >
-                  단국대학교 서버관리시스템
+                  단국대학교 서버관리시스템(관리자)
                 </Button>
               </div>
               <div className={classes.menuWrapper}>
-                {menus.client.map((menu) => (
+                {menus.map((menu) => (
                   <Button
                     className={classes.menuButton}
                     key={menu.id}
@@ -101,5 +93,3 @@ function Header() {
     </div>
   );
 }
-
-export default Header;
