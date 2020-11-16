@@ -16,7 +16,7 @@ module.exports = {
 
         return await models.user
             .findOne({
-                attributes: ['id', 'userId', 'name', 'department', 'tel', 'penalty'],
+                attributes: ['id', 'userId', 'name', 'department', 'tel', 'penalty', 'type'],
                 where: { userId, password },
                 raw: true,
             })
@@ -37,7 +37,11 @@ module.exports = {
                             if (error) res.status(409).json({ error });
                             // send final user info
                             res.cookie('x-access-token', token, { httpOnly: true });
-                            res.json({ message: 'Sign-in Successfully', token });
+                            res.json({
+                                message: 'Sign-in Successfully',
+                                token,
+                                type: parseInt(user.type),
+                            });
                         },
                     );
                 } else {

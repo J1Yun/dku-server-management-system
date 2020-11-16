@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
         userId: { type: DataTypes.STRING, allowNull: false, unique: true },
         password: { type: DataTypes.STRING, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
-        type: { type: DataTypes.INTEGER, allowNull: false },
+        type: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
         tel: { type: DataTypes.STRING, allowNull: false },
         department: { type: DataTypes.STRING, allowNull: false },
         penalty: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
