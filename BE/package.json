@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx nodemon -e js,html ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": ""
+    "build": "",
+    "testdata-build": "node initSampleData"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
