@@ -1,0 +1,26 @@
+{
+  "name": "dku-sms-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx nodemon -e js,html ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": ""
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "graphql-iso-date": "^3.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "mysql2": "^2.1.0",
+    "redis": "^3.0.2",
+    "sequelize": "^4.42.0"
+  }
+}
