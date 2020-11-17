@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
+import { useQuery } from 'react-apollo';
 import {
     Box,
     Collapse,
@@ -14,8 +15,11 @@ import {
     TableRow,
     Typography,
     Paper,
+    CircularProgress,
 } from '@material-ui/core';
 import moment from 'moment';
+import SnackMessage from './components/SnackMessage';
+import { GET_CONFIRM_RESERVATION_FROM_CLIENT } from '../queries';
 
 const useRowStyles = makeStyles((theme) => ({
     root: {
@@ -27,17 +31,6 @@ const useRowStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(5),
     },
 }));
-
-function createData(applyDate, startDate, endDate, os, applyOk, history) {
-    return {
-        applyDate,
-        startDate,
-        endDate,
-        os,
-        applyOk,
-        history,
-    };
-}
 
 function Row(props) {
     const { row } = props;
@@ -53,10 +46,10 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row" align="center">
-                    {row.applyDate}
+                    {moment(row.createdAt).format('YYYY-MM-DD')}
                 </TableCell>
-                <TableCell align="center">{row.startDate}</TableCell>
-                <TableCell align="center">{row.endDate}</TableCell>
+                <TableCell align="center">{row.start}</TableCell>
+                <TableCell align="center">{row.end}</TableCell>
                 <TableCell align="center">{row.os}</TableCell>
                 <TableCell align="center">
                     {row.applyOk === 0 ? (
@@ -66,7 +59,7 @@ function Row(props) {
                     )}
                 </TableCell>
             </TableRow>
-            <TableRow>
+            {/* <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
@@ -94,46 +87,29 @@ function Row(props) {
                         </Box>
                     </Collapse>
                 </TableCell>
-            </TableRow>
+            </TableRow> */}
         </React.Fragment>
     );
 }
 
-const rows = [
-    createData(
-        new moment().format('YYYY-MM-DD'),
-        new moment().format('YYYY-MM-DD'),
-        new moment().format('YYYY-MM-DD'),
-        'Ubuntu 18.04',
-        1,
-        [
-            {
-                date: new moment().format('YYYY-MM-DD'),
-                issue: '예약 신청',
-            },
-            {
-                date: new moment().format('YYYY-MM-DD'),
-                issue: '승인',
-            },
-        ],
-    ),
-    createData(
-        new moment().format('YYYY-MM-DD'),
-        new moment().format('YYYY-MM-DD'),
-        new moment().format('YYYY-MM-DD'),
-        'CentOS 7',
-        0,
-        [
-            {
-                date: new moment().format('YYYY-MM-DD'),
-                issue: '예약 신청',
-            },
-        ],
-    ),
-];
-
 export default function ConfirmReservation() {
     const classes = useRowStyles();
+    const [reservations, setConfirmReservation] = useState([]);
+    const { loading, error, data } = useQuery(GET_CONFIRM_RESERVATION_FROM_CLIENT);
+
+    useEffect(() => {
+        if (data) {
+            setConfirmReservation(
+                data.getConfirmReservationFromClient.map((c) => {
+                    return { ...c };
+                }),
+            );
+        }
+    }, [data, setConfirmReservation]);
+
+    if (loading) return <CircularProgress />;
+    if (error) return `${error}`;
+
     return (
         <TableContainer component={Paper} className={classes.tableWrapper}>
             <Table aria-label="collapsible table">
@@ -148,7 +124,7 @@ export default function ConfirmReservation() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row, idx) => (
+                    {reservations.map((row, idx) => (
                         <Row key={idx} row={row} />
                     ))}
                 </TableBody>

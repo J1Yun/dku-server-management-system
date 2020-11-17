@@ -66,7 +66,7 @@ const serverInit = async () => {
                 location: 'ICT관',
             },
         ])
-        .then((result) => console.log(`Init sample data successfully : Server`))
+        .then((result) => console.log(`Init sample data successfully : Server, result: ${result}`))
         .catch((err) => console.error(err));
 };
 
