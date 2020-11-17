@@ -5,5 +5,11 @@ module.exports = {
     Date: GraphQLDate,
 
     getServersFromClient: require('./ctrl/client/getServersFromClient'),
+
+    // getReservations: on-going (반납건 제외 필요)
+    getReservations: require('./ctrl/client/getReservations'),
+    getReservableServers: require('./ctrl/client/getReservableServers'),
+
     postReservation: require('./ctrl/client/postReservation'),
+    postReturn: require('./ctrl/client/postReturn'),
 };

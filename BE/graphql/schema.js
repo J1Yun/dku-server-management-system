@@ -14,11 +14,20 @@ module.exports = buildSchema(`
     type Reservation {
         id: ID!
         serverId: ID!
-        start: Date!
-        end: Date!
+        start: Date
+        end: Date
         purpose: String
-        applyOk: String!
-        createdAt: Date!
+        applyOk: Int
+        createdAt: Date
+    }
+
+    type ReservationWithServerInfo {
+        id: ID!
+        serverId: ID!
+        start: Date
+        end: Date
+        serverOS: String
+        serverName: String
     }
 
     input ReservationInput {
@@ -28,11 +37,21 @@ module.exports = buildSchema(`
         purpose: String
     }
 
+    input ReturnInput {
+        reservationId: ID!
+        uses: String
+        rating: Int
+        review: String
+    }
+
     type Query {
         getServersFromClient: [ServerClient]
+        getReservations: [ReservationWithServerInfo]
+        getReservableServers(start: Date!, end: Date!): [ServerClient]
     }
 
     type Mutation {
         postReservation(reservation: ReservationInput!): Reservation
+        postReturn(myReturn: ReturnInput!): ID
     }
 `);

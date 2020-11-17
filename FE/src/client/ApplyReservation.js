@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     Button,
     CssBaseline,
@@ -17,8 +17,8 @@ import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import SnackMessage from './components/SnackMessage';
 import FinishApplyDialog from './FinishApplyDialog';
-import { useMutation } from 'react-apollo';
-import { POST_RESERVATION } from '../queries';
+import { useQuery, useMutation } from 'react-apollo';
+import { POST_RESERVATION, GET_RESERVABLE_SERVERS } from '../queries';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -47,12 +47,13 @@ const useStyles = makeStyles((theme) => ({
 const initialReservation = {
     start: new moment().format('YYYY-MM-DD'),
     end: new moment().format('YYYY-MM-DD'),
-    serverId: 1,
+    serverId: '',
     purpose: '',
 };
 
 export default function ApplyReservation() {
     const classes = useStyles();
+    const [reservableServers, setReservableServers] = useState([]);
     const [reservation, setReservation] = useState(initialReservation);
     const [open, setOpen] = useState(false);
 
@@ -62,6 +63,19 @@ export default function ApplyReservation() {
         content: '',
         open: false,
     });
+
+    const { loading, error, data, refetch } = useQuery(GET_RESERVABLE_SERVERS, {
+        variables: {
+            start: reservation.start,
+            end: reservation.end,
+        },
+    });
+
+    useEffect(() => {
+        if (data) {
+            setReservableServers(data.getReservableServers);
+        }
+    }, [data, setReservableServers]);
 
     const [postReservation] = useMutation(POST_RESERVATION, {
         onCompleted: (response) => {
@@ -78,9 +92,14 @@ export default function ApplyReservation() {
     const handleChange = useCallback(
         (e) => {
             const { name, value } = e.target;
-            setReservation({ ...reservation, [name]: value });
+            if (name === 'start' || name === 'end') {
+                refetch();
+                setReservation({ ...reservation, [name]: value, serverId: '' });
+            } else {
+                setReservation({ ...reservation, [name]: value });
+            }
         },
-        [reservation],
+        [reservation, refetch],
     );
 
     const onSubmit = (e) => {
@@ -92,6 +111,11 @@ export default function ApplyReservation() {
             },
         });
     };
+
+    if (error)
+        return (
+            <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
+        );
 
     return (
         <Container component="main" maxWidth="sm">
@@ -135,23 +159,29 @@ export default function ApplyReservation() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl variant="outlined" fullWidth required>
-                                <InputLabel>서버 선택</InputLabel>
-                                <Select
-                                    name="serverId"
-                                    value={reservation.serverId}
-                                    onChange={handleChange}
-                                    label="서버 선택"
-                                    required
-                                >
-                                    <MenuItem value="">
-                                        <em>서버 선택</em>
-                                    </MenuItem>
-                                    <MenuItem value={1}>서버 1 - Ubuntu</MenuItem>
-                                    <MenuItem value={2}>서버 2 - Ubuntu</MenuItem>
-                                    <MenuItem value={3}>서버 3 - CentOS</MenuItem>
-                                </Select>
-                            </FormControl>
+                            {loading ? (
+                                <CircularProgress />
+                            ) : (
+                                <FormControl variant="outlined" fullWidth required>
+                                    <InputLabel>서버 선택</InputLabel>
+                                    <Select
+                                        name="serverId"
+                                        value={reservation.serverId}
+                                        onChange={handleChange}
+                                        label="서버 선택"
+                                        required
+                                    >
+                                        <MenuItem value="">
+                                            <em>서버 선택(선택한 기한에 예약가능한 서버만 표시)</em>
+                                        </MenuItem>
+                                        {reservableServers.map((r) => (
+                                            <MenuItem key={r.id} value={r.id}>
+                                                {r.name} ({r.os}/CPU {r.cpu}/RAM {r.ram}GB)
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
