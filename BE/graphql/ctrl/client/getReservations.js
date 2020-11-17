@@ -13,32 +13,10 @@
 
 const models = require('../../../models');
 module.exports = async ({}, { userId }) => {
-    return await models.reservation
-        .findAll({
-            include: [
-                {
-                    model: models.server,
-                    attributes: [
-                        ['os', 'serverOS'],
-                        ['name', 'serverName'],
-                    ],
-                },
-            ],
-            attributes: ['id', 'serverId', 'start', 'end'],
-            where: { userId },
-            raw: true,
-        })
-        .then((result) =>
-            result.map((r) => {
-                return {
-                    id: r.id,
-                    serverId: r.serverId,
-                    start: r.start,
-                    end: r.end,
-                    serverOS: r['server.serverOS'],
-                    serverName: r['server.serverName'],
-                };
-            }),
-        )
-        .catch((err) => log(err));
+    const query =
+        'select r.id, r.serverId, r.start, r.end, name as serverName, os as serverOS from servers s join reservations r on s.id = r.serverId where r.userId=:userId and not exists ( select ret.reservationId from returns ret where r.id=ret.reservationId )';
+    return await models.sequelize.query(query, { replacements: { userId } }).spread(
+        (results) => JSON.parse(JSON.stringify(results)),
+        (error) => error,
+    );
 };
