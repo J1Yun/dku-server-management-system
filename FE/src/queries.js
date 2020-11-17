@@ -12,3 +12,17 @@ export const GET_SERVERS_FROM_CLIENT = gql`
         }
     }
 `;
+
+export const POST_RESERVATION = gql`
+    mutation postReservation($reservation: ReservationInput!) {
+        postReservation(reservation: $reservation) {
+            id
+            serverId
+            start
+            end
+            purpose
+            applyOk
+            createdAt
+        }
+    }
+`;
