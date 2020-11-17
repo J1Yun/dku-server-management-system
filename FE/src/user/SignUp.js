@@ -16,6 +16,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Copyright from '../Copyright';
+import SnackMessage from '../client/components/SnackMessage';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -191,6 +192,9 @@ export default function SignUp() {
                                 value={user.passwordAgain}
                                 autoComplete="current-password"
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <SnackMessage message="이메일로 예약 정보가 발송되니 주소를 다시 한번 확인하시기 바랍니다. 모든 정보를 정확히 입력해야 회원가입 신청 버튼이 활성화됩니다." />
                         </Grid>
                     </Grid>
                     <Button
