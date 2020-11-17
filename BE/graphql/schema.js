@@ -17,8 +17,19 @@ module.exports = buildSchema(`
         start: Date!
         end: Date!
         purpose: String
-        applyOk: String!
+        applyOk: Int!
         createdAt: Date!
+    }
+
+    type ConfirmReservation{
+        id: ID!
+        serverId: ID!
+        userId: String!
+        createdAt: Date!
+        start: Date!
+        end: Date!
+        os: String!
+        applyOk: Int!
     }
 
     input ReservationInput {
@@ -30,6 +41,7 @@ module.exports = buildSchema(`
 
     type Query {
         getServersFromClient: [ServerClient]
+        getConfirmReservationFromClient: [ConfirmReservation]
     }
 
     type Mutation {

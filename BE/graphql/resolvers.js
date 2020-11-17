@@ -6,4 +6,5 @@ module.exports = {
 
     getServersFromClient: require('./ctrl/client/getServersFromClient'),
     postReservation: require('./ctrl/client/postReservation'),
+    getConfirmReservationFromClient: require('./ctrl/client/getConfirmReservationFromClient'),
 };

@@ -26,3 +26,15 @@ export const POST_RESERVATION = gql`
         }
     }
 `;
+
+export const GET_CONFIRM_RESERVATION_FROM_CLIENT = gql`
+    query getConfirmReservationFromClient {
+        getConfirmReservationFromClient {
+            createdAt
+            start
+            end
+            os
+            applyOk
+        }
+    }
+`;
