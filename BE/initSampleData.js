@@ -46,7 +46,7 @@ const serverInit = async () => {
             },
             {
                 name: 'SW-6서버',
-                os: 'Ubbuntu 20.04 LTS',
+                os: 'Ubuntu 20.04 LTS',
                 cpu: 1,
                 ram: 4,
                 location: 'ICT관',
