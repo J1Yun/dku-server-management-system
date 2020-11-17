@@ -199,6 +199,16 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        disabled={
+                            user.userId.length > 0 &&
+                            user.name.length > 0 &&
+                            user.password.length > 0 &&
+                            user.tel.length > 0 &&
+                            user.department.length > 0 &&
+                            user.password === user.passwordAgain
+                                ? false
+                                : true
+                        }
                     >
                         회원가입 신청
                     </Button>
