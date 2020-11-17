@@ -1,5 +1,3 @@
-const models = require('../../../models');
-
 // type ServerClient {
 //     id
 //     name
@@ -12,6 +10,7 @@ const models = require('../../../models');
 //     getServersFromClient: [ServerClient]
 // }
 
+const models = require('../../../models');
 module.exports = async () => {
     return await models.server
         .findAll({

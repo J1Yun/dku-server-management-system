@@ -5,4 +5,5 @@ module.exports = {
     Date: GraphQLDate,
 
     getServersFromClient: require('./ctrl/client/getServersFromClient'),
+    postReservation: require('./ctrl/client/postReservation'),
 };
