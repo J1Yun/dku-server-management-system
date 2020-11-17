@@ -4,8 +4,6 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-apollo';
 import {
-    Box,
-    Collapse,
     IconButton,
     Table,
     TableBody,
@@ -13,7 +11,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Typography,
     Paper,
     CircularProgress,
 } from '@material-ui/core';
@@ -108,7 +105,10 @@ export default function ConfirmReservation() {
     }, [data, setConfirmReservation]);
 
     if (loading) return <CircularProgress />;
-    if (error) return `${error}`;
+    if (error)
+        return (
+            <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
+        );
 
     return (
         <TableContainer component={Paper} className={classes.tableWrapper}>

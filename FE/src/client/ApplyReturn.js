@@ -125,7 +125,7 @@ export default function ApplyReturn() {
                                     </MenuItem>
                                     {reservations.map((r) => (
                                         <MenuItem key={r.id} value={r.id}>
-                                            {r.start}~{r.end} {r.serverName} ({r.serverOS})
+                                            [{r.start}~{r.end}] {r.serverName} ({r.serverOS})
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -193,6 +193,9 @@ export default function ApplyReturn() {
                         color="primary"
                         size="large"
                         className={classes.submit}
+                        disabled={
+                            myReturn.reservationId > 0 && myReturn.uses.length > 0 ? false : true
+                        }
                     >
                         서버 반납신청
                     </Button>

@@ -207,6 +207,11 @@ export default function ApplyReservation() {
                         color="primary"
                         size="large"
                         className={classes.submit}
+                        disabled={
+                            reservation.serverId > 0 && reservation.purpose.length > 0
+                                ? false
+                                : true
+                        }
                     >
                         서버 예약신청
                     </Button>
