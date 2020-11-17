@@ -12,5 +12,4 @@ module.exports = {
 
     postReservation: require('./ctrl/client/postReservation'),
     postReturn: require('./ctrl/client/postReturn'),
-    getConfirmReservationFromClient: require('./ctrl/client/getConfirmReservationFromClient'),
 };

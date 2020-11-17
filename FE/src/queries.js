@@ -40,18 +40,6 @@ export const GET_RESERVABLE_SERVERS = gql`
     }
 `;
 
-export const GET_CONFIRM_RESERVATION_FROM_CLIENT = gql`
-    query getConfirmReservationFromClient {
-        getConfirmReservationFromClient {
-            createdAt
-            start
-            end
-            os
-            applyOk
-        }
-    }
-`;
-
 export const POST_RESERVATION = gql`
     mutation postReservation($reservation: ReservationInput!) {
         postReservation(reservation: $reservation) {
