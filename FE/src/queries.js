@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 
+export const GET_USER_INFO = gql`
+    query getUserInfo {
+        getUserInfo {
+            id
+            userId
+            type
+            name
+            department
+            tel
+            penalty
+        }
+    }
+`;
+
 export const GET_SERVERS_FROM_CLIENT = gql`
     query getServersFromClient {
         getServersFromClient {

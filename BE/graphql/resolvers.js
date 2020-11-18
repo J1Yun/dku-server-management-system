@@ -6,6 +6,7 @@ module.exports = {
 
     // CLIENT
     // GET
+    getUserInfo: require('./ctrl/getUserInfo'),
     getServersFromClient: require('./ctrl/client/getServersFromClient'),
     getReservations: require('./ctrl/client/getReservations'),
     getReservableServers: require('./ctrl/client/getReservableServers'),

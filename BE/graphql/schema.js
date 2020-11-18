@@ -3,6 +3,16 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
     scalar Date
 
+    type User {
+        id: ID!,
+        userId: String!
+        type: Int!
+        name: String!
+        department: String!
+        tel: String
+        penalty: Int
+    }
+
     type ServerClient {
         id: ID!
         name: String!
@@ -62,6 +72,7 @@ module.exports = buildSchema(`
     }
 
     type Query {
+        getUserInfo: User
         getServersFromClient: [ServerClient]
         getReservations: [ReservationWithServerInfo]
         getReservableServers(start: Date!, end: Date!): [ServerClient]

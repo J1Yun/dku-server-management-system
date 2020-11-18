@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function StatusCircle({ color }) {
-    return <FiberManualRecordIcon style={{ color }}>●</FiberManualRecordIcon>;
+    return <FiberManualRecordIcon style={{ color }} />;
 }
 
 export default function ServerStatus() {
