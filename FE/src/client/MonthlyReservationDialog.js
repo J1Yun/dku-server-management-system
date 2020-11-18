@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MonthlyReservationDialog({ serverId, open, setOpen }) {
     const classes = useStyles();
     const [reservations, setReservations] = useState([]);
-    const { loading, error, data } = useQuery(GET_MONTHLY_RESERVATION, {
+    const { loading, error, data, refetch } = useQuery(GET_MONTHLY_RESERVATION, {
         variables: { serverId },
     });
 
@@ -87,6 +87,9 @@ export default function MonthlyReservationDialog({ serverId, open, setOpen }) {
                     )}
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={() => refetch()} color="primary">
+                        새로고침
+                    </Button>
                     <Button onClick={handleCloseClick} color="primary">
                         닫기
                     </Button>
