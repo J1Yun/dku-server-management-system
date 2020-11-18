@@ -49,11 +49,9 @@ function Row(props) {
                 <TableCell align="center">{row.end}</TableCell>
                 <TableCell align="center">{row.os}</TableCell>
                 <TableCell align="center">
-                    {row.applyOk === 0 ? (
-                        <span style={{ color: 'crimson' }}>미승인</span>
-                    ) : (
-                        <span style={{ color: 'green' }}>승인</span>
-                    )}
+                    {row.applyOk === 0 && <span style={{ color: '#777' }}>승인대기</span>}
+                    {row.applyOk === 1 && <span style={{ color: 'green' }}>승인됨</span>}
+                    {row.applyOk === 2 && <span style={{ color: 'crimson' }}>거부됨</span>}
                 </TableCell>
             </TableRow>
             {/* <TableRow>
