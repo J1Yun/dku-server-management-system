@@ -54,7 +54,17 @@ const useStyles = makeStyles((theme) => ({
             color: '#EAF1FF',
         },
         '&:hover': {
-            backgroundColor: '#0031AA',
+            backgroundColor: 'white',
+        },
+
+        '&:hover span': {
+            color: '#002A83',
+        },
+        '&:focus': {
+            backgroundColor: '#094DCC',
+        },
+        '&:focus span': {
+            color: '#EAF1FF',
         },
     },
 }));
