@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
             padding: '0px 8px',
             color: '#EAF1FF',
         },
+        '&:hover': {
+            backgroundColor: '#0031AA',
+        },
     },
 }));
 
