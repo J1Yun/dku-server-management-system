@@ -16,8 +16,6 @@ export default function App({ ...props }) {
         if (data) setUser(data.getUserInfo);
     }, [data, setUser]);
 
-    console.log(user);
-
     if (error)
         return (
             <SnackMessage message="죄송합니다. 서버와의 연결 중 오류가 발생했습니다. 잠시 후에 다시 시도해주세요. (react-apollo error)" />
@@ -28,7 +26,14 @@ export default function App({ ...props }) {
             {user && (
                 <>
                     <Header user={user} />
-                    <Container style={{ padding: 10, paddingTop: 20 }}>{props.children}</Container>
+                    {props.location.pathname.split('/')[1] === 'admin' &&
+                    parseInt(user.type) === 0 ? (
+                        <SnackMessage message="접근 권한이 없습니다." />
+                    ) : (
+                        <Container style={{ padding: 10, paddingTop: 20 }}>
+                            {props.children}
+                        </Container>
+                    )}
                     <Copyright />
                 </>
             )}
