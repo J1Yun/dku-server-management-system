@@ -52,6 +52,16 @@ export const GET_CONFIRM_RESERVATION_FROM_CLIENT = gql`
     }
 `;
 
+export const GET_MONTHLY_RESERVATION = gql`
+    query getMonthlyReservation($serverId: ID!) {
+        getMonthlyReservation(serverId: $serverId) {
+            serverId
+            start
+            end
+        }
+    }
+`;
+
 export const POST_RESERVATION = gql`
     mutation postReservation($reservation: ReservationInput!) {
         postReservation(reservation: $reservation) {

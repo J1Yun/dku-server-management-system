@@ -4,13 +4,15 @@ const { GraphQLDate } = require('graphql-iso-date');
 module.exports = {
     Date: GraphQLDate,
 
+    // CLIENT
+    // GET
     getServersFromClient: require('./ctrl/client/getServersFromClient'),
-
-    // getReservations: on-going (반납건 제외 필요)
     getReservations: require('./ctrl/client/getReservations'),
     getReservableServers: require('./ctrl/client/getReservableServers'),
+    getConfirmReservationFromClient: require('./ctrl/client/getConfirmReservationFromClient'),
+    getMonthlyReservation: require('./ctrl/client/getMonthlyReservation'),
 
+    // POST
     postReservation: require('./ctrl/client/postReservation'),
     postReturn: require('./ctrl/client/postReturn'),
-    getConfirmReservationFromClient: require('./ctrl/client/getConfirmReservationFromClient'),
 };

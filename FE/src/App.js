@@ -6,6 +6,7 @@ import { Container } from '@material-ui/core';
 import { AplClient as client } from './conf';
 import Copyright from './Copyright';
 
+// Cookie의 Token(expire 7d)을 넘겨서 type을 판단, App에만 넣어두면 헤더도 나눌 필요가 없음. 아니면 컨텍스트에서 userId, type까지 반환? 후자가 더 효율적일듯
 export default function App({ ...props }) {
     return (
         <ApolloProvider client={client}>

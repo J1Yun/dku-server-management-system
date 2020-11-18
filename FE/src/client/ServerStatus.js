@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Table,
@@ -8,10 +8,12 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Button,
     CircularProgress,
 } from '@material-ui/core';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SnackMessage from './components/SnackMessage';
+import MonthlyReservationDialog from './MonthlyReservationDialog';
 import { useQuery } from 'react-apollo';
 import { GET_SERVERS_FROM_CLIENT } from '../queries';
 
@@ -34,7 +36,21 @@ function StatusCircle({ color }) {
 export default function ServerStatus() {
     const classes = useStyles();
     const [servers, setServers] = useState([]);
+    const [open, setOpen] = useState([]);
     const { loading, error, data } = useQuery(GET_SERVERS_FROM_CLIENT);
+
+    const initOpen = (length) => {
+        const array = new Array(length).fill(false);
+        setOpen(array);
+    };
+    const handleOpenClick = useCallback(
+        (id) => {
+            let array = [...open];
+            array[id] = true;
+            setOpen(array);
+        },
+        [open],
+    );
 
     useEffect(() => {
         if (data) {
@@ -43,8 +59,9 @@ export default function ServerStatus() {
                     return { ...s, ram: `${s.ram}GB`, status: 0 };
                 }),
             );
+            initOpen(servers.length);
         }
-    }, [data, setServers]);
+    }, [data, setServers, servers.length]);
 
     if (loading) return <CircularProgress />;
     if (error)
@@ -64,7 +81,8 @@ export default function ServerStatus() {
                             <TableCell align="center">OS</TableCell>
                             <TableCell align="center">CPU</TableCell>
                             <TableCell align="center">RAM</TableCell>
-                            <TableCell align="center">가동상태</TableCell>
+                            <TableCell align="right">상태</TableCell>
+                            <TableCell align="center">예약현황</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -77,11 +95,29 @@ export default function ServerStatus() {
                                 <TableCell align="center">{row.os}</TableCell>
                                 <TableCell align="center">{row.cpu}</TableCell>
                                 <TableCell align="center">{row.ram}</TableCell>
-                                <TableCell align="center">
+                                <TableCell align="right">
                                     {row.status === 0 ? (
                                         <StatusCircle color="green" />
                                     ) : (
                                         <StatusCircle color="crimson" />
+                                    )}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        size="small"
+                                        onClick={() => handleOpenClick(row.id)}
+                                    >
+                                        조회
+                                    </Button>
+
+                                    {open[row.id] && (
+                                        <MonthlyReservationDialog
+                                            serverId={row.id}
+                                            open={open}
+                                            setOpen={setOpen}
+                                        />
                                     )}
                                 </TableCell>
                             </TableRow>
