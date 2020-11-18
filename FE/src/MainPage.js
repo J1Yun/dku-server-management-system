@@ -11,8 +11,10 @@ import {
     Snackbar,
     Paper,
 } from '@material-ui/core';
+import queryString from 'query-string';
 import ComputerIcon from '@material-ui/icons/Computer';
 import { makeStyles } from '@material-ui/core/styles';
+import SnackMessage from './client/components/SnackMessage';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import Copyright from './Copyright';
@@ -52,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignInSide() {
+export default function MainPage({ location }) {
     const classes = useStyles();
     const [user, setUser] = useState({
         userId: '',
@@ -75,6 +77,8 @@ export default function SignInSide() {
         },
         [user],
     );
+
+    const query = queryString.parse(location.search);
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -121,10 +125,14 @@ export default function SignInSide() {
                     <Avatar className={classes.avatar}>
                         <ComputerIcon />
                     </Avatar>
-                    <Typography style={{ fontSize: 25, fontWeight: 600 }}>
+                    <Typography style={{ fontSize: 25, fontWeight: 600, marginBottom: 20 }}>
                         단국대학교 서버관리시스템
                     </Typography>
                     <form className={classes.form} onSubmit={onSubmit} noValidate>
+                        {query.expired && (
+                            <SnackMessage message="로그인 정보가 유실되었습니다. 다시 로그인하세요." />
+                        )}
+                        {query.logout && <SnackMessage message="정상적으로 로그아웃되었습니다." />}
                         <TextField
                             variant="outlined"
                             margin="normal"

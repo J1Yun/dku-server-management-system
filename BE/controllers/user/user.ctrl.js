@@ -50,4 +50,11 @@ module.exports = {
             })
             .catch((error) => res.status(409).json({ error }));
     },
+
+    post_logout: (_, res) => {
+        res.clearCookie('x-access-token');
+        res.json({
+            message: 'Logout Successfully',
+        });
+    },
 };

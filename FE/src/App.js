@@ -15,7 +15,7 @@ export default function App({ ...props }) {
         if (data) setUser(data.getUserInfo);
     }, [data, setUser]);
 
-    if (error) window.location = '/';
+    if (error) window.location = '/?expired=client';
 
     return (
         <>

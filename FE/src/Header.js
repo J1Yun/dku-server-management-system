@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router';
-import { AppBar, Toolbar, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Button, Chip, Divider } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import { menus } from './menus';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,60 +44,97 @@ const useStyles = makeStyles((theme) => ({
     logoWrapper: {
         flex: 1,
     },
-    menuWrapper: {},
+    userLabel: {
+        height: '24px',
+        backgroundColor: '#094DCC',
+        fontSize: '0.85rem',
+        fontWeight: 500,
+        '& span': {
+            padding: '0px 8px',
+            color: '#EAF1FF',
+        },
+    },
 }));
 
-const menus = {
-    client: [
-        {
-            id: 1,
-            name: '예약하기',
-            link: '/client/apply_reservation',
-        },
-        {
-            id: 2,
-            name: '반납하기',
-            link: '/client/apply_return',
-        },
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
-        {
-            id: 3,
-            name: '예약확인',
-            link: '/client/confirm_reservation',
-        },
-        {
-            id: 4,
-            name: '이용문의',
-            link: '/client/ask',
-        },
-    ],
-    admin: [
-        {
-            id: 1,
-            name: '대시보드',
-            link: '/admin/dashboard',
-        },
-        {
-            id: 2,
-            name: '승인처리',
-            link: '/admin/confirm',
-        },
-        {
-            id: 3,
-            name: '회원조회',
-            link: '/admin/members',
-        },
-    ],
-};
+function UserInfo({ user }) {
+    return (
+        <List>
+            <ListItem>
+                <ListItemText primary={`소속: ${user.department}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`이메일: ${user.userId}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`전화번호: ${user.tel}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`페널티: ${user.penalty}회`} />
+            </ListItem>
+        </List>
+    );
+}
 
 export default function Header({ user }) {
     const classes = useStyles();
+    const [open, setOpen] = useState(false);
+    const [logoutOpen, setLogoutOpen] = useState(false);
+
+    const triggerLogout = () => {
+        axios
+            .post('/user/logout')
+            .then((result) => {
+                window.location = '/?logout=client';
+            })
+            .catch((err) => {
+                window.location = '/';
+            });
+    };
 
     return (
         <div className={classes.root}>
             <AppBar position="static" className={classes.header}>
                 <Toolbar>
                     <React.Fragment>
+                        <Dialog open={logoutOpen} TransitionComponent={Transition} keepMounted>
+                            <DialogTitle>로그아웃 할까요?</DialogTitle>
+                            <Divider />
+                            <DialogActions>
+                                <Button onClick={triggerLogout} color="primary">
+                                    로그아웃
+                                </Button>
+                                <Button onClick={() => setLogoutOpen(false)} color="primary">
+                                    취소
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog open={open} TransitionComponent={Transition} keepMounted>
+                            <DialogTitle>{user.name} 님</DialogTitle>
+                            <Divider />
+                            <DialogContent>
+                                <UserInfo user={user} />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick={() => {
+                                        setOpen(false);
+                                        setLogoutOpen(true);
+                                    }}
+                                    color="primary"
+                                >
+                                    로그아웃
+                                </Button>
+                                <Button onClick={() => setOpen(false)} color="primary">
+                                    닫기
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
                         <div className={classes.headerContentWrapper}>
                             <div className={classes.logoWrapper}>
                                 <Button
@@ -98,6 +145,13 @@ export default function Header({ user }) {
                                 >
                                     단국대학교 서버관리시스템
                                 </Button>
+                                <Chip
+                                    label={`${user.department} ${user.name}`}
+                                    className={classes.userLabel}
+                                    onClick={() => {
+                                        setOpen(true);
+                                    }}
+                                />
                             </div>
                             <div className={classes.menuWrapper}>
                                 {parseInt(user.type) === 0
