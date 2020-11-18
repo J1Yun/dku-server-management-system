@@ -93,8 +93,15 @@ export default function ApplyReservation() {
         (e) => {
             const { name, value } = e.target;
             if (name === 'start' || name === 'end') {
-                refetch();
-                setReservation({ ...reservation, [name]: value, serverId: '' });
+                if (
+                    (name === 'start' && value > reservation.end) ||
+                    (name === 'end' && value < reservation.start)
+                ) {
+                    return;
+                } else {
+                    refetch();
+                    setReservation({ ...reservation, [name]: value, serverId: '' });
+                }
             } else {
                 setReservation({ ...reservation, [name]: value });
             }
