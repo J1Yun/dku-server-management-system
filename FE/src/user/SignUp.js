@@ -91,7 +91,7 @@ export default function SignUp() {
                     }
                 } else {
                     // Success signup
-                    window.location = '/';
+                    window.location = '/?signup=client';
                 }
             })
             .catch((err) => {

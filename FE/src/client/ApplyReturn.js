@@ -168,7 +168,11 @@ export default function ApplyReturn() {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Rating name="rating" value={myReturn.rating} onChange={handleChange} />
+                            <Rating
+                                name="rating"
+                                value={parseInt(myReturn.rating)}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

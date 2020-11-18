@@ -129,6 +129,9 @@ export default function MainPage({ location }) {
                         단국대학교 서버관리시스템
                     </Typography>
                     <form className={classes.form} onSubmit={onSubmit} noValidate>
+                        {query.signup && (
+                            <SnackMessage message="회원가입이 완료되었습니다. 로그인 후 서비스를 이용하세요." />
+                        )}
                         {query.expired && (
                             <SnackMessage message="로그인 정보가 유실되었습니다. 다시 로그인하세요." />
                         )}
