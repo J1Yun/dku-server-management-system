@@ -71,8 +71,8 @@ export default function MonthlyReservationDialog({ serverId, open, setOpen }) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {reservations.map((row) => (
-                                        <TableRow key={row.id}>
+                                    {reservations.map((row, idx) => (
+                                        <TableRow key={idx}>
                                             <TableCell align="center">{row.start}</TableCell>
                                             <TableCell align="center">{row.end}</TableCell>
                                         </TableRow>
