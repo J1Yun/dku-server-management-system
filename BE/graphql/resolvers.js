@@ -19,6 +19,7 @@ module.exports = {
 
     // ADMIN
     // GET
+    getServersFromAdmin: require('./ctrl/admin/getServersFromAdmin'),
     getConfirms: require('./ctrl/admin/getConfirms'),
     getMembers: require('./ctrl/admin/getMembers'),
 

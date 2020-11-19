@@ -57,6 +57,15 @@ module.exports = buildSchema(`
         end: Date!
     }
 
+    type ServerAdmin{
+        id: ID!
+        name: String!
+        os: String!
+        cpu: Int!
+        ram: Int!
+        location: String!
+    }
+
     type AdminConfirm {
         id: ID!
         serverId: ID!
@@ -85,6 +94,7 @@ module.exports = buildSchema(`
     type Query {
         getUserInfo: User
         getServersFromClient: [ServerClient]
+        getServersFromAdmin:[ServerAdmin]
         getReservations: [ReservationWithServerInfo]
         getReservableServers(start: Date!, end: Date!): [ServerClient]
         getConfirmReservationFromClient: [ConfirmReservation]

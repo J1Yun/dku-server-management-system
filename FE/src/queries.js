@@ -27,6 +27,20 @@ export const GET_SERVERS_FROM_CLIENT = gql`
     }
 `;
 
+export const GET_SERVERS_FROM_ADMIN = gql`
+    query getServersFromAdmin {
+        getServersFromAdmin {
+            id
+            __typename @skip(if: true)
+            name
+            os
+            cpu
+            ram
+            location
+        }
+    }
+`;
+
 export const GET_RESERVATIONS = gql`
     query getReservations {
         getReservations {
