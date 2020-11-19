@@ -15,6 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 import moment from 'moment';
+import PageTitle from '../components/PageTitle';
 import SnackMessage from './components/SnackMessage';
 import { GET_CONFIRM_RESERVATION_FROM_CLIENT } from '../queries';
 
@@ -25,7 +26,7 @@ const useRowStyles = makeStyles((theme) => ({
         },
     },
     tableWrapper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(1),
     },
 }));
 
@@ -109,24 +110,27 @@ export default function ConfirmReservation() {
         );
 
     return (
-        <TableContainer component={Paper} className={classes.tableWrapper}>
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center">상세내역</TableCell>
-                        <TableCell align="center">예약 신청일</TableCell>
-                        <TableCell align="center">시작일</TableCell>
-                        <TableCell align="center">반납일</TableCell>
-                        <TableCell align="center">OS</TableCell>
-                        <TableCell align="center">승인여부</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {reservations.map((row, idx) => (
-                        <Row key={idx} row={row} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <PageTitle title="나의 예약내역" />
+            <TableContainer component={Paper} className={classes.tableWrapper}>
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">상세내역</TableCell>
+                            <TableCell align="center">예약 신청일</TableCell>
+                            <TableCell align="center">시작일</TableCell>
+                            <TableCell align="center">반납일</TableCell>
+                            <TableCell align="center">OS</TableCell>
+                            <TableCell align="center">승인여부</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {reservations.map((row, idx) => (
+                            <Row key={idx} row={row} />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     );
 }

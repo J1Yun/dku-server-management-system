@@ -14,10 +14,11 @@ import {
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SnackMessage from '../client/components/SnackMessage';
 import { GET_SERVERS_FROM_ADMIN } from '../queries';
+import PageTitle from '../components/PageTitle';
 
 const useStyles = makeStyles((theme) => ({
     tableWrapper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(1),
     },
     table: {
         minWidth: 500,
@@ -54,6 +55,7 @@ export default function ServerStatus() {
 
     return (
         <div>
+            <PageTitle title="대시보드" />
             <TableContainer className={classes.tableWrapper} component={Paper}>
                 <Table className={classes.table}>
                     <TableHead>

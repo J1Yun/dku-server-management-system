@@ -16,6 +16,7 @@ import SnackMessage from './components/SnackMessage';
 import MonthlyReservationDialog from './MonthlyReservationDialog';
 import { useQuery } from 'react-apollo';
 import { GET_SERVERS_FROM_CLIENT } from '../queries';
+import PageTitle from '../components/PageTitle';
 
 const useStyles = makeStyles((theme) => ({
     tableWrapper: {
@@ -71,6 +72,7 @@ export default function ServerStatus() {
 
     return (
         <div>
+            <PageTitle title="대시보드" />
             <SnackMessage message="단국대학교 서버관리시스템에 접속하신 것을 환영합니다. 사용 목적에 적합한 서버를 확인 후 선택하여 예약하시면 승인을 도와드리겠습니다." />
             <TableContainer className={classes.tableWrapper} component={Paper}>
                 <Table className={classes.table}>

@@ -4,6 +4,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { useQuery } from 'react-apollo';
 import { GET_MEMBERS } from '../queries';
 import SnackMessage from './components/SnackMessage';
+import PageTitle from '../components/PageTitle';
 
 const sortModel = [
     {
@@ -66,8 +67,11 @@ export default function Members() {
         );
 
     return (
-        <div style={{ height: 600, width: '100%', marginTop: 40 }}>
-            <DataGrid sortModel={sortModel} columns={columns} rows={members} />
-        </div>
+        <>
+            <PageTitle title="회원 조회" />
+            <div style={{ height: 600, width: '100%' }}>
+                <DataGrid sortModel={sortModel} columns={columns} rows={members} />
+            </div>
+        </>
     );
 }
