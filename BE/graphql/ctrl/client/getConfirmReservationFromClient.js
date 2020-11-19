@@ -21,6 +21,7 @@ module.exports = async ({}, { userId }) => {
             ],
             attributes: ['start', 'end', 'applyOk', 'createdAt'],
             where: { userId },
+            order: [['id', 'DESC']],
             raw: true,
         })
         .then((result) =>
