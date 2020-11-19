@@ -159,7 +159,9 @@ export default function Header({ user }) {
                                     단국대학교 서버관리시스템
                                 </Button>
                                 <Chip
-                                    label={`${user.department} ${user.name}`}
+                                    label={`${user.department} ${user.name} ${
+                                        parseInt(user.type) === 0 ? '(사용자)' : '(관리자)'
+                                    }`}
                                     className={classes.userLabel}
                                     onClick={() => {
                                         setOpen(true);

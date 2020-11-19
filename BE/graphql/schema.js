@@ -57,6 +57,17 @@ module.exports = buildSchema(`
         end: Date!
     }
 
+    type AdminConfirm {
+        id: ID!
+        serverId: ID!
+        start: Date!
+        end: Date!
+        applyOk: Int!
+        createdAt: Date!
+        userName: String
+        userDepartment: String
+    }
+
     input ReservationInput {
         serverId: ID!
         start: Date!
@@ -78,10 +89,13 @@ module.exports = buildSchema(`
         getReservableServers(start: Date!, end: Date!): [ServerClient]
         getConfirmReservationFromClient: [ConfirmReservation]
         getMonthlyReservation(serverId: ID!): [MonthlyReservation]
+        getConfirms: [AdminConfirm]
+        getMembers: [User]
     }
 
     type Mutation {
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
+        updateReservationApply(id: ID!, applyOk: Int!): ID
     }
 `);

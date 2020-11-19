@@ -16,4 +16,12 @@ module.exports = {
     // POST
     postReservation: require('./ctrl/client/postReservation'),
     postReturn: require('./ctrl/client/postReturn'),
+
+    // ADMIN
+    // GET
+    getConfirms: require('./ctrl/admin/getConfirms'),
+    getMembers: require('./ctrl/admin/getMembers'),
+
+    // POST
+    updateReservationApply: require('./ctrl/admin/updateReservationApply'),
 };

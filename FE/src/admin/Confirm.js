@@ -1,179 +1,124 @@
-import React, { useState } from "react";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect, useCallback } from 'react';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { makeStyles } from '@material-ui/core/styles';
 import {
-  Box,
-  Collapse,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Paper,
-} from "@material-ui/core";
-import moment from "moment";
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
+    CircularProgress,
+} from '@material-ui/core';
+import ReservationConfirmDialog from './components/ReservationConfirmDialog';
+import SnackMessage from './components/SnackMessage';
+import { useQuery } from 'react-apollo';
+import { GET_CONFIRMS } from '../queries';
 
 const useRowStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      borderBottom: "unset",
+    root: {
+        '& > *': {
+            borderBottom: 'unset',
+        },
     },
-  },
-  tableWrapper: {
-    marginTop: theme.spacing(5),
-  },
+    tableWrapper: {
+        marginTop: theme.spacing(5),
+    },
 }));
 
-function createData(
-  userDepartment,
-  userName,
-  applyDate,
-  startDate,
-  endDate,
-  serverId,
-  applyOk,
-  history
-) {
-  return {
-    userDepartment,
-    userName,
-    applyDate,
-    startDate,
-    endDate,
-    serverId,
-    applyOk,
-    history,
-  };
-}
+export default function Confirm() {
+    const classes = useRowStyles();
+    const [confirms, setConfirms] = useState([]);
+    const [open, setOpen] = useState([]);
+    const { loading, error, data, refetch } = useQuery(GET_CONFIRMS);
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = useState(false);
-  const classes = useRowStyles();
+    const initOpen = (length) => {
+        const array = new Array(length).fill(false);
+        setOpen(array);
+    };
+    const handleOpenClick = useCallback(
+        (id) => {
+            let array = [...open];
+            array[id] = true;
+            setOpen(array);
+        },
+        [open],
+    );
 
-  return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
-        <TableCell align="center">
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell align="center">{row.userDepartment}</TableCell>
-        <TableCell align="center">{row.userName}</TableCell>
-        <TableCell align="center">{row.applyDate}</TableCell>
-        <TableCell align="center">{row.startDate}</TableCell>
-        <TableCell align="center">{row.endDate}</TableCell>
-        <TableCell align="center">{row.serverId}</TableCell>
-        <TableCell align="center">
-          {row.applyOk === 0 ? (
-            <span style={{ color: "crimson" }}>승인대기</span>
-          ) : (
-            <span style={{ color: "green" }}>승인됨</span>
-          )}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                상세 내역
-              </Typography>
-              <Table size="small">
+    useEffect(() => {
+        if (data) {
+            setConfirms(
+                data.getConfirms.map((c) => {
+                    return { ...c };
+                }),
+            );
+            initOpen(confirms.length);
+        }
+    }, [data, setConfirms, confirms.length]);
+
+    if (loading) return <CircularProgress />;
+    if (error)
+        return (
+            <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
+        );
+
+    return (
+        <TableContainer component={Paper} className={classes.tableWrapper}>
+            <Table aria-label="collapsible table">
                 <TableHead>
-                  <TableRow>
-                    <TableCell align="center">날짜</TableCell>
-                    <TableCell align="center">이슈</TableCell>
-                  </TableRow>
+                    <TableRow>
+                        <TableCell align="center">상세내역</TableCell>
+                        <TableCell align="center">소속</TableCell>
+                        <TableCell align="center">성명</TableCell>
+                        <TableCell align="center">예약 신청일</TableCell>
+                        <TableCell align="center">시작일</TableCell>
+                        <TableCell align="center">반납일</TableCell>
+                        <TableCell align="center">서버ID</TableCell>
+                        <TableCell align="center">승인여부</TableCell>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell component="th" scope="row" align="center">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell align="center">{historyRow.issue}</TableCell>
-                    </TableRow>
-                  ))}
+                    {confirms.map((row, idx) => (
+                        <TableRow key={idx} className={classes.root}>
+                            <TableCell align="center">
+                                <IconButton
+                                    aria-label="expand row"
+                                    size="small"
+                                    onClick={() => setOpen(!open)}
+                                >
+                                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                </IconButton>
+                            </TableCell>
+                            <TableCell align="center">{row.userDepartment}</TableCell>
+                            <TableCell align="center">{row.userName}</TableCell>
+                            <TableCell align="center">{row.createdAt}</TableCell>
+                            <TableCell align="center">{row.start}</TableCell>
+                            <TableCell align="center">{row.end}</TableCell>
+                            <TableCell align="center">{row.serverId}</TableCell>
+                            <TableCell align="center">
+                                <Button
+                                    style={{ color: '#777' }}
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => handleOpenClick(row.id)}
+                                >
+                                    승인대기
+                                </Button>
+                                <ReservationConfirmDialog
+                                    id={row.id}
+                                    open={open}
+                                    setOpen={setOpen}
+                                    refetch={refetch}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
-const rows = [
-  createData(
-    "소프트웨어학과",
-    "허전진",
-    new moment().format("YYYY-MM-DD"),
-    new moment().format("YYYY-MM-DD"),
-    new moment().format("YYYY-MM-DD"),
-    1,
-    1,
-    [
-      {
-        date: new moment().format("YYYY-MM-DD"),
-        issue: "예약 신청",
-      },
-      {
-        date: new moment().format("YYYY-MM-DD"),
-        issue: "승인",
-      },
-    ]
-  ),
-  createData(
-    "소프트웨어학과",
-    "조정민",
-    new moment().format("YYYY-MM-DD"),
-    new moment().format("YYYY-MM-DD"),
-    new moment().format("YYYY-MM-DD"),
-    2,
-    0,
-    [
-      {
-        date: new moment().format("YYYY-MM-DD"),
-        issue: "예약 신청",
-      },
-    ]
-  ),
-];
-
-export default function Confirm() {
-  const classes = useRowStyles();
-  return (
-    <TableContainer component={Paper} className={classes.tableWrapper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">상세내역</TableCell>
-            <TableCell align="center">소속</TableCell>
-            <TableCell align="center">성명</TableCell>
-            <TableCell align="center">예약 신청일</TableCell>
-            <TableCell align="center">시작일</TableCell>
-            <TableCell align="center">반납일</TableCell>
-            <TableCell align="center">서버ID</TableCell>
-            <TableCell align="center">승인여부</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, idx) => (
-            <Row key={idx} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+            </Table>
+        </TableContainer>
+    );
 }

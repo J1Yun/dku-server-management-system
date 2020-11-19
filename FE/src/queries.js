@@ -76,6 +76,37 @@ export const GET_MONTHLY_RESERVATION = gql`
     }
 `;
 
+export const GET_CONFIRMS = gql`
+    query getConfirms {
+        getConfirms {
+            id
+            __typename @skip(if: true)
+            serverId
+            start
+            end
+            applyOk
+            createdAt
+            userName
+            userDepartment
+        }
+    }
+`;
+
+export const GET_MEMBERS = gql`
+    query getMembers {
+        getMembers {
+            id
+            __typename @skip(if: true)
+            userId
+            type
+            name
+            department
+            tel
+            penalty
+        }
+    }
+`;
+
 export const POST_RESERVATION = gql`
     mutation postReservation($reservation: ReservationInput!) {
         postReservation(reservation: $reservation) {
@@ -93,5 +124,11 @@ export const POST_RESERVATION = gql`
 export const POST_RETURN = gql`
     mutation postReturn($myReturn: ReturnInput!) {
         postReturn(myReturn: $myReturn)
+    }
+`;
+
+export const UPDATE_RESERVATION_APPLY = gql`
+    mutation updateReservationApply($id: ID!, $applyOk: Int!) {
+        updateReservationApply(id: $id, applyOk: $applyOk)
     }
 `;
