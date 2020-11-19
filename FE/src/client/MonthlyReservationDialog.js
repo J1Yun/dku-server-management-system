@@ -54,14 +54,18 @@ export default function MonthlyReservationDialog({ serverId, open, setOpen }) {
 
     return (
         <div>
-            <Dialog open={open[serverId]} TransitionComponent={Transition} keepMounted>
+            <Dialog open={open[serverId] || false} TransitionComponent={Transition} keepMounted>
                 <DialogTitle>선택한 서버의 예약 현황</DialogTitle>
                 <DialogContent>
-                    {loading && <CircularProgress />}
+                    {loading && (
+                        <div>
+                            <CircularProgress /> <span>예약 현황을 불러오고 있습니다</span>
+                        </div>
+                    )}
                     {error && (
                         <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
                     )}
-                    {reservations.length > 0 ? (
+                    {!loading && reservations.length > 0 && (
                         <TableContainer className={classes.tableWrapper} component={Paper}>
                             <Table className={classes.table}>
                                 <TableHead>
@@ -80,7 +84,8 @@ export default function MonthlyReservationDialog({ serverId, open, setOpen }) {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    ) : (
+                    )}
+                    {!loading && reservations.length === 0 && (
                         <SnackMessage
                             message={`본 서버는 2달간 예약 내역이 없습니다. (서버ID: ${serverId})`}
                         />
