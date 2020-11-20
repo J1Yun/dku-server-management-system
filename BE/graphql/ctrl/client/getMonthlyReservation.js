@@ -6,7 +6,10 @@ module.exports = async ({ serverId }) => {
     return await models.sequelize
         .query(query, { replacements: { serverId, today: moment().format('YYYY-MM-DD') } })
         .spread(
-            (results) => JSON.parse(JSON.stringify(results)),
+            (results) => {
+                console.log(results);
+                return JSON.parse(JSON.stringify(results));
+            },
             (error) => error,
         );
 };
