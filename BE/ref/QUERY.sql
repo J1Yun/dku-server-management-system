@@ -12,3 +12,12 @@ select r.id, r.start, r.end, r.serverId, u.name, u.department, IF ( EXISTS (sele
 
 # 관리자가 승인해야할 반납 내역
 select u.department, u.name as userName, r.start, r.end , s.name as serverName from returns ret join reservations r on r.id = ret.reservationId join users u  on u.userId = r.userId join servers s on s.id = r.serverId where ret.applyOk=0;
+
+# 승인 대기 중인 예약+반납 내역 수
+select count(v.id) as waiting from ( select id as id from reservations where applyOk=0 UNION ALL select id as id from returns where applyOk=0) v;
+
+# 승인 대기 중인 예약 내역 수
+select count(*) as waiting from reservations where applyOk=0;
+
+# 승인 대기 중인 반납 내역 수
+select count(*) as waiting from returns where applyOk=0;
