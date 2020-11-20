@@ -1,5 +1,5 @@
 # 사용자가 반납신청한 건을 제외한 예약서버 찾기
-select r.id, r.serverId, r.start, r.end, name as serverName, os as serverOS from servers s join reservations r on s.id = r.serverId where r.userId=:userId and r.applyOk=1 and not exists ( select ret.reservationId from returns ret where r.id=ret.reservationId );
+select r.id, r.serverId, r.start, r.end, name as serverName, os as serverOS from servers s join reservations r on s.id = r.serverId where r.userId=:userId and r.applyOk=1 and not exists ( select ret.reservationId from returns ret where r.id=ret.reservationId and r.applyOk!=2);
 
 # 해당 날짜에 이용가능한 서버 찾기
 select id, name, os, cpu, ram from servers s where s.id not in (select r.serverId from reservations r where r.applyOk!=2 and (:start<=end and start<=:end) );
@@ -21,3 +21,6 @@ select count(*) as waiting from reservations where applyOk=0;
 
 # 승인 대기 중인 반납 내역 수
 select count(*) as waiting from returns where applyOk=0;
+
+# 반납예정일이 n일 남은 예약 내역
+select u.department, u.name as userName, u.tel, r.start, r.end, s.id as serverId, s.name as serverName, IF( end<'2020-11-20', 1, 0 ) as late from reservations r join servers s on s.id = r.serverId join users u on r.userId = u.userId where r.applyOk=1 and end<=DATE_ADD('2020-11-20', INTERVAL 7 DAY) and NOT EXISTS(select reservationId from returns where reservationId=r.id and r.applyOk!=2);
