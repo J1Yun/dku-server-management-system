@@ -23,4 +23,4 @@ select count(*) as waiting from reservations where applyOk=0;
 select count(*) as waiting from returns where applyOk=0;
 
 # 반납예정일이 n일 남은 예약 내역
-select r.id, u.department, u.name as userName, u.tel, r.start, r.end, s.id as serverId, s.name as serverName, IF( end<'2020-11-20', 1, 0 ) as late from reservations r join servers s on s.id = r.serverId join users u on r.userId = u.userId where r.applyOk=1 and end<=DATE_ADD('2020-11-20', INTERVAL 7 DAY) and NOT EXISTS(select reservationId from returns where reservationId=r.id and r.applyOk!=2);
+select u.department, u.name as userName, u.tel, r.start, r.end, s.id as serverId, s.name as serverName, IF( end<'2020-11-20', 1, 0 ) as late from reservations r join servers s on s.id = r.serverId join users u on r.userId = u.userId where r.applyOk=1 and end<=DATE_ADD('2020-11-20', INTERVAL 7 DAY) and NOT EXISTS(select reservationId from returns where reservationId=r.id and r.applyOk!=2);
