@@ -9,8 +9,6 @@
 
 // getReservations: [ReservationWithServerInfo]
 
-// 이후 반납된(return에 들어간) 건은 제외하는 조인 추가
-
 const models = require('../../../models');
 module.exports = async ({}, { userId }) => {
     const query =

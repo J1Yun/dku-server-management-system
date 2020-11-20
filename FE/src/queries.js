@@ -90,6 +90,12 @@ export const GET_MONTHLY_RESERVATION = gql`
     }
 `;
 
+export const GET_CONFIRM_WAITING = gql`
+    query getMonthlyReservation {
+        getMonthlyReservation
+    }
+`;
+
 export const GET_CONFIRMS = gql`
     query getConfirms {
         getConfirms {

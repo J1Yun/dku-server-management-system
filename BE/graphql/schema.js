@@ -124,6 +124,7 @@ module.exports = buildSchema(`
         getReturnConfirms: [AdminReturnConfirm]
         getMembers: [User]
         getCalendarReservations: [CalendarReservation]
+        getConfirmWaiting: Int
     }
 
     type Mutation {
