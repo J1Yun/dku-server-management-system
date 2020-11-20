@@ -9,3 +9,6 @@ select serverId, CASE WHEN start<'2020-11-20' and '2020-11-20'<=end THEN '2020-1
 
 # 서버 예약 현황
 select r.id, r.start, r.end, r.serverId, u.name, u.department, IF ( EXISTS (select reservationId from returns where applyOk=1 and r.id=reservationId), 1, 0) as returnOK from users u join reservations r on u.userId = r.userId where r.applyOk=1;
+
+# 관리자가 승인해야할 반납 내역
+select u.department, u.name as userName, r.start, r.end , s.name as serverName from returns ret join reservations r on r.id = ret.reservationId join users u  on u.userId = r.userId join servers s on s.id = r.serverId where ret.applyOk=0;
