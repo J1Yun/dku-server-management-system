@@ -145,6 +145,7 @@ export const GET_CALENDAR_RESERVATIONS = gql`
             start
             end
             serverId
+            returnOk
             name
             department
         }

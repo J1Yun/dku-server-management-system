@@ -93,6 +93,7 @@ module.exports = buildSchema(`
         start: Date!
         end: Date!
         serverId: ID!
+        returnOk: Int!
         name: String
         department: String
     }

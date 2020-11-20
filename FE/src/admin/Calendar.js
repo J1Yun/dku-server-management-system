@@ -23,7 +23,9 @@ export default function ServerCalendar() {
                         id: d.id,
                         start: d.start,
                         end: d.end,
-                        title: `ID ${d.serverId} / ${d.department} ${d.name}`,
+                        title: `ID ${d.serverId} / ${d.department} ${d.name} / ${
+                            parseInt(d.returnOk) === 0 ? '반납 X' : '반납 O'
+                        }`,
                         allDay: true,
                     };
                 }),
