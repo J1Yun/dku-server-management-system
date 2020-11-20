@@ -11,12 +11,12 @@ import App from './App';
 import MainPage from './MainPage';
 import SignUp from './user/SignUp';
 
-import Dashboard from './admin/Dashboard';
+import AdminDashboard from './admin/Dashboard';
 import Calendar from './admin/Calendar';
 import Confirm from './admin/Confirm';
 import Members from './admin/Members';
 
-import ServerStatus from './client/ServerStatus';
+import ClientDashboard from './client/Dashboard';
 import ApplyReservation from './client/ApplyReservation';
 import ApplyReturn from './client/ApplyReturn';
 import ConfirmReservation from './client/ConfirmReservation';
@@ -43,14 +43,15 @@ ReactDOM.render(
                 <Route path="/" component={MainPage} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/admin" component={App}>
-                    <IndexRoute component={Dashboard} />
-                    <Route path="dashboard" component={Dashboard} />
+                    <IndexRoute component={AdminDashboard} />
+                    <Route path="dashboard" component={AdminDashboard} />
                     <Route path="calendar" component={Calendar} />
                     <Route path="confirm" component={Confirm} />
                     <Route path="members" component={Members} />
                 </Route>
                 <Route path="/client" component={App}>
-                    <IndexRoute component={ServerStatus} />
+                    <IndexRoute component={ClientDashboard} />
+                    <Route path="dashboard" component={ClientDashboard} />
                     <Route path="apply_reservation" component={ApplyReservation} />
                     <Route path="apply_return" component={ApplyReturn} />
                     <Route path="confirm_reservation" component={ConfirmReservation} />

@@ -13,7 +13,7 @@ const localizer = momentLocalizer(moment);
 export default function ServerCalendar() {
     const [events, setEvents] = useState([]);
 
-    const { loading, error, data, refetch } = useQuery(GET_CALENDAR_RESERVATIONS);
+    const { loading, error, data } = useQuery(GET_CALENDAR_RESERVATIONS);
 
     useEffect(() => {
         if (data) {

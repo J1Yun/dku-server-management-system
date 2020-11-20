@@ -34,7 +34,7 @@ function StatusCircle({ color }) {
     return <FiberManualRecordIcon style={{ color }} />;
 }
 
-export default function ServerStatus() {
+export default function Dashboard() {
     const classes = useStyles();
     const [servers, setServers] = useState([]);
     const [open, setOpen] = useState([]);
