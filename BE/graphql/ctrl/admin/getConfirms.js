@@ -12,6 +12,7 @@ module.exports = async () => {
             attributes: ['id', 'serverId', 'start', 'end', 'applyOk', 'createdAt'],
             where: { applyOk: 0 },
             raw: true,
+            order: [['id', 'DESC']],
         })
         .then((result) =>
             result.map((r) => {

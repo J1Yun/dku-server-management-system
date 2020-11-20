@@ -106,6 +106,22 @@ export const GET_CONFIRMS = gql`
     }
 `;
 
+export const GET_RETURN_CONFIRMS = gql`
+    query getReturnConfirms {
+        getReturnConfirms {
+            id
+            __typename @skip(if: true)
+            userDepartment
+            userName
+            start
+            end
+            createdAt
+            serverId
+            serverName
+        }
+    }
+`;
+
 export const GET_MEMBERS = gql`
     query getMembers {
         getMembers {
@@ -129,6 +145,7 @@ export const GET_CALENDAR_RESERVATIONS = gql`
             start
             end
             serverId
+            returnOk
             name
             department
         }
@@ -158,5 +175,11 @@ export const POST_RETURN = gql`
 export const UPDATE_RESERVATION_APPLY = gql`
     mutation updateReservationApply($id: ID!, $applyOk: Int!) {
         updateReservationApply(id: $id, applyOk: $applyOk)
+    }
+`;
+
+export const UPDATE_RETURN_APPLY = gql`
+    mutation updateReturnApply($id: ID!, $applyOk: Int!) {
+        updateReturnApply(id: $id, applyOk: $applyOk)
     }
 `;
