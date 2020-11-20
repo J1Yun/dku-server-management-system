@@ -12,6 +12,7 @@ import MainPage from './MainPage';
 import SignUp from './user/SignUp';
 
 import Dashboard from './admin/Dashboard';
+import Calendar from './admin/Calendar';
 import Confirm from './admin/Confirm';
 import Members from './admin/Members';
 
@@ -44,6 +45,7 @@ ReactDOM.render(
                 <Route path="/admin" component={App}>
                     <IndexRoute component={Dashboard} />
                     <Route path="dashboard" component={Dashboard} />
+                    <Route path="calendar" component={Calendar} />
                     <Route path="confirm" component={Confirm} />
                     <Route path="members" component={Members} />
                 </Route>

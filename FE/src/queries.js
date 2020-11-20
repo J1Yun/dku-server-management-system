@@ -121,6 +121,20 @@ export const GET_MEMBERS = gql`
     }
 `;
 
+export const GET_CALENDAR_RESERVATIONS = gql`
+    query getCalendarReservations {
+        getCalendarReservations {
+            id
+            __typename @skip(if: true)
+            start
+            end
+            serverId
+            name
+            department
+        }
+    }
+`;
+
 export const POST_RESERVATION = gql`
     mutation postReservation($reservation: ReservationInput!) {
         postReservation(reservation: $reservation) {

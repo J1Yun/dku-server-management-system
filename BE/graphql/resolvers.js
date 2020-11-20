@@ -22,6 +22,7 @@ module.exports = {
     getServersFromAdmin: require('./ctrl/admin/getServersFromAdmin'),
     getConfirms: require('./ctrl/admin/getConfirms'),
     getMembers: require('./ctrl/admin/getMembers'),
+    getCalendarReservations: require('./ctrl/admin/getCalendarReservations'),
 
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),

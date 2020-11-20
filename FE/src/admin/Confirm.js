@@ -69,60 +69,72 @@ export default function Confirm() {
 
     return (
         <>
-            <PageTitle title="승인을 기다리는 예약" />
-            <TableContainer component={Paper} className={classes.tableWrapper}>
-                <Table aria-label="collapsible table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">상세내역</TableCell>
-                            <TableCell align="center">소속</TableCell>
-                            <TableCell align="center">성명</TableCell>
-                            <TableCell align="center">예약 신청일</TableCell>
-                            <TableCell align="center">시작일</TableCell>
-                            <TableCell align="center">반납일</TableCell>
-                            <TableCell align="center">서버ID</TableCell>
-                            <TableCell align="center">승인여부</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {confirms.map((row, idx) => (
-                            <TableRow key={idx} className={classes.root}>
-                                <TableCell align="center">
-                                    <IconButton
-                                        aria-label="expand row"
-                                        size="small"
-                                        onClick={() => setOpen(!open)}
-                                    >
-                                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell align="center">{row.userDepartment}</TableCell>
-                                <TableCell align="center">{row.userName}</TableCell>
-                                <TableCell align="center">{row.createdAt}</TableCell>
-                                <TableCell align="center">{row.start}</TableCell>
-                                <TableCell align="center">{row.end}</TableCell>
-                                <TableCell align="center">{row.serverId}</TableCell>
-                                <TableCell align="center">
-                                    <Button
-                                        style={{ color: '#777' }}
-                                        variant="outlined"
-                                        size="small"
-                                        onClick={() => handleOpenClick(row.id)}
-                                    >
-                                        승인대기
-                                    </Button>
-                                    <ReservationConfirmDialog
-                                        id={row.id}
-                                        open={open}
-                                        setOpen={setOpen}
-                                        refetch={refetch}
-                                    />
-                                </TableCell>
+            <div>
+                <PageTitle title="승인을 기다리는 예약" />
+                <TableContainer component={Paper} className={classes.tableWrapper}>
+                    <Table aria-label="collapsible table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center">상세내역</TableCell>
+                                <TableCell align="center">소속</TableCell>
+                                <TableCell align="center">성명</TableCell>
+                                <TableCell align="center">예약 신청일</TableCell>
+                                <TableCell align="center">시작일</TableCell>
+                                <TableCell align="center">반납일</TableCell>
+                                <TableCell align="center">서버ID</TableCell>
+                                <TableCell align="center">승인여부</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {confirms.map((row, idx) => (
+                                <TableRow key={idx} className={classes.root}>
+                                    <TableCell align="center">
+                                        <IconButton
+                                            aria-label="expand row"
+                                            size="small"
+                                            onClick={() => setOpen(!open)}
+                                        >
+                                            {open ? (
+                                                <KeyboardArrowUpIcon />
+                                            ) : (
+                                                <KeyboardArrowDownIcon />
+                                            )}
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="center">{row.userDepartment}</TableCell>
+                                    <TableCell align="center">{row.userName}</TableCell>
+                                    <TableCell align="center">{row.createdAt}</TableCell>
+                                    <TableCell align="center">{row.start}</TableCell>
+                                    <TableCell align="center">{row.end}</TableCell>
+                                    <TableCell align="center">{row.serverId}</TableCell>
+                                    <TableCell align="center">
+                                        <Button
+                                            style={{ color: '#777' }}
+                                            variant="outlined"
+                                            size="small"
+                                            onClick={() => handleOpenClick(row.id)}
+                                        >
+                                            승인대기
+                                        </Button>
+                                        <ReservationConfirmDialog
+                                            id={row.id}
+                                            open={open}
+                                            setOpen={setOpen}
+                                            refetch={refetch}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {!loading && confirms.length === 0 && (
+                    <SnackMessage message="처리할 건이 없습니다." />
+                )}
+            </div>
+            <div style={{ marginTop: 35 }}>
+                <PageTitle title="승인을 기다리는 반납" />
+            </div>
         </>
     );
 }

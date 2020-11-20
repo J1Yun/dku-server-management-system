@@ -77,6 +77,15 @@ module.exports = buildSchema(`
         userDepartment: String
     }
 
+    type CalendarReservation {
+        id: ID!
+        start: Date!
+        end: Date!
+        serverId: ID!
+        name: String
+        department: String
+    }
+
     input ReservationInput {
         serverId: ID!
         start: Date!
@@ -101,6 +110,7 @@ module.exports = buildSchema(`
         getMonthlyReservation(serverId: ID!): [MonthlyReservation]
         getConfirms: [AdminConfirm]
         getMembers: [User]
+        getCalendarReservations: [CalendarReservation]
     }
 
     type Mutation {

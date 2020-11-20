@@ -7,9 +7,9 @@ export default function PageTitle({ title }) {
             style={{
                 marginTop: 10,
                 marginBottom: 20,
-                fontSize: '1.4rem',
+                fontSize: '1.325rem',
                 fontWeight: 600,
-                color: '#111',
+                color: '#222',
             }}
         >
             {title}
