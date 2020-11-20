@@ -5,15 +5,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { useMutation } from 'react-apollo';
-import { UPDATE_RESERVATION_APPLY } from '../../queries';
+import { UPDATE_RETURN_APPLY } from '../../queries';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
 });
 
-export default function ReservationConfirmDialog({ id, open, setOpen, refetch }) {
+export default function ReturnConfirmDialog({ id, open, setOpen, refetch }) {
     const [completedOpen, setCompletedOpen] = useState(false);
-    const [updateReservationApply] = useMutation(UPDATE_RESERVATION_APPLY, {
+    const [updateReservationApply] = useMutation(UPDATE_RETURN_APPLY, {
         onCompleted: () => {
             handleCloseClick();
             setCompletedOpen(true);
@@ -47,7 +47,7 @@ export default function ReservationConfirmDialog({ id, open, setOpen, refetch })
             </Dialog>
 
             <Dialog open={open[id] || false} TransitionComponent={Transition} keepMounted>
-                <DialogTitle>예약을 승인 처리하시겠습니까?</DialogTitle>
+                <DialogTitle>반납을 승인 처리하시겠습니까?</DialogTitle>
                 <DialogActions>
                     <Button color="secondary" variant="outlined" onClick={() => triggerUpdate(2)}>
                         거부

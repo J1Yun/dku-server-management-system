@@ -77,6 +77,17 @@ module.exports = buildSchema(`
         userDepartment: String
     }
 
+    type AdminReturnConfirm {
+        id: ID!
+        createdAt: Date!
+        userDepartment: String!
+        userName: String!
+        start: Date!
+        end: Date!
+        serverId: ID!
+        serverName: String!
+    }
+
     type CalendarReservation {
         id: ID!
         start: Date!
@@ -109,6 +120,7 @@ module.exports = buildSchema(`
         getConfirmReservationFromClient: [ConfirmReservation]
         getMonthlyReservation(serverId: ID!): [MonthlyReservation]
         getConfirms: [AdminConfirm]
+        getReturnConfirms: [AdminReturnConfirm]
         getMembers: [User]
         getCalendarReservations: [CalendarReservation]
     }
@@ -117,5 +129,6 @@ module.exports = buildSchema(`
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
         updateReservationApply(id: ID!, applyOk: Int!): ID
+        updateReturnApply(id: ID!, applyOk: Int!): ID
     }
 `);
