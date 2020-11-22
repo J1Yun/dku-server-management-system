@@ -96,7 +96,9 @@ export default function Confirm() {
     }, [userDDay]);
 
     const handleChange = useCallback((e) => {
-        setUserDDay(parseInt(e.target.value));
+        if (e.target.value >= 0) {
+            setUserDDay(parseInt(e.target.value));
+        } else return;
     }, []);
 
     useEffect(() => {
