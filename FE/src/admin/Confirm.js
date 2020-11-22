@@ -134,7 +134,7 @@ export default function Confirm() {
             <div>
                 <PageTitle title="승인을 기다리는 예약" />
                 <TableContainer component={Paper} className={classes.tableWrapper}>
-                    <Table aria-label="collapsible table">
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">예약 신청일</TableCell>
@@ -183,7 +183,7 @@ export default function Confirm() {
             <div style={{ marginTop: 35 }}>
                 <PageTitle title="승인을 기다리는 반납" />
                 <TableContainer component={Paper} className={classes.tableWrapper}>
-                    <Table aria-label="collapsible table">
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">반납 신청일</TableCell>
@@ -254,7 +254,7 @@ export default function Confirm() {
                     <CircularProgress />
                 ) : (
                     <TableContainer component={Paper} className={classes.tableWrapper}>
-                        <Table aria-label="collapsible table">
+                        <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center">소속</TableCell>

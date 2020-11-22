@@ -81,7 +81,7 @@ export default function ConfirmReservation() {
         <>
             <PageTitle title="나의 예약내역" />
             <TableContainer component={Paper} className={classes.tableWrapper}>
-                <Table aria-label="collapsible table">
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">예약 신청일</TableCell>
