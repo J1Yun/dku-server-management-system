@@ -48,7 +48,8 @@ module.exports = buildSchema(`
         start: Date!
         end: Date!
         os: String!
-        applyOk: Int!
+        applyOk: Int
+        returnOk: Int
     }
 
     type MonthlyReservation {

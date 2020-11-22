@@ -71,11 +71,14 @@ export const GET_RESERVABLE_SERVERS = gql`
 export const GET_CONFIRM_RESERVATION_FROM_CLIENT = gql`
     query getConfirmReservationFromClient {
         getConfirmReservationFromClient {
+            id
+            __typename @skip(if: true)
             createdAt
             start
             end
             os
             applyOk
+            returnOk
         }
     }
 `;

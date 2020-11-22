@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-apollo';
 import {
-    IconButton,
     Table,
     TableBody,
     TableCell,
@@ -32,17 +29,11 @@ const useRowStyles = makeStyles((theme) => ({
 
 function Row(props) {
     const { row } = props;
-    const [open, setOpen] = useState(false);
     const classes = useRowStyles();
 
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell align="center">
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
                 <TableCell component="th" scope="row" align="center">
                     {moment(row.createdAt).format('YYYY-MM-DD')}
                 </TableCell>
@@ -54,36 +45,13 @@ function Row(props) {
                     {row.applyOk === 1 && <span style={{ color: 'green' }}>승인됨</span>}
                     {row.applyOk === 2 && <span style={{ color: 'crimson' }}>거부됨</span>}
                 </TableCell>
-            </TableRow>
-            {/* <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                상세 내역
-                            </Typography>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="center">날짜</TableCell>
-                                        <TableCell align="center">이슈</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {row.history.map((historyRow, idx) => (
-                                        <TableRow key={idx}>
-                                            <TableCell component="th" scope="row" align="center">
-                                                {historyRow.date}
-                                            </TableCell>
-                                            <TableCell align="center">{historyRow.issue}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </Box>
-                    </Collapse>
+                <TableCell align="center">
+                    {row.returnOk === 0 && <span style={{ color: '#777' }}>승인대기</span>}
+                    {row.returnOk === 1 && <span style={{ color: 'green' }}>승인됨</span>}
+                    {row.returnOk === 2 && <span style={{ color: 'crimson' }}>거부됨</span>}
+                    {row.returnOk === 3 && <span style={{ color: '#777' }}>미반납</span>}
                 </TableCell>
-            </TableRow> */}
+            </TableRow>
         </React.Fragment>
     );
 }
@@ -116,12 +84,12 @@ export default function ConfirmReservation() {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">상세내역</TableCell>
                             <TableCell align="center">예약 신청일</TableCell>
                             <TableCell align="center">시작일</TableCell>
                             <TableCell align="center">반납일</TableCell>
                             <TableCell align="center">OS</TableCell>
                             <TableCell align="center">승인여부</TableCell>
+                            <TableCell align="center">반납여부</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
