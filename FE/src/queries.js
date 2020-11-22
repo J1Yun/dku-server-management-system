@@ -90,9 +90,19 @@ export const GET_MONTHLY_RESERVATION = gql`
     }
 `;
 
-export const GET_CONFIRM_WAITING = gql`
-    query getMonthlyReservation {
-        getMonthlyReservation
+export const GET_DEADLINE_RETURNS = gql`
+    query getDeadlineReturns($dDay: Int!) {
+        getDeadlineReturns(dDay: $dDay) {
+            id
+            userDepartment
+            userName
+            userTel
+            start
+            end
+            serverId
+            serverName
+            late
+        }
     }
 `;
 

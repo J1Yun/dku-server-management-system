@@ -24,7 +24,7 @@ module.exports = {
     getReturnConfirms: require('./ctrl/admin/getReturnConfirms'),
     getMembers: require('./ctrl/admin/getMembers'),
     getCalendarReservations: require('./ctrl/admin/getCalendarReservations'),
-    getConfirmWaiting: require('./ctrl/admin/getConfirmWaiting'),
+    getDeadlineReturns: require('./ctrl/admin/getDeadlineReturns'),
 
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),

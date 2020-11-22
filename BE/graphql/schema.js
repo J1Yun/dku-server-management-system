@@ -98,6 +98,18 @@ module.exports = buildSchema(`
         department: String
     }
 
+    type DeadlineReturn {
+        id: ID!
+        userDepartment: String
+        userName: String
+        userTel: String
+        start: Date!
+        end: Date!
+        serverId: ID!
+        serverName: String
+        late: Int
+    }
+
     input ReservationInput {
         serverId: ID!
         start: Date!
@@ -124,7 +136,7 @@ module.exports = buildSchema(`
         getReturnConfirms: [AdminReturnConfirm]
         getMembers: [User]
         getCalendarReservations: [CalendarReservation]
-        getConfirmWaiting: Int
+        getDeadlineReturns(dDay: Int!): [DeadlineReturn]
     }
 
     type Mutation {
