@@ -33,7 +33,7 @@ const useRowStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
     },
     textField: {
-        width: '20ch',
+        width: '19.5ch',
     },
 }));
 
@@ -246,12 +246,7 @@ export default function Confirm() {
                             labelWidth={0}
                         />
                     </FormControl>
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleSelectClick}
-                    >
+                    <Button variant="outlined" color="primary" onClick={handleSelectClick}>
                         조회
                     </Button>
                 </Box>
