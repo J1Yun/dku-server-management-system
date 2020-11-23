@@ -10,6 +10,7 @@ import {
     TableRow,
     Paper,
     CircularProgress,
+    Button,
 } from '@material-ui/core';
 import moment from 'moment';
 import PageTitle from '../components/PageTitle';
@@ -51,6 +52,18 @@ function Row(props) {
                     {row.returnOk === 2 && <span style={{ color: 'crimson' }}>거부됨</span>}
                     {row.returnOk === 3 && <span style={{ color: '#777' }}>미반납</span>}
                 </TableCell>
+                <TableCell align="center" width={100}>
+                    {row.applyOk === 1 && (
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => window.open(`/doc/res?id=${row.id}`, '_blank')}
+                        >
+                            PDF 열기
+                        </Button>
+                    )}
+                </TableCell>
             </TableRow>
         </React.Fragment>
     );
@@ -90,6 +103,7 @@ export default function ConfirmReservation() {
                             <TableCell align="center">OS</TableCell>
                             <TableCell align="center">승인여부</TableCell>
                             <TableCell align="center">반납여부</TableCell>
+                            <TableCell align="center">확인서</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
