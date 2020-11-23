@@ -30,3 +30,6 @@ select DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.os, 
 
 # 서버 예약 확인서
 select r.id, u.name as userName, u.department as userDepartment, DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.name as serverName, s.id as serverId, s.os, s.cpu, s.ram, r.purpose from reservations r join users u on u.userId = r.userId join servers s on s.id = r.serverId where r.id=:reservationId;
+
+# 서버 반납 확인서
+select ret.id , u.name as userName, u.department as userDepartment, DATE_FORMAT(ret.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.name as serverName, s.id as serverId, s.os, s.cpu, s.ram, ret.uses from reservations r join users u on u.userId = r.userId join servers s on s.id = r.serverId join returns ret on r.id=ret.reservationId where ret.id=:returnId;
