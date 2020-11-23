@@ -22,6 +22,8 @@ import ApplyReturn from './client/ApplyReturn';
 import ConfirmReservation from './client/ConfirmReservation';
 import Ask from './client/Ask';
 
+import ResDoc from './document/ResDoc';
+
 const theme = createMuiTheme({
     typography: {
         fontFamily: "'Noto Sans KR', 'Roboto', sans-serif",
@@ -57,6 +59,7 @@ ReactDOM.render(
                     <Route path="confirm_reservation" component={ConfirmReservation} />
                     <Route path="ask" component={Ask} />
                 </Route>
+                <Route path="/doc" component={ResDoc} />
             </Router>
         </ApolloProvider>
     </MuiThemeProvider>,
