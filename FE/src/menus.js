@@ -40,6 +40,11 @@ export const menus = {
         },
         {
             id: 4,
+            name: '예약조회',
+            link: '/admin/reservations',
+        },
+        {
+            id: 5,
             name: '회원조회',
             link: '/admin/members',
         },

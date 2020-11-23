@@ -15,6 +15,7 @@ import AdminDashboard from './admin/Dashboard';
 import Calendar from './admin/Calendar';
 import Confirm from './admin/Confirm';
 import Members from './admin/Members';
+import Reservations from './admin/Reservations';
 
 import ClientDashboard from './client/Dashboard';
 import ApplyReservation from './client/ApplyReservation';
@@ -52,6 +53,7 @@ ReactDOM.render(
                     <Route path="calendar" component={Calendar} />
                     <Route path="confirm" component={Confirm} />
                     <Route path="members" component={Members} />
+                    <Route path="reservations" components={Reservations} />
                 </Route>
                 <Route path="/client" component={App}>
                     <IndexRoute component={ClientDashboard} />

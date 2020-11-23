@@ -234,7 +234,7 @@ export default function Confirm() {
                 )}
             </div>
             <div style={{ marginTop: 35 }}>
-                <PageTitle title="반납 조회" />
+                <PageTitle title="예정된 반납 조회" />
                 <Box display="flex" flexDirection="row" justify="center" flexWrap="nowrap" m={1}>
                     <FormControl className={classes.textField} variant="outlined" size="small">
                         <OutlinedInput
