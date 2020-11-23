@@ -1,6 +1,7 @@
 import React from 'react';
-import { Font, Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Font, Page, Text, View, Document, PDFViewer } from '@react-pdf/renderer';
 import moment from 'moment';
+import { styles } from './docStyle';
 
 Font.register({
     family: 'Nanum Gothic Bold',
@@ -12,61 +13,7 @@ Font.register({
     src: 'https://fonts.gstatic.com/ea/nanumgothic/v5/NanumGothic-Regular.ttf',
 });
 
-// Create styles
-const styles = StyleSheet.create({
-    page: {
-        backgroundColor: 'white',
-        fontFamily: 'Nanum Gothic',
-        fontSize: 13,
-        padding: 15,
-    },
-    title: {
-        fontSize: 14,
-        textAlign: 'justify',
-        fontFamily: 'Nanum Gothic Bold',
-    },
-    docTitle: {
-        fontFamily: 'Nanum Gothic Bold',
-        fontSize: 19,
-        textAlign: 'center',
-        marginBottom: 60,
-        marginTop: 70,
-    },
-    text: {
-        textAlign: 'justify',
-    },
-    centerText: {
-        textAlign: 'center',
-    },
-    resInfo: {
-        marginTop: 70,
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    infoTitle: {
-        marginBottom: 50,
-        textAlign: 'center',
-    },
-    infoText: {
-        marginTop: 15,
-    },
-    copyright: {
-        position: 'absolute',
-        fontSize: 12,
-        bottom: 40,
-        left: 0,
-        right: 0,
-        textAlign: 'center',
-        color: 'grey',
-    },
-    copyrightText: {
-        color: '#333',
-        marginBottom: 3,
-    },
-});
-
-// Create Document Component
-export default function ResDoc({ reservationId }) {
+export default function ResDoc({ id }) {
     return (
         <PDFViewer style={{ width: '100vw', height: '100vh' }}>
             <Document>
