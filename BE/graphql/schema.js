@@ -111,6 +111,21 @@ module.exports = buildSchema(`
         late: Int
     }
 
+    type DocReservation {
+        id: ID!
+        userName: String!
+        userDepartment: String!
+        createdAt: Date!
+        start: Date!
+        end: Date!
+        serverName: String!
+        serverId: String!
+        os: String!
+        cpu: String!
+        ram: String!
+        purpose: String!
+    }
+
     input ReservationInput {
         serverId: ID!
         start: Date!
@@ -138,6 +153,7 @@ module.exports = buildSchema(`
         getMembers: [User]
         getCalendarReservations: [CalendarReservation]
         getDeadlineReturns(dDay: Int!): [DeadlineReturn]
+        getDocReservation(id: ID!): [DocReservation]
     }
 
     type Mutation {

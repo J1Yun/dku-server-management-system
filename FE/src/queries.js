@@ -171,6 +171,25 @@ export const GET_CALENDAR_RESERVATIONS = gql`
     }
 `;
 
+export const GET_DOC_RESERVATION = gql`
+    query getDocReservation($id: ID!) {
+        getDocReservation(id: $id) {
+            id
+            userName
+            userDepartment
+            createdAt
+            start
+            end
+            serverName
+            serverId
+            os
+            cpu
+            ram
+            purpose
+        }
+    }
+`;
+
 export const POST_RESERVATION = gql`
     mutation postReservation($reservation: ReservationInput!) {
         postReservation(reservation: $reservation) {

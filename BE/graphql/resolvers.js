@@ -29,4 +29,7 @@ module.exports = {
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),
     updateReturnApply: require('./ctrl/admin/updateReturnApply'),
+
+    // DOCUMENT
+    getDocReservation: require('./ctrl/document/getDocReservation'),
 };

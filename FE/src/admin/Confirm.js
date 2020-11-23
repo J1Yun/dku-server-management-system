@@ -21,7 +21,6 @@ import SnackMessage from './components/SnackMessage';
 import PageTitle from '../components/PageTitle';
 import moment from 'moment';
 import { useQuery } from 'react-apollo';
-import ResDoc from '../document/ResDoc';
 import { GET_CONFIRMS, GET_RETURN_CONFIRMS, GET_DEADLINE_RETURNS } from '../queries';
 
 const useRowStyles = makeStyles((theme) => ({
