@@ -24,6 +24,7 @@ import ConfirmReservation from './client/ConfirmReservation';
 import Ask from './client/Ask';
 
 import ResDoc from './document/ResDoc';
+import RetDoc from './document/RetDoc';
 
 import NotFound from './NotFound';
 
@@ -64,6 +65,7 @@ ReactDOM.render(
                     <Route path="ask" component={Ask} />
                 </Route>
                 <Route path="/doc/res" component={ResDoc} />
+                <Route path="/doc/ret" component={RetDoc} />
                 <Route path="*" component={NotFound} />
             </Router>
         </ApolloProvider>

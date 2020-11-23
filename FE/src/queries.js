@@ -55,6 +55,23 @@ export const GET_RESERVATIONS = gql`
     }
 `;
 
+export const GET_RESERVATIONS_FROM_ADMIN = gql`
+    query getReservationsFromAdmin {
+        getReservationsFromAdmin {
+            id
+            __typename @skip(if: true)
+            serverId
+            userDepartment
+            userName
+            createdAt
+            start
+            end
+            applyOk
+            returnOk
+        }
+    }
+`;
+
 export const GET_RESERVABLE_SERVERS = gql`
     query getReservableServers($start: Date!, $end: Date!) {
         getReservableServers(start: $start, end: $end) {
@@ -186,6 +203,25 @@ export const GET_DOC_RESERVATION = gql`
             cpu
             ram
             purpose
+        }
+    }
+`;
+
+export const GET_DOC_RETURN = gql`
+    query getDocReturn($id: ID!) {
+        getDocReturn(id: $id) {
+            id
+            userName
+            userDepartment
+            createdAt
+            start
+            end
+            serverName
+            serverId
+            os
+            cpu
+            ram
+            uses
         }
     }
 `;

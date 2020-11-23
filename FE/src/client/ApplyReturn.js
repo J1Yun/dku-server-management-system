@@ -80,7 +80,9 @@ export default function ApplyReturn() {
     const handleChange = useCallback(
         (e) => {
             const { name, value } = e.target;
-            setMyReturn({ ...myReturn, [name]: value });
+            if (name === 'rating') {
+                setMyReturn({ ...myReturn, [name]: parseInt(value) });
+            } else setMyReturn({ ...myReturn, [name]: value });
         },
         [myReturn],
     );
