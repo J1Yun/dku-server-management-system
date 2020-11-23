@@ -7,7 +7,7 @@ select id, name, os, cpu, ram from servers s where s.id not in (select r.serverI
 # 서버 예약 날짜 (두달간)
 select serverId, CASE WHEN start<'2020-11-20' and '2020-11-20'<=end THEN '2020-11-20' WHEN '2020-11-20' <=start and start<=DATE_ADD('2020-11-20', INTERVAL 2 MONTH) THEN start END as start, CASE WHEN '2020-11-20' <=end and end<=DATE_ADD('2020-11-20', INTERVAL 2 MONTH) THEN end WHEN start<=DATE_ADD('2020-11-20', INTERVAL 2 MONTH) and DATE_ADD('2020-11-20', INTERVAL 2 MONTH)<end THEN DATE_ADD('2020-11-20', INTERVAL 2 MONTH) END as end from reservations where serverId=:serverId and applyOk!=2 and end>='2020-11-20';
 
-# 서버 예약 현황
+# 서버 예약 현황  ( returnOk: 반납미완료 0, 반납완료 1 )
 select r.id, r.start, r.end, r.serverId, u.name, u.department, IF ( EXISTS (select reservationId from returns where applyOk=1 and r.id=reservationId), 1, 0) as returnOK from users u join reservations r on u.userId = r.userId where r.applyOk=1;
 
 # 관리자가 승인해야할 반납 내역
@@ -22,10 +22,10 @@ select count(*) as waiting from reservations where applyOk=0;
 # 승인 대기 중인 반납 내역 수
 select count(*) as waiting from returns where applyOk=0;
 
-# 반납예정일이 n일 남은 예약 내역
+# 반납예정일이 n일 남은 예약 내역 ( late: 반납기한남음 0, 반납기한지남 1 )
 select r.id, u.department as userDepartment, u.name as userName, u.tel, r.start, r.end, s.id as serverId, s.name as serverName, IF( end<'2020-11-20', 1, 0 ) as late from reservations r join servers s on s.id = r.serverId join users u on r.userId = u.userId where r.applyOk=1 and end<=DATE_ADD('2020-11-20', INTERVAL 7 DAY) and NOT EXISTS(select reservationId from returns where reservationId=r.id and r.applyOk!=2);
 
-# 나의 예약 내역 ( 반납승인대기 0, 반납승인완료 1, 반납승인거부 2, 미반납 3 )
+# 나의 예약 내역 ( returnOk: 반납승인대기 0, 반납승인완료 1, 반납승인거부 2, 미반납 3 )
 select DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.os, r.applyOk, IF(ret.id, ret.applyOk, 3) as returnOk from reservations r join servers s on r.serverId = s.id left join returns ret on r.id = ret.reservationId where r.userId=:userId;
 
 # 서버 예약 확인서
@@ -33,3 +33,6 @@ select r.id, u.name as userName, u.department as userDepartment, DATE_FORMAT(r.c
 
 # 서버 반납 확인서
 select ret.id , u.name as userName, u.department as userDepartment, DATE_FORMAT(ret.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.name as serverName, s.id as serverId, s.os, s.cpu, s.ram, ret.uses from reservations r join users u on u.userId = r.userId join servers s on s.id = r.serverId join returns ret on r.id=ret.reservationId where ret.id=:returnId;
+
+# 관리자 모든 예약 조회 ( returnOk: 반납승인대기 0, 반납승인완료 1, 반납승인거부 2, 미반납 3 )
+select r.id, s.id as serverId, u.department as userDepartment, u.name as userName, DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createAt, r.start, r.end, r.applyOk, IF(ret.id, ret.applyOk, 3) as returnOk from reservations r join servers s on r.serverId = s.id join users u on r.userId = u.userId left join returns ret on r.id = ret.reservationId;
