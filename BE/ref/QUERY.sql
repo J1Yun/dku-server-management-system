@@ -29,4 +29,4 @@ select r.id, u.department as userDepartment, u.name as userName, u.tel, r.start,
 select DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.os, r.applyOk, IF(ret.id, ret.applyOk, 3) as returnOk from reservations r join servers s on r.serverId = s.id left join returns ret on r.id = ret.reservationId where r.userId=:userId;
 
 # 서버 예약 확인서
-select u.name as userName, u.department, DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.name as serverName, s.id as serverId, s.os, s.cpu, s.ram, r.purpose from reservations r join users u on u.userId = r.userId join servers s on s.id = r.serverId where r.id=:reservationId;
+select r.id, u.name as userName, u.department as userDepartment, DATE_FORMAT(r.createdAt, '%Y-%c-%e') as createdAt, r.start, r.end, s.name as serverName, s.id as serverId, s.os, s.cpu, s.ram, r.purpose from reservations r join users u on u.userId = r.userId join servers s on s.id = r.serverId where r.id=:reservationId;
