@@ -25,6 +25,7 @@ module.exports = {
     getMembers: require('./ctrl/admin/getMembers'),
     getCalendarReservations: require('./ctrl/admin/getCalendarReservations'),
     getDeadlineReturns: require('./ctrl/admin/getDeadlineReturns'),
+    getReservationsFromAdmin: require('./ctrl/admin/getReservationsFromAdmin'),
 
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),
@@ -32,4 +33,5 @@ module.exports = {
 
     // DOCUMENT
     getDocReservation: require('./ctrl/document/getDocReservation'),
+    getDocReturn: require('./ctrl/document/getDocReturn'),
 };

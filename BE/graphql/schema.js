@@ -52,6 +52,18 @@ module.exports = buildSchema(`
         returnOk: Int
     }
 
+    type ReservationFromAdmin{
+        id: ID!
+        serverId: ID!
+        userDepartment: String!
+        userName: String!
+        createdAt: Date!
+        start: Date!
+        end: Date!
+        applyOk: Int
+        returnOk: Int
+    }
+
     type MonthlyReservation {
         serverId: ID!
         start: Date!
@@ -126,6 +138,21 @@ module.exports = buildSchema(`
         purpose: String!
     }
 
+    type DocReturn{
+        id: ID!
+        userName: String!
+        userDepartment: String!
+        createdAt: Date!
+        start: Date!
+        end: Date!
+        serverName: String!
+        serverId: String!
+        os: String!
+        cpu: String!
+        ram: String!
+        uses: String!
+    }
+
     input ReservationInput {
         serverId: ID!
         start: Date!
@@ -154,6 +181,8 @@ module.exports = buildSchema(`
         getCalendarReservations: [CalendarReservation]
         getDeadlineReturns(dDay: Int!): [DeadlineReturn]
         getDocReservation(id: ID!): [DocReservation]
+        getDocReturn(id: ID!): [DocReturn]
+        getReservationsFromAdmin: [ReservationFromAdmin]
     }
 
     type Mutation {

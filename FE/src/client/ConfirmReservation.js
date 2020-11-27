@@ -64,6 +64,18 @@ function Row(props) {
                         </Button>
                     )}
                 </TableCell>
+                <TableCell align="center" width={100}>
+                    {row.returnOk === 1 && (
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => window.open(`/doc/ret?id=${row.id}`, '_blank')}
+                        >
+                            PDF 열기
+                        </Button>
+                    )}
+                </TableCell>
             </TableRow>
         </React.Fragment>
     );
@@ -103,7 +115,8 @@ export default function ConfirmReservation() {
                             <TableCell align="center">OS</TableCell>
                             <TableCell align="center">승인여부</TableCell>
                             <TableCell align="center">반납여부</TableCell>
-                            <TableCell align="center">확인서</TableCell>
+                            <TableCell align="center">예약확인서</TableCell>
+                            <TableCell align="center">반납확인서</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
