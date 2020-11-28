@@ -33,17 +33,13 @@ const useStyles = makeStyles((theme) => ({
             padding: 10,
         },
     },
-    buttonSection: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 }));
 
 function StatusCircle({ color }) {
     return <FiberManualRecordIcon style={{ color }} />;
 }
 
-function AddHost({ refetch, setHostDialogOpen }) {
+function AddHostDialog({ refetch, setHostDialogOpen }) {
     const classes = useStyles();
     const [host, setHost] = useState([]);
     const [open, setOpen] = useState(false);
@@ -162,9 +158,17 @@ function AddHost({ refetch, setHostDialogOpen }) {
 
 export default function Console() {
     const classes = useStyles();
+    const [hostConsoleOpen, setHostConsoleOpen] = useState(true);
+    const [selectedHost, setSelectedHost] = useState({});
     const [hosts, setHosts] = useState([]);
     const { loading, error, data, refetch } = useQuery(GET_HOSTS);
     const [hostDialogOpen, setHostDialogOpen] = useState(false);
+
+    const handleOpenContainerConsole = useCallback((host) => {
+        setHostConsoleOpen(false);
+        setSelectedHost({ ...host });
+    }, []);
+
     useEffect(() => {
         if (data) {
             setHosts(
@@ -183,70 +187,159 @@ export default function Console() {
 
     return (
         <div>
-            <PageTitle title="호스트" />
-            <Dialog open={hostDialogOpen} keepMounted>
-                <DialogTitle>
-                    호스트 추가
+            {hostConsoleOpen && (
+                <>
+                    <PageTitle title="호스트 관리" />
+                    <Dialog open={hostDialogOpen} keepMounted>
+                        <DialogTitle>
+                            호스트 추가
+                            <Button
+                                onClick={() => setHostDialogOpen(false)}
+                                variant="outlined"
+                                color="secondary"
+                            >
+                                취소
+                            </Button>
+                        </DialogTitle>
+                        <Divider />
+                        <DialogContent>
+                            <AddHostDialog
+                                refetch={refetch}
+                                setHostDialogOpen={setHostDialogOpen}
+                            />
+                        </DialogContent>
+                    </Dialog>
                     <Button
-                        className={classes.buttonSection}
-                        onClick={() => setHostDialogOpen(false)}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => {
+                            setHostDialogOpen(true);
+                        }}
+                    >
+                        호스트 추가
+                    </Button>
+                    <TableContainer className={classes.tableWrapper} component={Paper}>
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center">서버ID</TableCell>
+                                    <TableCell align="center">서버명</TableCell>
+                                    <TableCell align="center">IP</TableCell>
+                                    <TableCell align="center">CPU</TableCell>
+                                    <TableCell align="center">RAM</TableCell>
+                                    <TableCell align="center">위치</TableCell>
+                                    <TableCell align="center">가동상태</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {hosts.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        onClick={() => handleOpenContainerConsole(row)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <TableCell align="center" component="th" scope="row">
+                                            {row.id}
+                                        </TableCell>
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center">{row.host}</TableCell>
+                                        <TableCell align="center">{row.cpu}</TableCell>
+                                        <TableCell align="center">{row.ram}</TableCell>
+                                        <TableCell align="center">{row.location}</TableCell>
+                                        <TableCell align="center">
+                                            {1 === 0 ? (
+                                                <StatusCircle color="green" />
+                                            ) : (
+                                                <StatusCircle color="crimson" />
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
+            )}
+            {!hostConsoleOpen && (
+                <>
+                    <PageTitle title={`컨테이너 관리 (호스트: ${selectedHost.name})`} />
+                    <Button
+                        onClick={() => setHostConsoleOpen(true)}
                         variant="outlined"
                         color="secondary"
+                        size="small"
                     >
-                        취소
+                        호스트 관리로 돌아가기
                     </Button>
-                </DialogTitle>
-                <Divider />
-                <DialogContent>
-                    <AddHost refetch={refetch} setHostDialogOpen={setHostDialogOpen} />
-                </DialogContent>
-            </Dialog>
-            <Button
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={() => {
-                    setHostDialogOpen(true);
-                }}
-            >
-                호스트추가
-            </Button>
-            <TableContainer className={classes.tableWrapper} component={Paper}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">서버ID</TableCell>
-                            <TableCell align="center">서버명</TableCell>
-                            <TableCell align="center">IP</TableCell>
-                            <TableCell align="center">CPU</TableCell>
-                            <TableCell align="center">RAM</TableCell>
-                            <TableCell align="center">위치</TableCell>
-                            <TableCell align="center">가동상태</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {hosts.map((row) => (
-                            <TableRow key={row.id} onClick={() => console.log(row.id)}>
-                                <TableCell align="center" component="th" scope="row">
-                                    {row.id}
-                                </TableCell>
-                                <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.host}</TableCell>
-                                <TableCell align="center">{row.cpu}</TableCell>
-                                <TableCell align="center">{row.ram}</TableCell>
-                                <TableCell align="center">{row.location}</TableCell>
-                                <TableCell align="center">
-                                    {1 === 0 ? (
-                                        <StatusCircle color="green" />
-                                    ) : (
-                                        <StatusCircle color="crimson" />
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                    <Dialog open={hostDialogOpen} keepMounted>
+                        <DialogTitle>
+                            컨테이너 추가
+                            <Button
+                                className={classes.buttonSection}
+                                onClick={() => setHostDialogOpen(false)}
+                                variant="outlined"
+                                color="secondary"
+                            >
+                                취소
+                            </Button>
+                        </DialogTitle>
+                        <Divider />
+                        <DialogContent>
+                            <AddHostDialog
+                                refetch={refetch}
+                                setHostDialogOpen={setHostDialogOpen}
+                            />
+                        </DialogContent>
+                    </Dialog>
+                    <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => {
+                            setHostDialogOpen(true);
+                        }}
+                    >
+                        컨테이너 추가
+                    </Button>
+                    <TableContainer className={classes.tableWrapper} component={Paper}>
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center">서버ID</TableCell>
+                                    <TableCell align="center">서버명</TableCell>
+                                    <TableCell align="center">IP</TableCell>
+                                    <TableCell align="center">CPU</TableCell>
+                                    <TableCell align="center">RAM</TableCell>
+                                    <TableCell align="center">위치</TableCell>
+                                    <TableCell align="center">가동상태</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {hosts.map((row) => (
+                                    <TableRow key={row.id} onClick={() => console.log(row.id)}>
+                                        <TableCell align="center" component="th" scope="row">
+                                            {row.id}
+                                        </TableCell>
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center">{row.host}</TableCell>
+                                        <TableCell align="center">{row.cpu}</TableCell>
+                                        <TableCell align="center">{row.ram}</TableCell>
+                                        <TableCell align="center">{row.location}</TableCell>
+                                        <TableCell align="center">
+                                            {1 === 0 ? (
+                                                <StatusCircle color="green" />
+                                            ) : (
+                                                <StatusCircle color="crimson" />
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
+            )}
         </div>
     );
 }
