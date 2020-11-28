@@ -188,6 +188,20 @@ export const GET_CALENDAR_RESERVATIONS = gql`
     }
 `;
 
+export const GET_HOSTS = gql`
+    query getHosts {
+        getHosts {
+            id
+            __typename @skip(if: true)
+            name
+            host
+            cpu
+            ram
+            location
+        }
+    }
+`;
+
 export const GET_DOC_RESERVATION = gql`
     query getDocReservation($id: ID!) {
         getDocReservation(id: $id) {
@@ -236,6 +250,20 @@ export const POST_RESERVATION = gql`
             purpose
             applyOk
             createdAt
+        }
+    }
+`;
+
+export const POST_HOST = gql`
+    mutation postHost($host: HostInput!) {
+        postHost(host: $host) {
+            host
+            port
+            name
+            password
+            location
+            cpu
+            ram
         }
     }
 `;

@@ -79,6 +79,26 @@ module.exports = buildSchema(`
         location: String!
     }
 
+    type Host{
+        id: ID!
+        host: String!
+        port: String!
+        name: String!
+        password: String!
+        location: String!
+        cpu: Int!
+        ram: Int!
+    }
+
+    type GetHost{
+        id: ID!
+        name: String!
+        host: String!
+        cpu: Int!
+        ram: Int!
+        location: String!
+    }
+
     type AdminConfirm {
         id: ID!
         serverId: ID!
@@ -167,6 +187,16 @@ module.exports = buildSchema(`
         review: String
     }
 
+    input HostInput {
+        host: String!
+        port: String!
+        name: String!
+        password: String!
+        location: String!
+        cpu: Int!
+        ram: Int!
+    }
+
     type Query {
         getUserInfo: User
         getServersFromClient: [ServerClient]
@@ -183,11 +213,13 @@ module.exports = buildSchema(`
         getDocReservation(id: ID!): [DocReservation]
         getDocReturn(id: ID!): [DocReturn]
         getReservationsFromAdmin: [ReservationFromAdmin]
+        getHosts: [Host]
     }
 
     type Mutation {
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
+        postHost(host: HostInput!): Host
         updateReservationApply(id: ID!, applyOk: Int!): ID
         updateReturnApply(id: ID!, applyOk: Int!): ID
     }
