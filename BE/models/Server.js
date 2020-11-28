@@ -7,10 +7,11 @@ module.exports = function (sequelize, DataTypes) {
         cpu: { type: DataTypes.INTEGER, allowNull: false },
         ram: { type: DataTypes.INTEGER, allowNull: false },
         location: { type: DataTypes.STRING, allowNull: false },
+        password: { type: DataTypes.STRING, allowNull: false },
         host: { type: DataTypes.STRING, allowNull: false },
         port: { type: DataTypes.STRING, allowNull: false },
         instanceName: { type: DataTypes.STRING, allowNull: false },
-        hostId: { type: DataTypes.INTEGER, allowNull: false }
+        hostId: { type: DataTypes.INTEGER, allowNull: false },
     });
     Server.prototype.dateFormat = (date) => moment(date).format('YYYY-MM-DD');
 
@@ -25,8 +26,6 @@ module.exports = function (sequelize, DataTypes) {
             onUpdate: 'cascade',
         });
     };
-
-    
 
     return Server;
 };

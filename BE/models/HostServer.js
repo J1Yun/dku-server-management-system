@@ -5,8 +5,9 @@ module.exports = function (sequelize, DataTypes) {
         host: { type: DataTypes.STRING, allowNull: false },
         port: { type: DataTypes.STRING, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
+        password: { type: DataTypes.STRING, allowNull: false },
         cpu: { type: DataTypes.INTEGER, allowNull: false },
-        ram: { type: DataTypes.INTEGER, allowNull: false }
+        ram: { type: DataTypes.INTEGER, allowNull: false },
     });
     HostServer.prototype.dateFormat = (date) => moment(date).format('YYYY-MM-DD');
 
@@ -17,4 +18,4 @@ module.exports = function (sequelize, DataTypes) {
     };
 
     return HostServer;
-}; 
+};

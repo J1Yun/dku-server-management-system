@@ -12,7 +12,7 @@ const sequelize = new Sequelize(
     {
         host: process.env.DB_HOST,
         dialect: 'mysql',
-        timezone: '+09:00', //한국 시간 세팅
+        timezone: '+09:00', //한국 시간 셋팅
         operatorsAliases: Sequelize.Op,
         pool: {
             max: 5,
