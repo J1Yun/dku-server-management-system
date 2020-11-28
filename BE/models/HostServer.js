@@ -6,6 +6,7 @@ module.exports = function (sequelize, DataTypes) {
         port: { type: DataTypes.STRING, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },
+        location: { type: DataTypes.STRING, allowNull: false },
         cpu: { type: DataTypes.INTEGER, allowNull: false },
         ram: { type: DataTypes.INTEGER, allowNull: false },
     });
