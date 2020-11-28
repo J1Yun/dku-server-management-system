@@ -79,6 +79,18 @@ module.exports = buildSchema(`
         location: String!
     }
 
+    type Container{
+        id: ID!
+        name: String!
+        os: String!
+        cpu: Int!
+        ram: Int!
+        host: String!
+        port: String!
+        password: String!
+        instanceName: String!
+    }
+
     type Host{
         id: ID!
         host: String!
@@ -214,12 +226,14 @@ module.exports = buildSchema(`
         getDocReturn(id: ID!): [DocReturn]
         getReservationsFromAdmin: [ReservationFromAdmin]
         getHosts: [Host]
+        getContainers(hostId: ID): [Container]
     }
 
     type Mutation {
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
         postHost(host: HostInput!): Host
+        postContainer(container: ContainerInput!): Container
         updateReservationApply(id: ID!, applyOk: Int!): ID
         updateReturnApply(id: ID!, applyOk: Int!): ID
     }

@@ -27,11 +27,13 @@ module.exports = {
     getDeadlineReturns: require('./ctrl/admin/getDeadlineReturns'),
     getReservationsFromAdmin: require('./ctrl/admin/getReservationsFromAdmin'),
     getHosts: require('./ctrl/admin/getHosts'),
+    getContainers: require('./ctrl/admin/getContainers'),
 
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),
     updateReturnApply: require('./ctrl/admin/updateReturnApply'),
     postHost: require('./ctrl/admin/postHost'),
+    postContainer: require('./ctrl/admin/postContainer'),
 
     // DOCUMENT
     getDocReservation: require('./ctrl/document/getDocReservation'),
