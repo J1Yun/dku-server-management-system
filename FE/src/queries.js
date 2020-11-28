@@ -202,6 +202,23 @@ export const GET_HOSTS = gql`
     }
 `;
 
+export const GET_CONTAINERS = gql`
+    query getContainers($hostId: ID) {
+        getContainers(hostId: $hostId) {
+            id
+            __typename @skip(if: true)
+            name
+            os
+            cpu
+            ram
+            host
+            port
+            password
+            instanceName
+        }
+    }
+`;
+
 export const GET_DOC_RESERVATION = gql`
     query getDocReservation($id: ID!) {
         getDocReservation(id: $id) {
@@ -264,6 +281,23 @@ export const POST_HOST = gql`
             location
             cpu
             ram
+        }
+    }
+`;
+
+export const POST_CONTAINER = gql`
+    mutation postContainer($container: ContainerInput!) {
+        postContainer(host: $container) {
+            name
+            os
+            cpu
+            ram
+            location
+            password
+            host
+            port
+            instanceName
+            hostId
         }
     }
 `;

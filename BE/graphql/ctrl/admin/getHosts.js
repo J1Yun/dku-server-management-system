@@ -11,7 +11,7 @@ const models = require('../../../models');
 module.exports = async () => {
     return await models.hostserver
         .findAll({
-            attributes: ['id', 'name', 'host', 'cpu', 'ram', 'location'],
+            attributes: ['id', 'name', 'password', 'host', 'cpu', 'ram', 'location'],
             raw: true,
         })
         .then((result) => result)
