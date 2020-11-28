@@ -1,19 +1,72 @@
 const redis = require('redis');
+const models = require('../models');
 const { promisify } = require('util');
 const Client = require('ssh2').Client;
-// 이 servers 부분을 hardcoding 하지말고 redis -> mysql 캐싱
-const servers = require('../conf/servers');
-const redisHost = require('../conf/secret');
+const redisHost = require('../conf/secret').redisHost;
 const redisClient = redis.createClient(redisHost);
 
-redisClient.on('error', (err) => {
-    console.error(err);
+const REDIS_INSTANCES_NAME = 'instances:all';
+const REDIS_INSTANCES_STATUS_NAME = 'instances-status:all';
+
+redisClient.on('error', (error) => {
+    console.error(`Error occured at Redis connection, ${error}`);
 });
 redisClient.on('ready', () => {
     console.log('Redis is ready');
 });
 
 const getAsync = promisify(redisClient.get).bind(redisClient);
+
+const refineServersData = (hosts, containers) =>
+    new Promise((resolve, reject) => {
+        if (!hosts) reject(Error('No hosts specified.'));
+        const servers = {
+            hosts: [],
+            containers: [],
+        };
+        hosts.forEach((h) =>
+            servers.hosts.push({
+                id: h.id,
+                connInfo: {
+                    host: h.host,
+                    port: h.port,
+                    username: 'root',
+                    password: h.password,
+                },
+            }),
+        );
+        containers.forEach((c) =>
+            servers.containers.push({
+                id: c.id,
+                define: {
+                    os: c.os,
+                    instanceName: c.instanceName,
+                },
+                connInfo: {
+                    host: c.host,
+                    port: c.port,
+                    username: 'root',
+                    password: c.password,
+                },
+            }),
+        );
+        resolve(servers);
+    });
+
+const getServers = async () => {
+    // Do caching
+    const cachedData = JSON.parse(await getAsync(REDIS_INSTANCES_NAME));
+    if (!cachedData) {
+        const hosts = await models.hostserver.findAll({ raw: true });
+        const containers = await models.server.findAll({ raw: true });
+        const nonCachedData = await refineServersData(hosts, containers);
+
+        // Do saving cache if not exists
+        redisClient.set(REDIS_INSTANCES_NAME, JSON.stringify(nonCachedData));
+
+        return nonCachedData;
+    } else return cachedData;
+};
 
 const commandToHost = (instance, command) =>
     new Promise((resolve, reject) => {
@@ -52,6 +105,7 @@ const connInstance = (instance) =>
 // 사용자가 함수를 호출하는 것이 아닌 redis의 결과값만을 가져옴
 const connAllInstance = () => {
     return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
         const connData = [];
         for (const instance of servers.containers) {
             await connInstance(instance)
@@ -68,13 +122,13 @@ const connAllInstance = () => {
     });
 };
 
-const setInstanceStatusToRedis = async () =>
-    redisClient.set('instance-status:all', JSON.stringify(await connAllInstance()));
+const setInstanceStatusFromRedis = async () =>
+    redisClient.set(REDIS_INSTANCES_STATUS_NAME, JSON.stringify(await connAllInstance()));
 
 const getInstanceStatusFromRedis = async () =>
-    console.log(JSON.parse(await getAsync('instance-status:all')));
+    console.log(JSON.parse(await getAsync(REDIS_INSTANCES_STATUS_NAME)));
 
-setInstanceStatusToRedis();
+setInstanceStatusFromRedis();
 getInstanceStatusFromRedis();
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-18');
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-20');
