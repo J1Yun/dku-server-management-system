@@ -136,6 +136,21 @@ export default function MainPage({ location }) {
                             <SnackMessage message="로그인 정보가 유실되었습니다. 다시 로그인하세요." />
                         )}
                         {query.logout && <SnackMessage message="정상적으로 로그아웃되었습니다." />}
+                        {query.inspire && (
+                            <>
+                                <SnackMessage message="로그인된 상태입니다. 현재 계정으로 다시 접속하거나, 새로운 계정으로 로그인하세요." />
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    className={classes.submit}
+                                    onClick={() => window.history.back()}
+                                >
+                                    현재 계정으로 다시 접속하기
+                                </Button>
+                            </>
+                        )}
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -170,7 +185,7 @@ export default function MainPage({ location }) {
                             size="large"
                             className={classes.submit}
                         >
-                            로그인
+                            {query.inspire ? '새로운 계정으로 로그인' : '로그인'}
                         </Button>
                         <Grid container>
                             <Grid item xs>
