@@ -40,6 +40,7 @@ const refineServersData = (hosts, containers) =>
                 id: c.id,
                 define: {
                     os: c.os,
+                    hostId: c.hostId,
                     instanceName: c.instanceName,
                 },
                 connInfo: {
@@ -122,14 +123,47 @@ const connAllInstance = () => {
     });
 };
 
+const commandToContainerViaHost = (command, containerId) => {
+    return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const targetContainer = servers.containers.filter((c) => c.id === containerId)[0];
+        const targetHostInstance = servers.hosts.filter(
+            (h) => h.id === targetContainer.define.hostId,
+        )[0];
+        return await commandToHost(
+            targetHostInstance,
+            command,
+            targetContainer.define.instanceName,
+        );
+    });
+};
+
+// docker [command] [instanceName]
+const commandToContainerViaHostUsingDocker = (command, containerId) => {
+    return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const targetContainer = servers.containers.filter((c) => c.id === containerId)[0];
+        const targetHostInstance = servers.hosts.filter(
+            (h) => h.id === targetContainer.define.hostId,
+        )[0];
+        return await commandToHost(
+            targetHostInstance,
+            `docker ${command} ${targetContainer.define.instanceName}`,
+        );
+    });
+};
+
 const setInstanceStatusFromRedis = async () =>
     redisClient.set(REDIS_INSTANCES_STATUS_NAME, JSON.stringify(await connAllInstance()));
 
 const getInstanceStatusFromRedis = async () =>
     console.log(JSON.parse(await getAsync(REDIS_INSTANCES_STATUS_NAME)));
 
-setInstanceStatusFromRedis();
-getInstanceStatusFromRedis();
+commandToContainerViaHostUsingDocker('inspect', 1);
+
+//setInstanceStatusFromRedis();
+//getInstanceStatusFromRedis();
+
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-18');
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-20');
 //commandToHost(servers.hosts[0], 'docker restart dku-centos-8');
