@@ -272,9 +272,6 @@ export default function Console() {
                     >
                         호스트 관리로 돌아가기
                     </Button>
-                    {/* 컨테이너 추가에 들어갈 내용
-                    호스트: ~
-                    name, os */}
                     <Dialog open={hostDialogOpen} keepMounted>
                         <DialogTitle>
                             컨테이너 추가
