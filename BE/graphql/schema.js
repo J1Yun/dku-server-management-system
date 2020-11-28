@@ -89,6 +89,7 @@ module.exports = buildSchema(`
         port: String!
         password: String!
         instanceName: String!
+        hostId: ID!
     }
 
     type Host{
@@ -209,6 +210,12 @@ module.exports = buildSchema(`
         ram: Int!
     }
 
+    input ContainerInput {
+        name: String!
+        os: String!
+        password: String!
+    }
+
     type Query {
         getUserInfo: User
         getServersFromClient: [ServerClient]
@@ -233,7 +240,7 @@ module.exports = buildSchema(`
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
         postHost(host: HostInput!): Host
-        postContainer(container: ContainerInput!): Container
+        postContainer(container: ContainerInput!, hostId: ID!): Boolean
         updateReservationApply(id: ID!, applyOk: Int!): ID
         updateReturnApply(id: ID!, applyOk: Int!): ID
     }

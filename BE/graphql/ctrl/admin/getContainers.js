@@ -17,9 +17,6 @@ module.exports = async ({ hostId }) => {
             where: { hostId },
             raw: true,
         })
-        .then((result) => {
-            console.log(result);
-            return result;
-        })
+        .then((result) => result)
         .catch((error) => error);
 };

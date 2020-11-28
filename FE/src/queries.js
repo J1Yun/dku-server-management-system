@@ -286,19 +286,8 @@ export const POST_HOST = gql`
 `;
 
 export const POST_CONTAINER = gql`
-    mutation postContainer($container: ContainerInput!) {
-        postContainer(host: $container) {
-            name
-            os
-            cpu
-            ram
-            location
-            password
-            host
-            port
-            instanceName
-            hostId
-        }
+    mutation postContainer($container: ContainerInput!, $hostId: ID!) {
+        postContainer(container: $container, hostId: $hostId)
     }
 `;
 

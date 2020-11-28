@@ -192,8 +192,10 @@ function AddContainerDialog({ refetch, setContainerDialogOpen, selectedHost }) {
         setOpen(true);
         postContainer({
             variables: {
-                selectedHost,
-                container,
+                hostId: selectedHost.id,
+                container: {
+                    ...container,
+                },
             },
         });
     };
@@ -268,14 +270,16 @@ export default function Console() {
         setHostConsoleOpen(false);
         setSelectedHost({ ...host });
     }, []);
-    const { loading: loadingContainer, error: errorContainer, data: dataContainer } = useQuery(
-        GET_CONTAINERS,
-        {
-            variables: {
-                hostId: parseInt(selectedHost.id) || null,
-            },
+    const {
+        loading: loadingContainer,
+        error: errorContainer,
+        data: dataContainer,
+        refetch: refetchContainer,
+    } = useQuery(GET_CONTAINERS, {
+        variables: {
+            hostId: parseInt(selectedHost.id) || null,
         },
-    );
+    });
     useEffect(() => {
         if (data) {
             setHosts(
@@ -379,7 +383,7 @@ export default function Console() {
                     </TableContainer>
                 </>
             )}
-            {!hostConsoleOpen && containers.length > 0 && (
+            {!hostConsoleOpen && (
                 <>
                     <PageTitle title={`컨테이너 관리 (호스트: ${selectedHost.name})`} />
                     <Button
@@ -408,7 +412,7 @@ export default function Console() {
                         <Divider />
                         <DialogContent>
                             <AddContainerDialog
-                                refetch={refetch}
+                                refetch={refetchContainer}
                                 setContainerDialogOpen={setContainerDialogOpen}
                                 selectedHost={selectedHost}
                             />
@@ -440,28 +444,32 @@ export default function Console() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {containers.map((row) => (
-                                    <TableRow key={row.id} onClick={() => console.log(row.id)}>
-                                        <TableCell align="center">{row.id}</TableCell>
-                                        <TableCell align="center">{row.instanceName}</TableCell>
-                                        <TableCell align="center">{row.host}</TableCell>
-                                        <TableCell align="center">{row.port}</TableCell>
-                                        <TableCell align="center">{row.os}</TableCell>
-                                        <TableCell align="center">{row.cpu}</TableCell>
-                                        <TableCell align="center">{row.ram}GB</TableCell>
-                                        <TableCell align="center">{row.password}</TableCell>
-                                        <TableCell align="center">
-                                            {1 === 0 ? (
-                                                <StatusCircle color="green" />
-                                            ) : (
-                                                <StatusCircle color="crimson" />
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {containers.length > 0 &&
+                                    containers.map((row) => (
+                                        <TableRow key={row.id}>
+                                            <TableCell align="center">{row.id}</TableCell>
+                                            <TableCell align="center">{row.instanceName}</TableCell>
+                                            <TableCell align="center">{row.host}</TableCell>
+                                            <TableCell align="center">{row.port}</TableCell>
+                                            <TableCell align="center">{row.os}</TableCell>
+                                            <TableCell align="center">{row.cpu}</TableCell>
+                                            <TableCell align="center">{row.ram}GB</TableCell>
+                                            <TableCell align="center">{row.password}</TableCell>
+                                            <TableCell align="center">
+                                                {1 === 0 ? (
+                                                    <StatusCircle color="green" />
+                                                ) : (
+                                                    <StatusCircle color="crimson" />
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    {containers.length === 0 && (
+                        <SnackMessage message="등록된 컨테이너가 없습니다. 컨테이너를 추가하세요." />
+                    )}
                 </>
             )}
         </div>
