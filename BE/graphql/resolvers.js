@@ -38,4 +38,8 @@ module.exports = {
     // DOCUMENT
     getDocReservation: require('./ctrl/document/getDocReservation'),
     getDocReturn: require('./ctrl/document/getDocReturn'),
+
+    // SSH
+    getHostStatus: require('./ctrl/ssh/getStatus').getHostStatus,
+    getContainerStatus: require('./ctrl/ssh/getStatus').getContainerStatus,
 };

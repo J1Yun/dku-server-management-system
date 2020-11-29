@@ -171,7 +171,7 @@ module.exports = buildSchema(`
         purpose: String!
     }
 
-    type DocReturn{
+    type DocReturn {
         id: ID!
         userName: String!
         userDepartment: String!
@@ -184,6 +184,11 @@ module.exports = buildSchema(`
         cpu: String!
         ram: String!
         uses: String!
+    }
+
+    type Status {
+        id: Int!
+        status: Int!
     }
 
     input ReservationInput {
@@ -234,6 +239,8 @@ module.exports = buildSchema(`
         getReservationsFromAdmin: [ReservationFromAdmin]
         getHosts: [Host]
         getContainers(hostId: ID): [Container]
+        getHostStatus: [Status]
+        getContainerStatus: [Status]
     }
 
     type Mutation {

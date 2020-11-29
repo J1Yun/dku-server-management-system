@@ -219,6 +219,24 @@ export const GET_CONTAINERS = gql`
     }
 `;
 
+export const GET_HOST_STATUS = gql`
+    query getHostStatus {
+        getHostStatus {
+            id
+            status
+        }
+    }
+`;
+
+export const GET_CONTAINER_STATUS = gql`
+    query getHostStatus {
+        getContainerStatus {
+            id
+            status
+        }
+    }
+`;
+
 export const GET_DOC_RESERVATION = gql`
     query getDocReservation($id: ID!) {
         getDocReservation(id: $id) {

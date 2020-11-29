@@ -6,7 +6,8 @@ const redisHost = require('../conf/secret').redisHost;
 const redisClient = redis.createClient(redisHost);
 
 const REDIS_INSTANCES_NAME = 'instances:all';
-const REDIS_INSTANCES_STATUS_NAME = 'instances-status:all';
+const REDIS_HOST_STATUS_NAME = 'host-status:all';
+const REDIS_CONTAINER_STATUS_NAME = 'container-status:all';
 
 redisClient.on('error', (error) => {
     console.error(`Error occured at Redis connection, ${error}`);
@@ -69,6 +70,13 @@ const getServers = async () => {
     } else return cachedData;
 };
 
+const updateServers = async () => {
+    const hosts = await models.hostserver.findAll({ raw: true });
+    const containers = await models.server.findAll({ raw: true });
+    const nonCachedData = await refineServersData(hosts, containers);
+    redisClient.set(REDIS_INSTANCES_NAME, JSON.stringify(nonCachedData));
+};
+
 const commandToHost = (instance, command) =>
     new Promise((resolve, reject) => {
         const conn = new Client();
@@ -102,13 +110,30 @@ const connInstance = (instance) =>
             .connect(instance.connInfo);
     });
 
-// To Redis
-// 사용자가 함수를 호출하는 것이 아닌 redis의 결과값만을 가져옴
-const connAllInstance = () => {
+const connAllContainers = () => {
     return new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const connData = [];
         for (const instance of servers.containers) {
+            await connInstance(instance)
+                .then((id) => connData.push({ id, status: 1 }))
+                .catch((error) =>
+                    connData.push({
+                        id: instance.id,
+                        status: 0,
+                        error: `${error.code} (${error.errno})`,
+                    }),
+                );
+        }
+        resolve(connData);
+    });
+};
+
+const connAllHosts = () => {
+    return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const connData = [];
+        for (const instance of servers.hosts) {
             await connInstance(instance)
                 .then((id) => connData.push({ id, status: 1 }))
                 .catch((error) =>
@@ -130,10 +155,8 @@ const commandToContainerViaHost = (command, containerId) => {
         const targetHostInstance = servers.hosts.filter(
             (h) => h.id === targetContainer.define.hostId,
         )[0];
-        return await commandToHost(
-            targetHostInstance,
-            command,
-            targetContainer.define.instanceName,
+        resolve(
+            await commandToHost(targetHostInstance, command, targetContainer.define.instanceName),
         );
     });
 };
@@ -146,23 +169,33 @@ const commandToContainerViaHostUsingDocker = (command, containerId) => {
         const targetHostInstance = servers.hosts.filter(
             (h) => h.id === targetContainer.define.hostId,
         )[0];
-        return await commandToHost(
-            targetHostInstance,
-            `docker ${command} ${targetContainer.define.instanceName}`,
+        resolve(
+            await commandToHost(
+                targetHostInstance,
+                `docker ${command} ${targetContainer.define.instanceName}`,
+            ),
         );
     });
 };
 
-const setInstanceStatusFromRedis = async () =>
-    redisClient.set(REDIS_INSTANCES_STATUS_NAME, JSON.stringify(await connAllInstance()));
+const setContainerStatusToRedis = async () =>
+    redisClient.set(REDIS_CONTAINER_STATUS_NAME, JSON.stringify(await connAllContainers()));
 
-const getInstanceStatusFromRedis = async () =>
-    console.log(JSON.parse(await getAsync(REDIS_INSTANCES_STATUS_NAME)));
+const setHostStatusToRedis = async () =>
+    redisClient.set(REDIS_HOST_STATUS_NAME, JSON.stringify(await connAllHosts()));
 
-commandToContainerViaHostUsingDocker('inspect', 1);
+const getContainerStatusFromRedis = async () =>
+    JSON.parse(await getAsync(REDIS_CONTAINER_STATUS_NAME));
 
-//setInstanceStatusFromRedis();
-//getInstanceStatusFromRedis();
+const getHostStatusFromRedis = async () => JSON.parse(await getAsync(REDIS_HOST_STATUS_NAME));
+
+module.exports = {
+    setContainerStatusToRedis,
+    setHostStatusToRedis,
+    getContainerStatusFromRedis,
+    getHostStatusFromRedis,
+    updateServers,
+};
 
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-18');
 //commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-20');

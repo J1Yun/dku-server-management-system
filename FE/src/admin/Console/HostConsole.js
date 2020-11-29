@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -9,8 +9,28 @@ import {
     Paper,
 } from '@material-ui/core';
 import StatusCircle from './StatusCircle';
+import { useQuery } from 'react-apollo';
+import { GET_HOST_STATUS } from '../../queries';
+import SnackMessage from '../../client/components/SnackMessage';
 
 export default function HostConsole({ hosts, classes, handleOpenContainerConsole }) {
+    const [hostStatus, setHostStatus] = useState([]);
+    const { error, data, refetch } = useQuery(GET_HOST_STATUS);
+
+    useEffect(() => {
+        if (data) setHostStatus([...data.getHostStatus]);
+    }, [data, setHostStatus]);
+
+    const getStatus = (id) => {
+        const targetStatusData = hostStatus.find((s) => s.id === parseInt(id));
+        return targetStatusData ? targetStatusData.status : null;
+    };
+
+    if (error)
+        return (
+            <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
+        );
+
     return (
         <TableContainer className={classes.tableWrapper} component={Paper}>
             <Table className={classes.table}>
@@ -41,7 +61,7 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
                             <TableCell align="center">{row.ram}GB</TableCell>
                             <TableCell align="center">{row.location}</TableCell>
                             <TableCell align="center">
-                                {1 === 0 ? (
+                                {getStatus(row.id) === 1 ? (
                                     <StatusCircle color="green" />
                                 ) : (
                                     <StatusCircle color="crimson" />

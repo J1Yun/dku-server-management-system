@@ -112,7 +112,7 @@ export default function Console() {
                             color="secondary"
                             size="small"
                         >
-                            호스트 관리로 돌아가기
+                            호스트 콘솔로 돌아가기
                         </Button>
                     </Box>
                     <AddContainerDialog

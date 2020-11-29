@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -9,8 +9,28 @@ import {
     Paper,
 } from '@material-ui/core';
 import StatusCircle from './StatusCircle';
+import { useQuery } from 'react-apollo';
+import { GET_CONTAINER_STATUS } from '../../queries';
+import SnackMessage from '../../client/components/SnackMessage';
 
 export default function ContainerConsole({ containers, classes }) {
+    const [containerStatus, setContainerStatus] = useState([]);
+    const { error, data, refetch } = useQuery(GET_CONTAINER_STATUS);
+
+    useEffect(() => {
+        if (data) setContainerStatus([...data.getContainerStatus]);
+    }, [data, setContainerStatus]);
+
+    const getStatus = (id) => {
+        const targetStatusData = containerStatus.find((s) => s.id === parseInt(id));
+        return targetStatusData ? targetStatusData.status : null;
+    };
+
+    if (error)
+        return (
+            <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
+        );
+
     return (
         <TableContainer className={classes.tableWrapper} component={Paper}>
             <Table className={classes.table}>
@@ -21,7 +41,7 @@ export default function ContainerConsole({ containers, classes }) {
                         <TableCell align="center">HOST</TableCell>
                         <TableCell align="center">PORT</TableCell>
                         <TableCell align="center">OS</TableCell>
-                        <TableCell align="center">CPU</TableCell>
+                        <TableCell align="center">vCPU</TableCell>
                         <TableCell align="center">RAM</TableCell>
                         <TableCell align="center">패스워드</TableCell>
                         <TableCell align="center">가동상태</TableCell>
@@ -40,7 +60,7 @@ export default function ContainerConsole({ containers, classes }) {
                                 <TableCell align="center">{row.ram}GB</TableCell>
                                 <TableCell align="center">{row.password}</TableCell>
                                 <TableCell align="center">
-                                    {1 === 0 ? (
+                                    {getStatus(row.id) === 1 ? (
                                         <StatusCircle color="green" />
                                     ) : (
                                         <StatusCircle color="crimson" />
