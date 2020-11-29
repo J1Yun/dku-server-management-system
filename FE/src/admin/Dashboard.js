@@ -11,9 +11,9 @@ import {
     Paper,
     CircularProgress,
 } from '@material-ui/core';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import StatusCircle from './Console/StatusCircle';
 import SnackMessage from '../client/components/SnackMessage';
-import { GET_SERVERS_FROM_ADMIN } from '../queries';
+import { GET_SERVERS_FROM_ADMIN, GET_CONTAINER_STATUS } from '../queries';
 import PageTitle from '../components/PageTitle';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,27 +28,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function StatusCircle({ color }) {
-    return <FiberManualRecordIcon style={{ color }}>●</FiberManualRecordIcon>;
-}
-
 export default function ServerStatus() {
     const classes = useStyles();
     const [servers, setServers] = useState([]);
+    const [containerStatus, setContainerStatus] = useState([]);
     const { loading, error, data } = useQuery(GET_SERVERS_FROM_ADMIN);
+    const { error: errorStatus, data: dataStatus, refetch: refetchStatus } = useQuery(
+        GET_CONTAINER_STATUS,
+    );
 
     useEffect(() => {
         if (data) {
             setServers(
                 data.getServersFromAdmin.map((s) => {
-                    return { ...s, ram: `${s.ram}GB`, status: 0 };
+                    return { ...s, ram: `${s.ram}GB` };
                 }),
             );
         }
     }, [data, setServers]);
 
+    useEffect(() => {
+        if (dataStatus) setContainerStatus([...dataStatus.getContainerStatus]);
+    }, [dataStatus, setContainerStatus]);
+
+    const getStatus = (id) => {
+        const targetStatusData = containerStatus.find((s) => s.id === parseInt(id));
+        return targetStatusData ? targetStatusData.status : null;
+    };
+
     if (loading) return <CircularProgress />;
-    if (error)
+    if (error || errorStatus)
         return (
             <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
         );
@@ -81,7 +90,7 @@ export default function ServerStatus() {
                                 <TableCell align="center">{row.ram}</TableCell>
                                 <TableCell align="center">{row.location}</TableCell>
                                 <TableCell align="center">
-                                    {row.status === 0 ? (
+                                    {getStatus(row.id) === 1 ? (
                                         <StatusCircle color="green" />
                                     ) : (
                                         <StatusCircle color="crimson" />
