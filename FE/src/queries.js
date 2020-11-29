@@ -223,6 +223,7 @@ export const GET_HOST_STATUS = gql`
     query getHostStatus {
         getHostStatus {
             id
+            __typename @skip(if: true)
             status
         }
     }

@@ -75,6 +75,7 @@ const updateServers = async () => {
     const containers = await models.server.findAll({ raw: true });
     const nonCachedData = await refineServersData(hosts, containers);
     redisClient.set(REDIS_INSTANCES_NAME, JSON.stringify(nonCachedData));
+    console.log('Updated Server to redis successfully.');
 };
 
 const commandToHost = (instance, command) =>

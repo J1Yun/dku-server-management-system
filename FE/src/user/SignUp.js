@@ -86,6 +86,7 @@ export default function SignUp() {
                         setAlertOpen(true);
                         setMessage('사용 중인 이메일입니다. 다른 이메일을 사용하세요.');
                     } else {
+                        console.log(result.data.error);
                         setAlertOpen(true);
                         setMessage('입력 내용을 다시 확인해주세요.');
                     }
@@ -95,7 +96,6 @@ export default function SignUp() {
                 }
             })
             .catch((err) => {
-                console.error(err);
                 setAlertOpen(true);
                 setMessage('서버에 오류가 발생했습니다. 나중에 다시 시도해주세요.');
             });
@@ -127,7 +127,6 @@ export default function SignUp() {
                                 label="소속"
                                 onChange={handleChange}
                                 value={user.department}
-                                autoComplete={false}
                                 autoFocus
                             />
                         </Grid>

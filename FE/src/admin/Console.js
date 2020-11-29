@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useQuery } from 'react-apollo';
-import { Button, CircularProgress, Box, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Box } from '@material-ui/core';
 import SnackMessage from '../client/components/SnackMessage';
 import PageTitle from '../components/PageTitle';
 import { GET_HOSTS, GET_CONTAINERS } from '../queries';

@@ -7,6 +7,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Button,
 } from '@material-ui/core';
 import StatusCircle from './StatusCircle';
 import { useQuery } from 'react-apollo';
@@ -38,13 +39,16 @@ export default function ContainerConsole({ containers, classes }) {
                     <TableRow>
                         <TableCell align="center">인스턴스ID</TableCell>
                         <TableCell align="center">인스턴스 이름</TableCell>
-                        <TableCell align="center">HOST</TableCell>
+                        <TableCell align="center">Host IP</TableCell>
                         <TableCell align="center">PORT</TableCell>
                         <TableCell align="center">OS</TableCell>
                         <TableCell align="center">vCPU</TableCell>
                         <TableCell align="center">RAM</TableCell>
                         <TableCell align="center">패스워드</TableCell>
-                        <TableCell align="center">가동상태</TableCell>
+                        <TableCell align="center">상태</TableCell>
+                        <TableCell align="center" width={160}>
+                            작업
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,6 +69,19 @@ export default function ContainerConsole({ containers, classes }) {
                                     ) : (
                                         <StatusCircle color="crimson" />
                                     )}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <Button size="small" color="secondary" variant="outlined">
+                                        재부팅
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        color="secondary"
+                                        variant="outlined"
+                                        style={{ marginLeft: 4 }}
+                                    >
+                                        삭제
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}

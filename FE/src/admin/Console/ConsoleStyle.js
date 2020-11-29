@@ -18,10 +18,10 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
-    paper: {
-        marginTop: theme.spacing(4),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+    hostConsoleTableRow: {
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#E3F2FF',
+        },
     },
 }));
