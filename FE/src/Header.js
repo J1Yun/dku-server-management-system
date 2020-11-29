@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
     },
     userLabel: {
         height: '24px',
-        backgroundColor: '#094DCC',
         fontSize: '0.85rem',
+        backgroundColor: '#094DCC',
         fontWeight: 500,
         '& span': {
             padding: '0px 8px',
@@ -65,6 +65,29 @@ const useStyles = makeStyles((theme) => ({
         },
         '&:focus span': {
             color: '#EAF1FF',
+        },
+    },
+    consoleBt: {
+        cursor: 'pointer',
+        height: '25px',
+        backgroundColor: 'white',
+        fontSize: '0.875rem',
+        fontWeight: 500,
+        '& span': {
+            padding: '0px 10px',
+            color: '#094DCC',
+        },
+        '&:hover': {
+            backgroundColor: '#094DCC',
+        },
+        '&:hover span': {
+            color: '#EAF1FF',
+        },
+        '&:focus': {
+            backgroundColor: 'white',
+        },
+        '&:focus span': {
+            color: '#094DCC',
         },
     },
 }));
@@ -169,27 +192,37 @@ export default function Header({ user }) {
                                 />
                             </div>
                             <div className={classes.menuWrapper}>
-                                {parseInt(user.type) === 0
-                                    ? menus.client.map((menu) => (
-                                          <Button
-                                              className={classes.menuButton}
-                                              key={menu.id}
-                                              component={Link}
-                                              to={menu.link}
-                                          >
-                                              {menu.name}
-                                          </Button>
-                                      ))
-                                    : menus.admin.map((menu) => (
-                                          <Button
-                                              className={classes.menuButton}
-                                              key={menu.id}
-                                              component={Link}
-                                              to={menu.link}
-                                          >
-                                              {menu.name}
-                                          </Button>
-                                      ))}
+                                {parseInt(user.type) === 0 ? (
+                                    menus.client.map((menu) => (
+                                        <Button
+                                            className={classes.menuButton}
+                                            key={menu.id}
+                                            component={Link}
+                                            to={menu.link}
+                                        >
+                                            {menu.name}
+                                        </Button>
+                                    ))
+                                ) : (
+                                    <>
+                                        <Chip
+                                            component={Link}
+                                            label="Console"
+                                            className={classes.consoleBt}
+                                            to="/admin/console"
+                                        />
+                                        {menus.admin.map((menu) => (
+                                            <Button
+                                                className={classes.menuButton}
+                                                key={menu.id}
+                                                component={Link}
+                                                to={menu.link}
+                                            >
+                                                {menu.name}
+                                            </Button>
+                                        ))}
+                                    </>
+                                )}
                             </div>
                         </div>
                     </React.Fragment>

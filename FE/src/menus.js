@@ -30,26 +30,21 @@ export const menus = {
         },
         {
             id: 2,
-            name: '콘솔',
-            link: '/admin/console',
-        },
-        {
-            id: 3,
             name: '캘린더',
             link: '/admin/calendar',
         },
         {
-            id: 4,
+            id: 3,
             name: '승인처리',
             link: '/admin/confirm',
         },
         {
-            id: 5,
+            id: 4,
             name: '예약조회',
             link: '/admin/reservations',
         },
         {
-            id: 6,
+            id: 5,
             name: '회원조회',
             link: '/admin/members',
         },
