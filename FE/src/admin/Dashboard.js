@@ -69,13 +69,13 @@ export default function ServerStatus() {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">서버ID</TableCell>
-                            <TableCell align="center">서버명</TableCell>
+                            <TableCell align="center">컨테이너 ID</TableCell>
+                            <TableCell align="center">컨테이너 이름</TableCell>
                             <TableCell align="center">OS</TableCell>
-                            <TableCell align="center">CPU</TableCell>
+                            <TableCell align="center">vCPU</TableCell>
                             <TableCell align="center">RAM</TableCell>
                             <TableCell align="center">위치</TableCell>
-                            <TableCell align="center">가동상태</TableCell>
+                            <TableCell align="center">상태</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
