@@ -17,7 +17,7 @@ export default function ContainerConsole({ containers, classes }) {
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">인스턴스ID</TableCell>
-                        <TableCell align="center">인스턴스명</TableCell>
+                        <TableCell align="center">인스턴스 이름</TableCell>
                         <TableCell align="center">HOST</TableCell>
                         <TableCell align="center">PORT</TableCell>
                         <TableCell align="center">OS</TableCell>

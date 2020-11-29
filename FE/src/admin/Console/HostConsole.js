@@ -38,7 +38,7 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
                             <TableCell align="center">{row.name}</TableCell>
                             <TableCell align="center">{row.host}</TableCell>
                             <TableCell align="center">{row.cpu}</TableCell>
-                            <TableCell align="center">{row.ram}</TableCell>
+                            <TableCell align="center">{row.ram}GB</TableCell>
                             <TableCell align="center">{row.location}</TableCell>
                             <TableCell align="center">
                                 {1 === 0 ? (
