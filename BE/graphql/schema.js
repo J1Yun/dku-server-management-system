@@ -250,5 +250,7 @@ module.exports = buildSchema(`
         postContainer(container: ContainerInput!, hostId: ID!): Boolean
         updateReservationApply(id: ID!, applyOk: Int!): ID
         updateReturnApply(id: ID!, applyOk: Int!): ID
+        postCmdToHost(command: String!, hostId: ID!): String
+        postCmdToContainerViaHostUsingDocker(command: String!, containerId: ID!): String
     }
 `);

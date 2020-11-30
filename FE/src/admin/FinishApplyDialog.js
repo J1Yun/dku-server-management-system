@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FinishApplyDialog({ dialogInfo, setDialogInfo, setHostDialogOpen }) {
     return (
         <div>
-            <Dialog open={dialogInfo.open} TransitionComponent={Transition} keepMounted>
+            <Dialog open={dialogInfo.open || false} TransitionComponent={Transition} keepMounted>
                 <DialogTitle>{dialogInfo.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{dialogInfo.content}</DialogContentText>

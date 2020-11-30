@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-apollo';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -11,6 +11,7 @@ import {
     Paper,
     CircularProgress,
 } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import StatusCircle from './Console/StatusCircle';
 import SnackMessage from '../client/components/SnackMessage';
 import { GET_SERVERS_FROM_ADMIN, GET_CONTAINER_STATUS } from '../queries';
@@ -56,6 +57,10 @@ export default function ServerStatus() {
         return targetStatusData ? targetStatusData.status : null;
     };
 
+    const handleRefreshClick = useCallback(() => {
+        setTimeout(() => refetchStatus(), 0);
+    }, [refetchStatus]);
+
     if (loading) return <CircularProgress />;
     if (error || errorStatus)
         return (
@@ -75,7 +80,16 @@ export default function ServerStatus() {
                             <TableCell align="center">vCPU</TableCell>
                             <TableCell align="center">RAM</TableCell>
                             <TableCell align="center">위치</TableCell>
-                            <TableCell align="center">상태</TableCell>
+                            <TableCell align="center">
+                                {'상태 '}
+                                {loading && (
+                                    <CircularProgress style={{ width: '14px', height: '14px' }} />
+                                )}
+                                <RefreshIcon
+                                    style={{ fontSize: '14px', cursor: 'pointer' }}
+                                    onClick={handleRefreshClick}
+                                />
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

@@ -78,7 +78,7 @@ const updateServers = async () => {
     console.log('Updated Server to redis successfully.');
 };
 
-const commandToHost = (instance, command) =>
+const commandToInstance = (instance, command) =>
     new Promise((resolve, reject) => {
         const conn = new Client();
         conn.on('ready', () => {
@@ -91,7 +91,7 @@ const commandToHost = (instance, command) =>
                     console.log('STDERR: ' + data);
                 });
                 stream.on('close', (code, signal) => {
-                    console.log('Process closed with code ' + code);
+                    console.log('[CMD] Process closed with code ' + code);
                     resolve(`Executed command to host [${instance.id}] Successfully.`);
                 });
             });
@@ -152,12 +152,16 @@ const connAllHosts = () => {
 const commandToContainerViaHost = (command, containerId) => {
     return new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
-        const targetContainer = servers.containers.filter((c) => c.id === containerId)[0];
-        const targetHostInstance = servers.hosts.filter(
+        const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
+        const targetHostInstance = servers.hosts.find(
             (h) => h.id === targetContainer.define.hostId,
-        )[0];
+        );
         resolve(
-            await commandToHost(targetHostInstance, command, targetContainer.define.instanceName),
+            await commandToInstance(
+                targetHostInstance,
+                command,
+                targetContainer.define.instanceName,
+            ),
         );
     });
 };
@@ -166,12 +170,12 @@ const commandToContainerViaHost = (command, containerId) => {
 const commandToContainerViaHostUsingDocker = (command, containerId) => {
     return new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
-        const targetContainer = servers.containers.filter((c) => c.id === containerId)[0];
-        const targetHostInstance = servers.hosts.filter(
+        const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
+        const targetHostInstance = servers.hosts.find(
             (h) => h.id === targetContainer.define.hostId,
-        )[0];
+        );
         resolve(
-            await commandToHost(
+            await commandToInstance(
                 targetHostInstance,
                 `docker ${command} ${targetContainer.define.instanceName}`,
             ),
@@ -179,11 +183,29 @@ const commandToContainerViaHostUsingDocker = (command, containerId) => {
     });
 };
 
-const setContainerStatusToRedis = async () =>
-    redisClient.set(REDIS_CONTAINER_STATUS_NAME, JSON.stringify(await connAllContainers()));
+const commandToContainer = (command, containerId) => {
+    return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
+        resolve(await commandToInstance(targetContainer, command));
+    });
+};
 
-const setHostStatusToRedis = async () =>
+const commandToHost = (command, hostId) => {
+    return new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const targetHostInstance = servers.hosts.find((h) => h.id === parseInt(hostId));
+        resolve(await commandToInstance(targetHostInstance, command));
+    });
+};
+
+async function setContainerStatusToRedis() {
+    redisClient.set(REDIS_CONTAINER_STATUS_NAME, JSON.stringify(await connAllContainers()));
+}
+
+async function setHostStatusToRedis() {
     redisClient.set(REDIS_HOST_STATUS_NAME, JSON.stringify(await connAllHosts()));
+}
 
 const getContainerStatusFromRedis = async () =>
     JSON.parse(await getAsync(REDIS_CONTAINER_STATUS_NAME));
@@ -196,8 +218,8 @@ module.exports = {
     getContainerStatusFromRedis,
     getHostStatusFromRedis,
     updateServers,
+    commandToHost,
+    commandToContainer,
+    commandToContainerViaHost,
+    commandToContainerViaHostUsingDocker,
 };
-
-//commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-18');
-//commandToHost(servers.hosts[0], 'docker restart dku-ubuntu-20');
-//commandToHost(servers.hosts[0], 'docker restart dku-centos-8');

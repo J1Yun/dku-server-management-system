@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1.5),
     },
     table: {
-        minWidth: 500,
+        minWidth: 600,
         '& .MuiTableCell-root': {
             padding: 10,
         },

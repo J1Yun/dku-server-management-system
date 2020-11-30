@@ -39,7 +39,12 @@ module.exports = {
     getDocReservation: require('./ctrl/document/getDocReservation'),
     getDocReturn: require('./ctrl/document/getDocReturn'),
 
-    // SSH
+    // SSH - Status
     getHostStatus: require('./ctrl/ssh/getStatus').getHostStatus,
     getContainerStatus: require('./ctrl/ssh/getStatus').getContainerStatus,
+
+    // SSH - Command By SuperAdmin
+    postCmdToHost: require('./ctrl/ssh/postCommandByAdmin').postCmdToHost,
+    postCmdToContainerViaHostUsingDocker: require('./ctrl/ssh/postCommandByAdmin')
+        .postCmdToContainerViaHostUsingDocker,
 };

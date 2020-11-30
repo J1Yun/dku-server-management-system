@@ -11,12 +11,13 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import SnackMessage from './components/SnackMessage';
 import MonthlyReservationDialog from './MonthlyReservationDialog';
 import { useQuery } from 'react-apollo';
-import { GET_SERVERS_FROM_CLIENT } from '../queries';
+import { GET_SERVERS_FROM_CLIENT, GET_CONTAINER_STATUS } from '../queries';
 import PageTitle from '../components/PageTitle';
+import StatusCircle from '../admin/Console/StatusCircle';
 
 const useStyles = makeStyles((theme) => ({
     tableWrapper: {
@@ -30,15 +31,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function StatusCircle({ color }) {
-    return <FiberManualRecordIcon style={{ color }} />;
-}
-
 export default function Dashboard() {
     const classes = useStyles();
     const [servers, setServers] = useState([]);
     const [open, setOpen] = useState([]);
+    const [containerStatus, setContainerStatus] = useState([]);
     const { loading, error, data } = useQuery(GET_SERVERS_FROM_CLIENT);
+    const { error: errorStatus, data: dataStatus, refetch: refetchStatus } = useQuery(
+        GET_CONTAINER_STATUS,
+    );
 
     const initOpen = (length) => {
         const array = new Array(length).fill(false);
@@ -57,15 +58,28 @@ export default function Dashboard() {
         if (data) {
             setServers(
                 data.getServersFromClient.map((s) => {
-                    return { ...s, ram: `${s.ram}GB`, status: 0 };
+                    return { ...s, ram: `${s.ram}GB` };
                 }),
             );
             initOpen(servers.length);
         }
     }, [data, setServers, servers.length]);
 
+    useEffect(() => {
+        if (dataStatus) setContainerStatus([...dataStatus.getContainerStatus]);
+    }, [dataStatus, setContainerStatus]);
+
+    const getStatus = (id) => {
+        const targetStatusData = containerStatus.find((s) => s.id === parseInt(id));
+        return targetStatusData ? targetStatusData.status : null;
+    };
+
+    const handleRefreshClick = useCallback(() => {
+        setTimeout(() => refetchStatus(), 0);
+    }, [refetchStatus]);
+
     if (loading) return <CircularProgress />;
-    if (error)
+    if (error || errorStatus)
         return (
             <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
         );
@@ -83,8 +97,19 @@ export default function Dashboard() {
                             <TableCell align="center">OS</TableCell>
                             <TableCell align="center">CPU</TableCell>
                             <TableCell align="center">RAM</TableCell>
-                            <TableCell align="right">상태</TableCell>
-                            <TableCell align="center">예약현황</TableCell>
+                            <TableCell align="center">
+                                {'상태 '}
+                                {loading && (
+                                    <CircularProgress style={{ width: '14px', height: '14px' }} />
+                                )}
+                                <RefreshIcon
+                                    style={{ fontSize: '14px', cursor: 'pointer' }}
+                                    onClick={handleRefreshClick}
+                                />
+                            </TableCell>
+                            <TableCell align="center" width={110}>
+                                예약현황
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -97,8 +122,8 @@ export default function Dashboard() {
                                 <TableCell align="center">{row.os}</TableCell>
                                 <TableCell align="center">{row.cpu}</TableCell>
                                 <TableCell align="center">{row.ram}</TableCell>
-                                <TableCell align="right">
-                                    {row.status === 0 ? (
+                                <TableCell align="center">
+                                    {getStatus(row.id) === 1 ? (
                                         <StatusCircle color="green" />
                                     ) : (
                                         <StatusCircle color="crimson" />
