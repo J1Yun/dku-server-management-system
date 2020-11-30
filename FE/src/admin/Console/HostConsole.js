@@ -72,8 +72,8 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">서버ID</TableCell>
-                            <TableCell align="center">서버명</TableCell>
+                            <TableCell align="center">호스트 ID</TableCell>
+                            <TableCell align="center">호스트 이름</TableCell>
                             <TableCell align="center">IP</TableCell>
                             <TableCell align="center">CPU</TableCell>
                             <TableCell align="center">RAM</TableCell>

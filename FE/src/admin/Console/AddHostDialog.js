@@ -99,7 +99,7 @@ export default function AddHostDialog({ refetch, setHostDialogOpen, hostDialogOp
                                 name="name"
                                 variant="outlined"
                                 value={host.name}
-                                label="서버명"
+                                label="호스트 서버 이름"
                                 onChange={handleChange}
                                 fullWidth
                                 required
@@ -132,7 +132,7 @@ export default function AddHostDialog({ refetch, setHostDialogOpen, hostDialogOp
                             <TextField
                                 name="password"
                                 variant="outlined"
-                                label="비밀번호"
+                                label="패스워드"
                                 value={host.password}
                                 onChange={handleChange}
                                 fullWidth

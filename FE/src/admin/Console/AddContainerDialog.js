@@ -7,7 +7,6 @@ import {
     Divider,
     Grid,
     TextField,
-    Typography,
     Button,
     FormControl,
     InputLabel,
@@ -100,14 +99,12 @@ export default function AddContainerDialog({
                         <DialogContent style={{ padding: 20 }}>
                             <Grid container spacing={1}>
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle1">
-                                        호스트 서버 이름: {selectedHost.name}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Typography variant="subtitle1">
-                                        호스트 IP: {selectedHost.host}
-                                    </Typography>
+                                    <p style={{ marginTop: 5 }}>
+                                        호스트 서버 이름: <i>{selectedHost.name}</i>
+                                    </p>
+                                    <p>
+                                        호스트 IP: <i>{selectedHost.host}</i>
+                                    </p>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
@@ -143,11 +140,10 @@ export default function AddContainerDialog({
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        type="password"
                                         name="password"
                                         variant="outlined"
                                         value={container.password}
-                                        label="비밀번호"
+                                        label="패스워드"
                                         onChange={handleChange}
                                         fullWidth
                                         required
