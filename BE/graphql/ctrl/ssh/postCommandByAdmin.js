@@ -3,6 +3,7 @@ const {
     commandToContainerViaHost,
     commandToContainerViaHostUsingDocker,
     commandToContainer,
+    initContainer,
 } = require('../../../ssh/tools');
 const models = require('../../../models');
 
@@ -29,6 +30,13 @@ module.exports = {
     postCmdToContainerViaHostUsingDocker: async ({ command, containerId }, { userId }) => {
         if ((await checkIsSuperAdmin(userId)) === true) {
             return await commandToContainerViaHostUsingDocker(command, containerId);
+        } else {
+            return new Error('NO PERMISSION');
+        }
+    },
+    postInitContainer: async ({ containerId }, { userId }) => {
+        if ((await checkIsSuperAdmin(userId)) === true) {
+            return await initContainer(containerId);
         } else {
             return new Error('NO PERMISSION');
         }

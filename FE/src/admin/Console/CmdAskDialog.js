@@ -25,19 +25,16 @@ export default function CmdAskDialog({
     const handleChange = useCallback((e) => {
         setUserInputValue(e.target.value);
     }, []);
-    const handleClick = useCallback(
-        (e) => {
-            setHostDialogOpen(false);
-            triggerFunction();
-            setDialogInfo({
-                ...dialogInfo,
-                title: '작업이 요청되었습니다.',
-                content: '완전한 작업 완료까지 일정 시간이 소요됩니다.',
-                open: true,
-            });
-        },
-        [setHostDialogOpen, triggerFunction, dialogInfo],
-    );
+    const handleClick = useCallback(() => {
+        setHostDialogOpen(false);
+        triggerFunction();
+        setDialogInfo({
+            ...dialogInfo,
+            title: '작업이 요청되었습니다.',
+            content: '완전한 작업 완료까지 일정 시간이 소요됩니다.',
+            open: true,
+        });
+    }, [setHostDialogOpen, triggerFunction, dialogInfo]);
     return (
         <>
             <Dialog open={hostDialogOpen || false} keepMounted>
@@ -57,7 +54,8 @@ export default function CmdAskDialog({
                 <DialogContent style={{ padding: 20 }}>
                     <p>{message}</p>
                     <p>
-                        작업을 요청하려면 아래 필드에 <b>작업을 요청함</b>을 직접 입력하세요.
+                        아래 필드에 <b>작업을 요청함</b>을 직접 입력하세요. 요청한 작업은 취소할 수
+                        없습니다.
                     </p>
                     <Box display="flex" flexDirection="row" justify="center">
                         <TextField

@@ -13,7 +13,11 @@ import {
 } from '@material-ui/core';
 import StatusCircle from './StatusCircle';
 import { useQuery, useMutation } from 'react-apollo';
-import { GET_CONTAINER_STATUS, POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER } from '../../queries';
+import {
+    GET_CONTAINER_STATUS,
+    POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER,
+    POST_INIT_CONTAINER,
+} from '../../queries';
 import SnackMessage from '../../client/components/SnackMessage';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CmdAskDialog from './CmdAskDialog';
@@ -21,12 +25,13 @@ import CmdAskDialog from './CmdAskDialog';
 export default function ContainerConsole({ containers, classes }) {
     const [containerStatus, setContainerStatus] = useState([]);
     const { loading, error, data, refetch: refetchStatus } = useQuery(GET_CONTAINER_STATUS);
-    const [containerId, setContainerId] = useState(null);
     const [message, setMessage] = useState('');
+    const [triggerFunction, setTriggerFunction] = useState(() => () => {});
     const [containerDialogOpen, setContainerDialogOpen] = useState(false);
     const [postCmdToContainerViaHostUsingDocker, { error: errorCmd }] = useMutation(
         POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER,
     );
+    const [postInitContainer, { error: errorInit }] = useMutation(POST_INIT_CONTAINER);
 
     useEffect(() => {
         if (data) setContainerStatus([...data.getContainerStatus]);
@@ -42,18 +47,35 @@ export default function ContainerConsole({ containers, classes }) {
     }, [refetchStatus]);
 
     const handleContainerRestartClick = (e, containerId) => {
-        setContainerId(containerId);
         setMessage(
             '컨테이너를 재시작하면 사용 중인 클라이언트의 작업에 치명적인 피해를 야기할 수 있습니다. 완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
         );
+        setTriggerFunction(() => () => triggerContainerRestart(containerId));
         setContainerDialogOpen(true);
         e.stopPropagation();
     };
 
-    const triggerContainerRestart = () => {
+    const handleContainerInitClick = (e, containerId) => {
+        setMessage(
+            '초기화시 컨테이너 내의 모든 내용, 설정이 삭제됩니다.완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
+        );
+        setTriggerFunction(() => () => triggerContainerInit(containerId));
+        setContainerDialogOpen(true);
+        e.stopPropagation();
+    };
+
+    const triggerContainerRestart = (containerId) => {
         postCmdToContainerViaHostUsingDocker({
             variables: {
                 command: 'restart',
+                containerId,
+            },
+        });
+    };
+
+    const triggerContainerInit = (containerId) => {
+        postInitContainer({
+            variables: {
                 containerId,
             },
         });
@@ -64,7 +86,7 @@ export default function ContainerConsole({ containers, classes }) {
             <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
         );
 
-    if (errorCmd)
+    if (errorCmd || errorInit)
         return (
             <SnackMessage message="권한 없음 - 요청이 거부되었습니다. 에러메시지가 출력됩니다." />
         );
@@ -134,6 +156,9 @@ export default function ContainerConsole({ containers, classes }) {
                                                 color="secondary"
                                                 variant="outlined"
                                                 style={{ marginLeft: 4 }}
+                                                onClick={(e) =>
+                                                    handleContainerInitClick(e, parseInt(row.id))
+                                                }
                                             >
                                                 초기화
                                             </Button>
@@ -156,7 +181,7 @@ export default function ContainerConsole({ containers, classes }) {
                 setHostDialogOpen={setContainerDialogOpen}
                 hostDialogOpen={containerDialogOpen}
                 message={message}
-                triggerFunction={triggerContainerRestart}
+                triggerFunction={triggerFunction}
             />
         </>
     );

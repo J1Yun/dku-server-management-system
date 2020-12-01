@@ -47,4 +47,5 @@ module.exports = {
     postCmdToHost: require('./ctrl/ssh/postCommandByAdmin').postCmdToHost,
     postCmdToContainerViaHostUsingDocker: require('./ctrl/ssh/postCommandByAdmin')
         .postCmdToContainerViaHostUsingDocker,
+    postInitContainer: require('./ctrl/ssh/postCommandByAdmin').postInitContainer,
 };

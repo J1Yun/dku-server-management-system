@@ -252,5 +252,6 @@ module.exports = buildSchema(`
         updateReturnApply(id: ID!, applyOk: Int!): ID
         postCmdToHost(command: String!, hostId: ID!): String
         postCmdToContainerViaHostUsingDocker(command: String!, containerId: ID!): String
+        postInitContainer(containerId: ID!): String
     }
 `);

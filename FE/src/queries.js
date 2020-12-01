@@ -328,6 +328,12 @@ export const POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER = gql`
     }
 `;
 
+export const POST_INIT_CONTAINER = gql`
+    mutation postInitContainer($containerId: ID!) {
+        postInitContainer(containerId: $containerId)
+    }
+`;
+
 export const UPDATE_RESERVATION_APPLY = gql`
     mutation updateReservationApply($id: ID!, $applyOk: Int!) {
         updateReservationApply(id: $id, applyOk: $applyOk)

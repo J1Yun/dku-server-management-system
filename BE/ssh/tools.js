@@ -199,6 +199,17 @@ const commandToHost = (command, hostId) => {
     });
 };
 
+const initContainer = (containerId) =>
+    new Promise(async (resolve, reject) => {
+        const servers = (await getServers()) || reject(Error('Empty servers'));
+        const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
+        const targetHostInstance = servers.hosts.find(
+            (h) => h.id === targetContainer.define.hostId,
+        );
+        const dir = `/usr/dku-ssh-server/${targetContainer.define.os.replace(' ', '')}`;
+        resolve(await commandToInstance(targetHostInstance, `cd ${dir}; ./clean.sh; ./init.sh;`));
+    });
+
 async function setContainerStatusToRedis() {
     redisClient.set(REDIS_CONTAINER_STATUS_NAME, JSON.stringify(await connAllContainers()));
 }
@@ -222,4 +233,5 @@ module.exports = {
     commandToContainer,
     commandToContainerViaHost,
     commandToContainerViaHostUsingDocker,
+    initContainer,
 };
