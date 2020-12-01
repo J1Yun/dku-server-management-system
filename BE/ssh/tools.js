@@ -111,8 +111,8 @@ const connInstance = (instance) =>
             .connect(instance.connInfo);
     });
 
-const connAllContainers = () => {
-    return new Promise(async (resolve, reject) => {
+const connAllContainers = () =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const connData = [];
         for (const instance of servers.containers) {
@@ -128,10 +128,9 @@ const connAllContainers = () => {
         }
         resolve(connData);
     });
-};
 
-const connAllHosts = () => {
-    return new Promise(async (resolve, reject) => {
+const connAllHosts = () =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const connData = [];
         for (const instance of servers.hosts) {
@@ -147,10 +146,9 @@ const connAllHosts = () => {
         }
         resolve(connData);
     });
-};
 
-const commandToContainerViaHost = (command, containerId) => {
-    return new Promise(async (resolve, reject) => {
+const commandToContainerViaHost = (command, containerId) =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
         const targetHostInstance = servers.hosts.find(
@@ -164,11 +162,10 @@ const commandToContainerViaHost = (command, containerId) => {
             ),
         );
     });
-};
 
 // docker [command] [instanceName]
-const commandToContainerViaHostUsingDocker = (command, containerId) => {
-    return new Promise(async (resolve, reject) => {
+const commandToContainerViaHostUsingDocker = (command, containerId) =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
         const targetHostInstance = servers.hosts.find(
@@ -181,23 +178,20 @@ const commandToContainerViaHostUsingDocker = (command, containerId) => {
             ),
         );
     });
-};
 
-const commandToContainer = (command, containerId) => {
-    return new Promise(async (resolve, reject) => {
+const commandToContainer = (command, containerId) =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const targetContainer = servers.containers.find((c) => c.id === parseInt(containerId));
         resolve(await commandToInstance(targetContainer, command));
     });
-};
 
-const commandToHost = (command, hostId) => {
-    return new Promise(async (resolve, reject) => {
+const commandToHost = (command, hostId) =>
+    new Promise(async (resolve, reject) => {
         const servers = (await getServers()) || reject(Error('Empty servers'));
         const targetHostInstance = servers.hosts.find((h) => h.id === parseInt(hostId));
         resolve(await commandToInstance(targetHostInstance, command));
     });
-};
 
 const initContainer = (containerId) =>
     new Promise(async (resolve, reject) => {
@@ -209,6 +203,15 @@ const initContainer = (containerId) =>
         const dir = `/usr/dku-ssh-server/${targetContainer.define.os.replace(' ', '')}`;
         resolve(await commandToInstance(targetHostInstance, `cd ${dir}; ./clean.sh; ./init.sh;`));
     });
+
+const initEveryContainersAfterUse = async () => {
+    const afterUses = [];
+    for (const afterUse of afterUses) {
+        await initContainer(afterUse.id)
+            .then(() => console.log(`[Init-Success] ${afterUse.id}`))
+            .catch((error) => console.log(`[Init-Fail] ${afterUse.id} ${error}`));
+    }
+};
 
 async function setContainerStatusToRedis() {
     redisClient.set(REDIS_CONTAINER_STATUS_NAME, JSON.stringify(await connAllContainers()));
@@ -223,9 +226,14 @@ const getContainerStatusFromRedis = async () =>
 
 const getHostStatusFromRedis = async () => JSON.parse(await getAsync(REDIS_HOST_STATUS_NAME));
 
+const cachingServersToRedis = () => {
+    setHostStatusToRedis();
+    setContainerStatusToRedis();
+    console.log('[Redis] Cached server status.');
+};
+
 module.exports = {
-    setContainerStatusToRedis,
-    setHostStatusToRedis,
+    cachingServersToRedis,
     getContainerStatusFromRedis,
     getHostStatusFromRedis,
     updateServers,
@@ -234,4 +242,5 @@ module.exports = {
     commandToContainerViaHost,
     commandToContainerViaHostUsingDocker,
     initContainer,
+    initEveryContainersAfterUse,
 };
