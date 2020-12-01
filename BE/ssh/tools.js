@@ -4,6 +4,7 @@ const { promisify } = require('util');
 const Client = require('ssh2').Client;
 const redisHost = require('../conf/secret').redisHost;
 const redisClient = redis.createClient(redisHost);
+const moment = require('moment');
 
 const REDIS_INSTANCES_NAME = 'instances:all';
 const REDIS_HOST_STATUS_NAME = 'host-status:all';
@@ -205,12 +206,19 @@ const initContainer = (containerId) =>
     });
 
 const initEveryContainersAfterUse = async () => {
-    const afterUses = [];
+    const query = `
+    select serverId, userId from reservations r where not EXISTS( select serverId, userId from reservations where serverId=r.serverId and userId=r.userId and start=date(now()) and applyOk!=2) and end=DATE_ADD(date(now()), INTERVAL -1 DAY) and applyOk=1;
+    `;
+    const afterUses = await models.sequelize.query(query).spread(
+        (results) => JSON.parse(JSON.stringify(results)),
+        (error) => error,
+    );
     for (const afterUse of afterUses) {
-        await initContainer(afterUse.id)
-            .then(() => console.log(`[Init-Success] ${afterUse.id}`))
-            .catch((error) => console.log(`[Init-Fail] ${afterUse.id} ${error}`));
+        await initContainer(afterUse.serverId)
+            .then(() => console.log(`[Init-Success] ${afterUse.serverId}`))
+            .catch((error) => console.log(`[Init-Fail] ${afterUse.serverId} ${error}`));
     }
+    console.log(`[${moment().format('YYYY-MM-DD')}] Init instances completed.`);
 };
 
 async function setContainerStatusToRedis() {
