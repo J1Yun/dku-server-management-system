@@ -35,6 +35,10 @@ module.exports = {
     postHost: require('./ctrl/admin/postHost'),
     postContainer: require('./ctrl/admin/postContainer'),
 
+    // DELETE
+    deleteContainer: require('./ctrl/admin/deleteContainer'),
+    deleteHost: require('./ctrl/admin/deleteHost'),
+
     // DOCUMENT
     getDocReservation: require('./ctrl/document/getDocReservation'),
     getDocReturn: require('./ctrl/document/getDocReturn'),

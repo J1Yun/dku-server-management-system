@@ -253,5 +253,7 @@ module.exports = buildSchema(`
         postCmdToHost(command: String!, hostId: ID!): String
         postCmdToContainerViaHostUsingDocker(command: String!, containerId: ID!): String
         postInitContainer(containerId: ID!): String
+        deleteContainer(containerId: ID!): Boolean
+        deleteHost(hostId: ID!): Boolean
     }
 `);

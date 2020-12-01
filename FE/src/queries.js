@@ -334,6 +334,18 @@ export const POST_INIT_CONTAINER = gql`
     }
 `;
 
+export const DELETE_CONTAINER = gql`
+    mutation deleteContainer($containerId: ID!) {
+        deleteContainer(containerId: $containerId)
+    }
+`;
+
+export const DELETE_HOST = gql`
+    mutation deleteHost($hostId: ID!) {
+        deleteHost(hostId: $hostId)
+    }
+`;
+
 export const UPDATE_RESERVATION_APPLY = gql`
     mutation updateReservationApply($id: ID!, $applyOk: Int!) {
         updateReservationApply(id: $id, applyOk: $applyOk)

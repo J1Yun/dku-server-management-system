@@ -85,6 +85,7 @@ export default function Console() {
                         hosts={hosts}
                         classes={classes}
                         handleOpenContainerConsole={handleOpenContainerConsole}
+                        refetch={refetch}
                     />
                     {hosts.length === 0 && (
                         <SnackMessage message="등록된 호스트 서버가 없습니다. 호스트를 추가하세요." />
@@ -121,7 +122,11 @@ export default function Console() {
                         selectedHost={selectedHost}
                         containerDialogOpen={containerDialogOpen}
                     />
-                    <ContainerConsole containers={containers} classes={classes} />
+                    <ContainerConsole
+                        containers={containers}
+                        classes={classes}
+                        refetch={refetchContainer}
+                    />
                     {containers.length === 0 && (
                         <SnackMessage message="등록된 컨테이너가 없습니다. 컨테이너를 추가하세요." />
                     )}

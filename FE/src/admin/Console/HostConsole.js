@@ -13,18 +13,21 @@ import {
 } from '@material-ui/core';
 import StatusCircle from './StatusCircle';
 import { useQuery, useMutation } from 'react-apollo';
-import { GET_HOST_STATUS, POST_CMD_TO_HOST } from '../../queries';
+import { GET_HOST_STATUS, POST_CMD_TO_HOST, DELETE_HOST } from '../../queries';
 import SnackMessage from '../../client/components/SnackMessage';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CmdAskDialog from './CmdAskDialog';
 
-export default function HostConsole({ hosts, classes, handleOpenContainerConsole }) {
+export default function HostConsole({ hosts, classes, handleOpenContainerConsole, refetch }) {
     const [hostStatus, setHostStatus] = useState([]);
     const { loading, error, data, refetch: refetchStatus } = useQuery(GET_HOST_STATUS);
-    const [hostId, setHostId] = useState(null);
     const [message, setMessage] = useState('');
     const [hostDialogOpen, setHostDialogOpen] = useState(false);
     const [postCmdToHost, { error: errorCmd }] = useMutation(POST_CMD_TO_HOST);
+    const [triggerFunction, setTriggerFunction] = useState(() => () => {});
+    const [deleteHost, { error: errorDelete }] = useMutation(DELETE_HOST, {
+        onCompleted: () => refetch(),
+    });
 
     useEffect(() => {
         if (data) setHostStatus([...data.getHostStatus]);
@@ -40,18 +43,33 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
     }, [refetchStatus]);
 
     const handleHostRebootClick = (e, hostId) => {
-        setHostId(hostId);
         setMessage(
             '호스트 서버를 재부팅하면 연결된 컨테이너도 모두 종료됩니다. 재부팅 완료 후 연결된 모든 컨테이너가 자동으로 재시작되며, 완전한 재부팅에는 약 3분의 시간이 소요됩니다.',
         );
+        setTriggerFunction(() => () => triggerHostReboot(hostId));
         setHostDialogOpen(true);
         e.stopPropagation();
     };
 
-    const triggerHostReboot = () => {
+    const handleHostDeleteClick = (e, hostId) => {
+        setMessage('호스트 서버를 삭제하면 연결된 모든 컨테이너가 자동으로 삭제됩니다.');
+        setTriggerFunction(() => () => triggerHostDelete(hostId));
+        setHostDialogOpen(true);
+        e.stopPropagation();
+    };
+
+    const triggerHostReboot = (hostId) => {
         postCmdToHost({
             variables: {
                 command: 'reboot',
+                hostId,
+            },
+        });
+    };
+
+    const triggerHostDelete = (hostId) => {
+        deleteHost({
+            variables: {
                 hostId,
             },
         });
@@ -61,7 +79,7 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
         return (
             <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
         );
-    if (errorCmd)
+    if (errorCmd || errorDelete)
         return (
             <SnackMessage message="권한 없음 - 요청이 거부되었습니다. 에러메시지가 출력됩니다." />
         );
@@ -132,6 +150,9 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
                                             color="secondary"
                                             variant="outlined"
                                             style={{ marginLeft: 4 }}
+                                            onClick={(e) =>
+                                                handleHostDeleteClick(e, parseInt(row.id))
+                                            }
                                         >
                                             삭제
                                         </Button>
@@ -146,7 +167,7 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
                 setHostDialogOpen={setHostDialogOpen}
                 hostDialogOpen={hostDialogOpen}
                 message={message}
-                triggerFunction={triggerHostReboot}
+                triggerFunction={triggerFunction}
             />
         </>
     );

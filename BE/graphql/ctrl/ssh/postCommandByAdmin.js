@@ -20,6 +20,7 @@ const checkIsSuperAdmin = (userId) =>
     });
 
 module.exports = {
+    checkIsSuperAdmin,
     postCmdToHost: async ({ command, hostId }, { userId }) => {
         if ((await checkIsSuperAdmin(userId)) === true) {
             return await commandToHost(command, hostId);

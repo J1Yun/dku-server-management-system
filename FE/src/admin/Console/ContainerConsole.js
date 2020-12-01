@@ -17,12 +17,13 @@ import {
     GET_CONTAINER_STATUS,
     POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER,
     POST_INIT_CONTAINER,
+    DELETE_CONTAINER,
 } from '../../queries';
 import SnackMessage from '../../client/components/SnackMessage';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CmdAskDialog from './CmdAskDialog';
 
-export default function ContainerConsole({ containers, classes }) {
+export default function ContainerConsole({ containers, classes, refetch }) {
     const [containerStatus, setContainerStatus] = useState([]);
     const { loading, error, data, refetch: refetchStatus } = useQuery(GET_CONTAINER_STATUS);
     const [message, setMessage] = useState('');
@@ -32,6 +33,11 @@ export default function ContainerConsole({ containers, classes }) {
         POST_CMD_TO_CONTAINER_VIA_HOST_USING_DOCKER,
     );
     const [postInitContainer, { error: errorInit }] = useMutation(POST_INIT_CONTAINER);
+    const [deleteContainer, { error: errorDelete }] = useMutation(DELETE_CONTAINER, {
+        onCompleted: () => {
+            refetch();
+        },
+    });
 
     useEffect(() => {
         if (data) setContainerStatus([...data.getContainerStatus]);
@@ -64,6 +70,15 @@ export default function ContainerConsole({ containers, classes }) {
         e.stopPropagation();
     };
 
+    const handleContainerDeleteClick = (e, containerId) => {
+        setMessage(
+            '삭제 시 컨테이너 내의 모든 내용, 설정이 삭제됩니다. 완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
+        );
+        setTriggerFunction(() => () => triggerContainerDelete(containerId));
+        setContainerDialogOpen(true);
+        e.stopPropagation();
+    };
+
     const triggerContainerRestart = (containerId) => {
         postCmdToContainerViaHostUsingDocker({
             variables: {
@@ -81,12 +96,20 @@ export default function ContainerConsole({ containers, classes }) {
         });
     };
 
+    const triggerContainerDelete = (containerId) => {
+        deleteContainer({
+            variables: {
+                containerId,
+            },
+        });
+    };
+
     if (error)
         return (
             <SnackMessage message="죄송합니다. 데이터 처리 중 에러가 발생했습니다. 잠시 후에 다시 시도해주세요." />
         );
 
-    if (errorCmd || errorInit)
+    if (errorCmd || errorInit || errorDelete)
         return (
             <SnackMessage message="권한 없음 - 요청이 거부되었습니다. 에러메시지가 출력됩니다." />
         );
@@ -167,6 +190,9 @@ export default function ContainerConsole({ containers, classes }) {
                                                 color="secondary"
                                                 variant="outlined"
                                                 style={{ marginLeft: 4 }}
+                                                onClick={(e) =>
+                                                    handleContainerDeleteClick(e, parseInt(row.id))
+                                                }
                                             >
                                                 삭제
                                             </Button>
