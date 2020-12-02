@@ -69,7 +69,10 @@ export default function Console() {
                         setHostDialogOpen={setHostDialogOpen}
                         hostDialogOpen={hostDialogOpen}
                     />
-                    <Box display="flex" flexDirection="row-reverse" justify="center" m={1}>
+                    <Box display="flex" flexDirection="row" justify="center" m={1}>
+                        <span style={{ flex: 1, color: '#666' }}>
+                            호스트를 클릭하여 호스트에 연결된 컨테이너 콘솔로 이동할 수 있습니다.
+                        </span>
                         <Button
                             size="small"
                             color="primary"

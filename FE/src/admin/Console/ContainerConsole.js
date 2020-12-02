@@ -63,7 +63,7 @@ export default function ContainerConsole({ containers, classes, refetch }) {
 
     const handleContainerInitClick = (e, containerId) => {
         setMessage(
-            '초기화시 컨테이너 내의 모든 내용, 설정이 삭제됩니다.완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
+            '초기화시 컨테이너 내의 모든 내용, 설정이 삭제됩니다. 완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
         );
         setTriggerFunction(() => () => triggerContainerInit(containerId));
         setContainerDialogOpen(true);
@@ -72,7 +72,7 @@ export default function ContainerConsole({ containers, classes, refetch }) {
 
     const handleContainerDeleteClick = (e, containerId) => {
         setMessage(
-            '삭제 시 컨테이너 내의 모든 내용, 설정이 삭제됩니다. 완전한 작업 완료에 약 10초의 시간이 소요됩니다.',
+            '컨테이너는 목록에서만 삭제됩니다. 컨테이너 자체를 삭제하는 것이 아니므로 같은 운영체제의 컨테이너를 다시 추가할 수 있습니다.',
         );
         setTriggerFunction(() => () => triggerContainerDelete(containerId));
         setContainerDialogOpen(true);

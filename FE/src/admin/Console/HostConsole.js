@@ -52,7 +52,9 @@ export default function HostConsole({ hosts, classes, handleOpenContainerConsole
     };
 
     const handleHostDeleteClick = (e, hostId) => {
-        setMessage('호스트 서버를 삭제하면 연결된 모든 컨테이너가 자동으로 삭제됩니다.');
+        setMessage(
+            '호스트 서버를 삭제하면 연결된 모든 컨테이너가 자동으로 삭제됩니다. 이는 모두 목록에서만 삭제되는 것으로, 연결 정보를 다시 추가할 수 있습니다.',
+        );
         setTriggerFunction(() => () => triggerHostDelete(hostId));
         setHostDialogOpen(true);
         e.stopPropagation();
