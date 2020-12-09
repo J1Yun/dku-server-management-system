@@ -57,7 +57,7 @@ const refineServersData = (hosts, containers) =>
     });
 
 const getServers = async () => {
-    // Do caching
+    // Get cached data or from MySQL
     const cachedData = JSON.parse(await getAsync(REDIS_INSTANCES_NAME));
     if (!cachedData) {
         const hosts = await models.hostserver.findAll({ raw: true });
