@@ -1,7 +1,7 @@
 const models = require('../../../models');
 const moment = require('moment');
-module.exports = async () => {
-    return await models.reservation
+module.exports = async () =>
+    await models.reservation
         .findAll({
             include: [
                 {
@@ -29,4 +29,3 @@ module.exports = async () => {
             }),
         )
         .catch((err) => err);
-};
