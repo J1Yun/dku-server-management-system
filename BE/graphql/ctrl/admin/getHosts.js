@@ -8,12 +8,12 @@
 // }
 
 const models = require('../../../models');
-module.exports = async () => {
-    return await models.hostserver
+module.exports = async () =>
+    await models.hostserver
         .findAll({
             attributes: ['id', 'name', 'password', 'host', 'cpu', 'ram', 'location'],
             raw: true,
         })
         .then((result) => result)
         .catch((err) => err);
-};
+;
