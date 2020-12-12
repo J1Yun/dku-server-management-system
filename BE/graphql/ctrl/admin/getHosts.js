@@ -16,4 +16,3 @@ module.exports = async () =>
         })
         .then((result) => result)
         .catch((err) => err);
-;
