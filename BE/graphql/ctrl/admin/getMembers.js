@@ -9,12 +9,11 @@
 // }
 
 const models = require('../../../models');
-module.exports = async () => {
-    return await models.user
+module.exports = async () =>
+    await models.user
         .findAll({
             attributes: ['id', 'userId', 'type', 'name', 'department', 'tel', 'penalty'],
             raw: true,
         })
         .then((result) => result)
         .catch((err) => err);
-};
