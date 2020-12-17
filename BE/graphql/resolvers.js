@@ -27,12 +27,14 @@ module.exports = {
     getDeadlineReturns: require('./ctrl/admin/getDeadlineReturns'),
     getReservationsFromAdmin: require('./ctrl/admin/getReservationsFromAdmin'),
     getHosts: require('./ctrl/admin/getHosts'),
+    getPhysicals: require('./ctrl/admin/getPhysicals'),
     getContainers: require('./ctrl/admin/getContainers'),
 
     // POST
     updateReservationApply: require('./ctrl/admin/updateReservationApply'),
     updateReturnApply: require('./ctrl/admin/updateReturnApply'),
     postHost: require('./ctrl/admin/postHost'),
+    postPhysical: require('./ctrl/admin/postPhysical'),
     postContainer: require('./ctrl/admin/postContainer'),
 
     // DELETE
@@ -49,6 +51,7 @@ module.exports = {
 
     // SSH - Command By SuperAdmin
     postCmdToHost: require('./ctrl/ssh/postCommandByAdmin').postCmdToHost,
+    postCmdToPhysical: require('./ctrl/ssh/postCommandByAdmin').postCmdToPhysical,
     postCmdToContainerViaHostUsingDocker: require('./ctrl/ssh/postCommandByAdmin')
         .postCmdToContainerViaHostUsingDocker,
     postInitContainer: require('./ctrl/ssh/postCommandByAdmin').postInitContainer,

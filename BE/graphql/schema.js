@@ -97,19 +97,11 @@ module.exports = buildSchema(`
         host: String!
         port: String!
         name: String!
+        os: String
         password: String!
         location: String!
         cpu: Int!
         ram: Int!
-    }
-
-    type GetHost{
-        id: ID!
-        name: String!
-        host: String!
-        cpu: Int!
-        ram: Int!
-        location: String!
     }
 
     type AdminConfirm {
@@ -209,6 +201,7 @@ module.exports = buildSchema(`
         host: String!
         port: String!
         name: String!
+        os: String
         password: String!
         location: String!
         cpu: Int!
@@ -238,6 +231,7 @@ module.exports = buildSchema(`
         getDocReturn(id: ID!): [DocReturn]
         getReservationsFromAdmin: [ReservationFromAdmin]
         getHosts: [Host]
+        getPhysicals: [Host]
         getContainers(hostId: ID): [Container]
         getHostStatus: [Status]
         getContainerStatus: [Status]
@@ -247,11 +241,13 @@ module.exports = buildSchema(`
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
         postHost(host: HostInput!): Host
+        postPhysical(host: HostInput!): Host
         postContainer(container: ContainerInput!, hostId: ID!): Boolean
         updateReservationApply(id: ID!, applyOk: Int!): ID
         updateReturnApply(id: ID!, applyOk: Int!): ID
         postCmdToHost(command: String!, hostId: ID!): String
-        postCmdToContainerViaHostUsingDocker(command: String!, containerId: ID!): String
+        postCmdToPhysical(command: String!, containerId: ID!): String
+        postCmdToContainerViaHostUsingDocker(command: String! containerId: ID!): String
         postInitContainer(containerId: ID!): String
         deleteContainer(containerId: ID!): Boolean
         deleteHost(hostId: ID!): Boolean

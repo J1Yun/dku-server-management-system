@@ -24,4 +24,9 @@ export const useStyles = makeStyles((theme) => ({
             backgroundColor: '#E3F2FF',
         },
     },
+    physicalConsoleTableRow: {
+        '&:hover': {
+            backgroundColor: '#E3F2FF',
+        },
+    },
 }));

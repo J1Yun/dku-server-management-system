@@ -1,5 +1,6 @@
 const checkIsSuperAdmin = require('../ssh/postCommandByAdmin');
 const models = require('../../../models');
+const { updateServers } = require('../../../ssh/tools');
 module.exports = async ({ containerId }, { userId }) => {
     const query = 'delete from servers where id=:containerId';
 
@@ -11,7 +12,10 @@ module.exports = async ({ containerId }, { userId }) => {
                 },
             })
             .spread(
-                () => true,
+                () => {
+                    updateServers();
+                    return true;
+                },
                 (error) => error,
             );
     } else {

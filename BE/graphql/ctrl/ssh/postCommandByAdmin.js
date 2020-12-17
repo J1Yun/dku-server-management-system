@@ -28,6 +28,13 @@ module.exports = {
             return new Error('NO PERMISSION');
         }
     },
+    postCmdToPhysical: async ({ command, containerId }, { userId }) => {
+        if ((await checkIsSuperAdmin(userId)) === true) {
+            return await commandToContainer(command, containerId);
+        } else {
+            return new Error('NO PERMISSION');
+        }
+    },
     postCmdToContainerViaHostUsingDocker: async ({ command, containerId }, { userId }) => {
         if ((await checkIsSuperAdmin(userId)) === true) {
             return await commandToContainerViaHostUsingDocker(command, containerId);

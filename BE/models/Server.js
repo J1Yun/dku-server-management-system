@@ -10,8 +10,9 @@ module.exports = function (sequelize, DataTypes) {
         password: { type: DataTypes.STRING, allowNull: false },
         host: { type: DataTypes.STRING, allowNull: false },
         port: { type: DataTypes.STRING, allowNull: false },
-        instanceName: { type: DataTypes.STRING, allowNull: false },
-        hostId: { type: DataTypes.INTEGER, allowNull: false },
+        instanceName: { type: DataTypes.STRING, allowNull: true },
+        hostId: { type: DataTypes.INTEGER, defaultValue: null },
+        isPhysical: { type: DataTypes.TINYINT, defaultValue: 0, allowNull: false },
     });
     Server.prototype.dateFormat = (date) => moment(date).format('YYYY-MM-DD');
 

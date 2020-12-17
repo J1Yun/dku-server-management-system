@@ -1,5 +1,6 @@
 const checkIsSuperAdmin = require('../ssh/postCommandByAdmin');
 const models = require('../../../models');
+const { updateServers } = require('../../../ssh/tools');
 module.exports = async ({ hostId }, { userId }) => {
     const queryHost = `delete from hostservers where id=:hostId`;
     const queryContainer = `delete from servers where hostId=:hostId`;
@@ -23,7 +24,10 @@ module.exports = async ({ hostId }, { userId }) => {
                     },
                 })
                 .spread(
-                    () => true,
+                    () => {
+                        updateServers();
+                        return true;
+                    },
                     (error) => error,
                 );
         } else return new Error('DATABASE ERROR');

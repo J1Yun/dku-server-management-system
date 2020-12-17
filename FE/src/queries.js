@@ -202,6 +202,22 @@ export const GET_HOSTS = gql`
     }
 `;
 
+export const GET_PHYSICALS = gql`
+    query getPhysicals {
+        getPhysicals {
+            id
+            __typename @skip(if: true)
+            name
+            os
+            host
+            cpu
+            ram
+            password
+            location
+        }
+    }
+`;
+
 export const GET_CONTAINERS = gql`
     query getContainers($hostId: ID) {
         getContainers(hostId: $hostId) {
@@ -304,6 +320,21 @@ export const POST_HOST = gql`
     }
 `;
 
+export const POST_PHYSICAL = gql`
+    mutation postPhysical($host: HostInput!) {
+        postPhysical(host: $host) {
+            host
+            port
+            name
+            os
+            password
+            location
+            cpu
+            ram
+        }
+    }
+`;
+
 export const POST_CONTAINER = gql`
     mutation postContainer($container: ContainerInput!, $hostId: ID!) {
         postContainer(container: $container, hostId: $hostId)
@@ -319,6 +350,12 @@ export const POST_RETURN = gql`
 export const POST_CMD_TO_HOST = gql`
     mutation postCmdToHost($command: String!, $hostId: ID!) {
         postCmdToHost(command: $command, hostId: $hostId)
+    }
+`;
+
+export const POST_CMD_TO_PHYSICAL = gql`
+    mutation postCmdToPhysical($command: String!, $containerId: ID!) {
+        postCmdToPhysical(command: $command, containerId: $containerId)
     }
 `;
 
