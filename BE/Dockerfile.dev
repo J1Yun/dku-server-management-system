@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 ENV DOCKERIZE_VERSION v0.2.0
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \  
@@ -6,10 +6,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-
-# install yarn
-RUN npm install -g yarn
-RUN yarn --version
 
 # Install dependencies
 COPY package.json .
