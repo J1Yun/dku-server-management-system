@@ -203,7 +203,7 @@ export default function ApplyReservation() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <SnackMessage message="사용 목적이 명확하지 않거나 적절하지 않다고 판단될 경우 승인을 거부당할 수 있습니다. 신청 내용을 정확히 확인 후 신청해주세요." />
+                            <SnackMessage message="사용 목적이 명확하지 않거나 적절하지 않다고 판단될 경우 승인을 거부당할 수 있습니다. 신청 내용을 정확히 확인 후 신청해주세요. 예약 후 연장을 원하는 경우 반납일에서 최소 3일 전에 같은 서버로 다시 예약하세요." />
                         </Grid>
                     </Grid>
 
