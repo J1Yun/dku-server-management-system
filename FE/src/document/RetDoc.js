@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { Font, Page, Text, View, Document, PDFViewer } from '@react-pdf/renderer';
+import {
+    TableHeader,
+    TableCell,
+    TableBody,
+    Table,
+    DataTableCell,
+} from '@david.kucsai/react-pdf-table';
 import moment from 'moment';
 import { styles } from './docStyle';
 import queryString from 'query-string';
@@ -44,32 +51,131 @@ export default function RetDoc({ location }) {
                 <PDFViewer style={{ width: '100vw', height: '100vh' }}>
                     <Document>
                         <Page size="A4" style={styles.page}>
-                            <Text style={styles.title} fixed>
-                                단국대학교 SW중심사업단
-                            </Text>
-                            <Text style={styles.text} fixed>
-                                서버관리시스템
-                            </Text>
                             <Text style={styles.docTitle}>서버 반납 확인서</Text>
-                            <Text style={styles.centerText}>
-                                본 확인서를 통해 서버 반납이 정상적으로 이루어졌음을 증명합니다.
-                            </Text>
                             <View style={styles.resInfo}>
-                                <Text style={styles.infoTitle}>- 반납 내용 (아래) -</Text>
-                                <Text style={styles.infoText}>반납자명: {ret.userName}</Text>
-                                <Text style={styles.infoText}>
-                                    반납자 소속: {ret.userDepartment}
-                                </Text>
-                                <Text style={styles.infoText}>반납 신청일: {ret.createdAt}</Text>
-                                <Text style={styles.infoText}>시작일: {ret.start}</Text>
-                                <Text style={styles.infoText}>반납일: {ret.end}</Text>
-                                <Text style={styles.infoText}>
-                                    반납된 서버: {ret.serverName} (ID: {ret.serverId})
-                                </Text>
-                                <Text style={styles.infoText}>
-                                    서버 세부사항: OS {ret.os} / CPU {ret.cpu} / RAM {ret.ram}GB
-                                </Text>
-                                <Text style={styles.infoText}>사용 내용: {ret.uses}</Text>
+                                <Table data={[0]}>
+                                    <TableHeader></TableHeader>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '서버명'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() => ret.serverName}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '서버 세부사항'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() =>
+                                                `OS : ${ret.os} / CPU : ${ret.cpu} / RAM ${ret.ram}GB`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '대여기간'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() => `${ret.start} ~ ${ret.end}`}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '대여자 정보'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() =>
+                                                `${ret.userDepartment} ${ret.userName}`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableUsesHeight}
+                                            getContent={() => '사용\n결과\n보고서'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableUses}
+                                            getContent={() => ret.uses}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableNameHeight}
+                                            getContent={() => '반납 검수'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableHeight}
+                                            getContent={() =>
+                                                `위와 같이 『SW중심대학 사업단의 서버 반납과 검수』를 신청합니다.\n\n${ret.createdAt}\n\n위 신청인 : ${ret.userName}  (인)`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '서버 확인'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() => `□ 운영체제 설치 확인   □ ID/PW 확인`}
+                                        />
+                                    </TableBody>
+                                </Table>
+                            </View>
+                            <View style={styles.tableSignPadding}>
+                                <Table data={[0]}>
+                                    <TableHeader>
+                                        <TableCell style={styles.tableSignHeader}>담당자</TableCell>
+                                        <TableCell style={styles.tableSignHeader}>
+                                            담당교수
+                                        </TableCell>
+                                        <TableCell style={styles.tableSignHeader}>센터장</TableCell>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                    </TableBody>
+                                </Table>
                             </View>
                             <View style={styles.copyright} fixed>
                                 <Text style={styles.copyrightText}>

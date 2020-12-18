@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { Font, Page, Text, View, Document, PDFViewer } from '@react-pdf/renderer';
+import {
+    TableHeader,
+    TableCell,
+    TableBody,
+    Table,
+    DataTableCell,
+} from '@david.kucsai/react-pdf-table';
 import moment from 'moment';
 import { styles } from './docStyle';
 import queryString from 'query-string';
@@ -44,32 +51,133 @@ export default function ResDoc({ location }) {
                 <PDFViewer style={{ width: '100vw', height: '100vh' }}>
                     <Document>
                         <Page size="A4" style={styles.page}>
-                            <Text style={styles.title} fixed>
-                                단국대학교 SW중심사업단
-                            </Text>
-                            <Text style={styles.text} fixed>
-                                서버관리시스템
-                            </Text>
                             <Text style={styles.docTitle}>서버 예약 확인서</Text>
-                            <Text style={styles.centerText}>
-                                본 확인서를 통해 서버 예약이 정상적으로 이루어졌음을 증명합니다.
-                            </Text>
                             <View style={styles.resInfo}>
-                                <Text style={styles.infoTitle}>- 예약 내용 (아래) -</Text>
-                                <Text style={styles.infoText}>예약자명: {res.userName}</Text>
-                                <Text style={styles.infoText}>
-                                    예약자 소속: {res.userDepartment}
-                                </Text>
-                                <Text style={styles.infoText}>예약 신청일: {res.createdAt}</Text>
-                                <Text style={styles.infoText}>시작일: {res.start}</Text>
-                                <Text style={styles.infoText}>반납일: {res.end}</Text>
-                                <Text style={styles.infoText}>
-                                    예약된 서버: {res.serverName} (ID: {res.serverId})
-                                </Text>
-                                <Text style={styles.infoText}>
-                                    서버 세부사항: OS {res.os} / CPU {res.cpu} / RAM {res.ram}GB
-                                </Text>
-                                <Text style={styles.infoText}>사용 목적: {res.purpose}</Text>
+                                <Table data={[0]}>
+                                    <TableHeader></TableHeader>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '서버명'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() => res.serverName}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '대여기간'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() => `${res.start} ~ ${res.end}`}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '대여자 정보'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() =>
+                                                `${res.userDepartment} ${res.userName}`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tablePurposeHeight}
+                                            getContent={() => '서버\n활용 용도'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tablePurpose}
+                                            getContent={() => res.purpose}
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableNameHeight}
+                                            getContent={() => '대여자\n의무사항'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableHeight}
+                                            getContent={() =>
+                                                '1. 대여자는 대여받은 후 서버의 환경 셋팅을 확인한다.\n2. 반납 시 1번에서 확인한 환경과 초기 ID/PW로 셋팅하여 반납한다.\n3. 반납 시 서버 활요에 대한 간략한 결과보고서를 제출한다.'
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableNameHeight}
+                                            getContent={() => '신청 및 동의'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableHeight}
+                                            getContent={() =>
+                                                `위와 같이 『SW중심대학 사업단의 서버 대여』를 신청합니다.\n\n${res.createdAt}\n\n위 신청인 : ${res.userName}  (인)`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                                <Table data={[0]}>
+                                    <TableBody>
+                                        <DataTableCell
+                                            weighting={0.2}
+                                            style={styles.tableName}
+                                            getContent={() => '서버 세부사항'}
+                                        />
+                                        <DataTableCell
+                                            style={styles.table}
+                                            getContent={() =>
+                                                `OS : ${res.os} / CPU : ${res.cpu} / RAM ${res.ram}GB`
+                                            }
+                                        />
+                                    </TableBody>
+                                </Table>
+                            </View>
+                            <View style={styles.tableSignPadding}>
+                                <Table data={[0]}>
+                                    <TableHeader>
+                                        <TableCell style={styles.tableSignHeader}>담당자</TableCell>
+                                        <TableCell style={styles.tableSignHeader}>
+                                            담당교수
+                                        </TableCell>
+                                        <TableCell style={styles.tableSignHeader}>센터장</TableCell>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                        <DataTableCell
+                                            style={styles.tableSign}
+                                            getContent={() => `　`}
+                                        />
+                                    </TableBody>
+                                </Table>
                             </View>
                             <View style={styles.copyright} fixed>
                                 <Text style={styles.copyrightText}>

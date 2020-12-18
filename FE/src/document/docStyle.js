@@ -16,8 +16,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Nanum Gothic Bold',
         fontSize: 19,
         textAlign: 'center',
-        marginBottom: 60,
-        marginTop: 70,
+        marginTop: 80,
     },
     text: {
         textAlign: 'justify',
@@ -26,7 +25,7 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
     },
     resInfo: {
-        marginTop: 70,
+        marginTop: 25,
         paddingLeft: 20,
         paddingRight: 20,
     },
@@ -49,5 +48,54 @@ export const styles = StyleSheet.create({
     copyrightText: {
         color: '#333',
         marginBottom: 3,
+    },
+    tableName: {
+        textAlign: 'center',
+        height: 40,
+        backgroundColor: '#C0C0C0',
+    },
+    table: {
+        height: 40,
+        textAlign: 'center',
+    },
+    tableHeight: {
+        height: 120,
+        textAlign: 'center',
+    },
+    tableNameHeight: {
+        height: 120,
+        textAlign: 'center',
+        backgroundColor: '#C0C0C0',
+    },
+    tableSignHeader: {
+        height: 20,
+        fontSize: 11,
+        textAlign: 'center',
+    },
+    tableSign: {
+        height: 40,
+    },
+    tableSignPadding: {
+        paddingTop: 5,
+        paddingLeft: 330,
+        paddingRight: 20,
+    },
+    tablePurposeHeight: {
+        height: 100,
+        backgroundColor: '#C0C0C0',
+        textAlign: 'center',
+    },
+    tablePurpose: {
+        textAlign: 'center',
+        height: 100,
+    },
+    tableUses: {
+        textAlign: 'center',
+        height: 130,
+    },
+    tableUsesHeight: {
+        textAlign: 'center',
+        height: 130,
+        backgroundColor: '#C0C0C0',
     },
 });
