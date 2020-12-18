@@ -74,10 +74,13 @@ export default function ServerStatus() {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">컨테이너 ID</TableCell>
-                            <TableCell align="center">컨테이너 이름</TableCell>
+                            <TableCell align="center" width={100}>
+                                서버 ID
+                            </TableCell>
+                            <TableCell align="center">유형</TableCell>
+                            <TableCell align="center">이름</TableCell>
                             <TableCell align="center">OS</TableCell>
-                            <TableCell align="center">vCPU</TableCell>
+                            <TableCell align="center">CPU</TableCell>
                             <TableCell align="center">RAM</TableCell>
                             <TableCell align="center">위치</TableCell>
                             <TableCell align="center">
@@ -97,6 +100,9 @@ export default function ServerStatus() {
                             <TableRow key={row.id}>
                                 <TableCell align="center" component="th" scope="row">
                                     {row.id}
+                                </TableCell>
+                                <TableCell align="center" component="th" scope="row">
+                                    {row.isPhysical === 0 ? '가상화 서버' : '물리 서버'}
                                 </TableCell>
                                 <TableCell align="center">{row.name}</TableCell>
                                 <TableCell align="center">{row.os}</TableCell>

@@ -19,6 +19,7 @@ module.exports = buildSchema(`
         os: String!
         cpu: Int!
         ram: Int!
+        isPhysical: Int!
     }
 
     type Reservation {
@@ -77,6 +78,7 @@ module.exports = buildSchema(`
         cpu: Int!
         ram: Int!
         location: String!
+        isPhysical: Int!
     }
 
     type Container{

@@ -23,6 +23,7 @@ export const GET_SERVERS_FROM_CLIENT = gql`
             os
             cpu
             ram
+            isPhysical
         }
     }
 `;
@@ -37,6 +38,7 @@ export const GET_SERVERS_FROM_ADMIN = gql`
             cpu
             ram
             location
+            isPhysical
         }
     }
 `;
