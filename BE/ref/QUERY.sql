@@ -42,3 +42,6 @@ insert into servers (name, os, cpu, ram, location, password, host, port, instanc
 
 -- 어제부로 예약 기간이 끝난 내역 ( 연장신청 건 제외 )
 select serverId, userId from reservations r where not EXISTS( select serverId, userId from reservations where serverId=r.serverId and userId=r.userId and start=date(now()) and applyOk!=2) and end=DATE_ADD(date(now()), INTERVAL -1 DAY) and applyOk=1;
+
+-- 예약 정보
+select r.id as reservaionId, u.name as userName, u.userId, start, end, s.name as serverName, os as serverOS, host, port, s.password from users u join reservations r on u.userId = r.userId join servers s on s.id = r.serverId where r.id=:reservationId;
