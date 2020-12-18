@@ -1,4 +1,5 @@
 const models = require('../../../models');
+const { sendMailOfReservationApplyOk } = require('../../../api/mailer');
 module.exports = async ({ id, applyOk }) => {
     return await models.reservation
         .update(
@@ -7,6 +8,9 @@ module.exports = async ({ id, applyOk }) => {
             },
             { where: { id } },
         )
-        .then(() => parseInt(id))
+        .then(() => {
+            if (parseInt(applyOk) === 1) sendMailOfReservationApplyOk(id);
+            return parseInt(id);
+        })
         .catch((err) => err);
 };
