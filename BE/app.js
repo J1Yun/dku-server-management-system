@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const db = require('./models');
+const helmet = require('helmet');
+const hpp = require('hpp');
 
 const Auth = require('./middlewares/auth');
 const schema = require('./graphql/schema');
@@ -25,7 +27,7 @@ class App {
             .authenticate()
             .then(() => {
                 console.log('Connection has been established successfully.');
-                //return db.sequelize.sync();
+                return db.sequelize.sync();
             })
             .then(() => {
                 console.log('DB Sync complete.');
@@ -41,7 +43,9 @@ class App {
     }
 
     setMiddleware() {
-        this.app.use(logger('dev'));
+        this.app.use(helmet());
+        this.app.use(hpp());
+        this.app.use(logger('combined'));
         this.app.use(cookieParser());
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));

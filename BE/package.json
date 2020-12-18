@@ -4,11 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "npx nodemon -e js,html ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "",
-    "server-db-build": "node ./conf/createServerData",
-    "ssh-test": "node ./ssh/tools"
+    "start": "pm2 start ./bin/www.js -i 8",
+    "dev": "npx nodemon -e js,html ./bin/www",
+    "server-db-build": "node ./conf/createServerData"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
@@ -18,6 +16,8 @@
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",
     "graphql-iso-date": "^3.6.1",
+    "helmet": "^4.2.0",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",

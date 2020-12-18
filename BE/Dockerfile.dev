@@ -1,0 +1,27 @@
+FROM node:10
+
+ENV DOCKERIZE_VERSION v0.2.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \  
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN sudo apt update && sudo apt install yarn -y
+RUN yarn --version
+
+# Install dependencies
+COPY package.json .
+RUN yarn install
+
+# Bundle app source
+COPY . .
+
+RUN chmod +x docker-entrypoint.sh  
+ENTRYPOINT ./docker-entrypoint.sh
+
+# Exports
+EXPOSE 80
