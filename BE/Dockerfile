@@ -1,7 +1,8 @@
 # Bind to build_n_run.sh in current directory
 
 FROM node:12
-RUN npm install -g yarn
+RUN apt-get update;
+RUN apt install yarn -y
 RUN npm install -g pm2
 COPY package.json /src/package.json
 RUN  cd /src; yarn install;
