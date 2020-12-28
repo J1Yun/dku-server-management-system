@@ -1,7 +1,9 @@
-# dku-ml-server-management
- 단국대학교 머신러닝 서버 통합 관리시스템
+# dku-server-management-system
+ 단국대학교 머신러닝 서버 통합 관리시스템 (DKU-SMS)
  
  발주/단국대학교 SW중심대학사업단
+
+ [사용법 핸드북](https://www.notion.so/DKU-SMS-Handbook-07303724c9b84c8dbdee8368a631846f)(Notion)
 
 ### 프로젝트 목적
 
@@ -18,15 +20,15 @@
 ### 기술 스택
 
 - 벡엔드
-    - Node.js, Express, SSH2
+    - Node.js, Express, SSH2, PM2, Sequelize
 - 프론트엔드
-    - React, HTML5/CSS5/JS
+    - React, Material UI, HTML5/CSS5/JS
 - 데이터베이스
-    - Redis, MySQL(Sequelize)
+    - Redis, MySQL
 - 서버 인프라
-    - Docker, Rundeck
+    - Docker
 
-### 프로그램 로직 (RAW)
+### 프로그램 로직
 
 1. 교수자가 웹 페이지에서 일정 기간 서버 예약 신청 → 관리자 승인
     - 관리자 승인 후 예약 승인 문서(PDF) 발급

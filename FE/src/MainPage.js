@@ -83,7 +83,7 @@ export default function MainPage({ location }) {
     const onSubmit = (e) => {
         e.preventDefault();
         axios
-            .post('/user/signin', {
+            .post('/api/user/signin', {
                 user,
             })
             .then((response) => {

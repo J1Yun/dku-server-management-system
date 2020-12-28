@@ -1,0 +1,73 @@
+version: "3.1"
+networks:
+  app-tier:
+    driver: bridge
+services:
+  app:
+    networks:
+      - app-tier
+    build:
+      context: ./BE
+      dockerfile: ./Dockerfile-dev
+    container_name: dku-sms-backend
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+      - redis
+    restart: always
+    ports:
+      - "4000:4000"
+    expose:
+      - "4000"
+
+  client:
+    networks:
+      - app-tier
+    build:
+      context: ./FE
+      dockerfile: ./Dockerfile-dev
+    container_name: dku-sms-frontend
+    volumes:
+      - /app/node_modules
+      - ./FE:/app
+    links:
+      - app
+    depends_on:
+      - app
+    restart: always
+    ports:
+      - "80:3000"
+    expose:
+      - "80"
+
+  db:
+    networks:
+      - app-tier
+    env_file: ./.env
+    image: mysql:5.7
+    volumes:
+      - ./conf/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    container_name: dku-sms-database
+    environment:
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+
+  redis:
+    networks:
+      - app-tier
+    env_file: ./.env
+    image: redis:alpine
+    container_name: dku-sms-redis
+    hostname: sms-redis
+    #network_mode: host
+    command: redis-server --requirepass ${REDIS_PASSWORD} --port 6379
+    restart: always
+    ports:
+      - "6379:6379"

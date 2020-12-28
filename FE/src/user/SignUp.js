@@ -76,7 +76,7 @@ export default function SignUp() {
     const onSubmit = (e) => {
         e.preventDefault();
         axios
-            .post('/user/signup', {
+            .post('/api/user/signup', {
                 user,
             })
             .then((result) => {

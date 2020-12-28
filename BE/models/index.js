@@ -14,6 +14,8 @@ const sequelize = new Sequelize(
         dialect: 'mysql',
         timezone: '+09:00', //한국 시간 셋팅
         operatorsAliases: Sequelize.Op,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_general_ci',
         pool: {
             max: 5,
             min: 0,
