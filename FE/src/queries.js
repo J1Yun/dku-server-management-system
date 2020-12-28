@@ -24,6 +24,7 @@ export const GET_SERVERS_FROM_CLIENT = gql`
             cpu
             ram
             isPhysical
+            isUsing
         }
     }
 `;

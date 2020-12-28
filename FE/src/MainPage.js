@@ -126,7 +126,7 @@ export default function MainPage({ location }) {
                         <ComputerIcon />
                     </Avatar>
                     <Typography style={{ fontSize: 25, fontWeight: 600, marginBottom: 20 }}>
-                        단국대학교 서버관리시스템
+                        단국대학교 SW중심대학 서버관리시스템
                     </Typography>
                     <form className={classes.form} onSubmit={onSubmit} noValidate>
                         {query.signup && (
@@ -187,15 +187,10 @@ export default function MainPage({ location }) {
                         >
                             {query.inspire ? '새로운 계정으로 로그인' : '로그인'}
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    비밀번호를 잊으셨나요?
-                                </Link>
-                            </Grid>
+                        <Grid container justify="flex-end">
                             <Grid item>
                                 <Link href="/signup" variant="body2">
-                                    {'계정이 없다면 회원가입하세요!'}
+                                    {'계정을 만들고 서비스를 이용하세요'}
                                 </Link>
                             </Grid>
                         </Grid>

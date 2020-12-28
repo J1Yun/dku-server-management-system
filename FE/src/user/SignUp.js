@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Copyright from '../Copyright';
 import SnackMessage from '../client/components/SnackMessage';
+import PrivacyDialog from './PrivacyDialog';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -53,8 +54,9 @@ const initialUser = {
 
 export default function SignUp() {
     const classes = useStyles();
-
     const [user, setUser] = useState(initialUser);
+    const [open, setOpen] = useState(false);
+    const [privacyChecked, setPrivacyChecked] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
     const [message, setMessage] = useState('');
 
@@ -114,7 +116,7 @@ export default function SignUp() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    회원가입
+                    계정 만들기
                 </Typography>
                 <form className={classes.form} onSubmit={onSubmit} noValidate>
                     <Grid container spacing={2}>
@@ -172,7 +174,7 @@ export default function SignUp() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="비밀번호"
+                                label="비밀번호 (8자 이상)"
                                 type="password"
                                 onChange={handleChange}
                                 value={user.password}
@@ -193,7 +195,33 @@ export default function SignUp() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <SnackMessage message="이메일로 예약 정보가 발송되니 주소를 다시 한번 확인하시기 바랍니다. 모든 정보를 정확히 입력해야 회원가입 신청 버튼이 활성화됩니다." />
+                            {privacyChecked === false ? (
+                                <Button
+                                    fullWidth
+                                    color="secondary"
+                                    variant="outlined"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    개인정보처리방침을 읽고 동의하세요
+                                </Button>
+                            ) : (
+                                <Button
+                                    fullWidth
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    개인정보처리방침에 동의하였습니다
+                                </Button>
+                            )}
+                            <PrivacyDialog
+                                open={open}
+                                setOpen={setOpen}
+                                setPrivacyChecked={setPrivacyChecked}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <SnackMessage message="이메일로 예약 정보가 발송되니 주소를 다시 한번 확인하세요. 모든 정보를 정확히 입력 후 개인정보처리방침에 동의해야 회원가입 신청 버튼이 활성화됩니다." />
                         </Grid>
                     </Grid>
                     <Button
@@ -208,7 +236,9 @@ export default function SignUp() {
                             user.password.length > 0 &&
                             user.tel.length > 0 &&
                             user.department.length > 0 &&
-                            user.password === user.passwordAgain
+                            user.password.length >= 8 &&
+                            user.password === user.passwordAgain &&
+                            privacyChecked === true
                                 ? false
                                 : true
                         }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CircularProgress, Divider } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useQuery } from 'react-apollo';
@@ -39,9 +39,7 @@ export default function ServerCalendar() {
 
     return (
         <>
-            <PageTitle title="캘린더" />
-            <Divider />
-            <p>서버 예약 현황을 캘린더로 확인하세요.</p>
+            <PageTitle title="서버 예약현황 캘린더" />
             <div style={{ height: 700, marginTop: 10 }}>
                 <Calendar
                     localizer={localizer}
