@@ -45,3 +45,7 @@ select serverId, userId from reservations r where not EXISTS( select serverId, u
 
 -- 예약 정보
 select r.id as reservaionId, u.name as userName, u.userId, start, end, s.name as serverName, os as serverOS, host, port, s.password from users u join reservations r on u.userId = r.userId join servers s on s.id = r.serverId where r.id=:reservationId;
+
+-- 서버 사용 정보
+select s.id as id, name, os, cpu, ram, isPhysical, IF ( EXISTS (select id from reservations r where applyOk=1 and serverId=s.id and (start>=date(now()) or end<=date(now())) and NOT EXISTS (select reservationId from returns where r.id=reservationId)) , 1, 0) as isUsing from servers s;
+
