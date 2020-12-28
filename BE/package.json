@@ -5,8 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start": "pm2 start ./bin/www.js -i 8",
-    "dev": "npx nodemon -e js,html ./bin/www",
-    "server-db-build": "node ./conf/createServerData"
+    "sync-db": "node ./bin/syncDB",
+    "server-db-build": "node ./conf/createServerData",
+    "init-server": "yarn sync-db; yarn server-db-build; yarn start",
+    "kill": "killall node",
+    "dev": "npx nodemon -e js,html ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
