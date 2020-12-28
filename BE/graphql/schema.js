@@ -20,6 +20,7 @@ module.exports = buildSchema(`
         cpu: Int!
         ram: Int!
         isPhysical: Int!
+        isUsing: Int!
     }
 
     type Reservation {
