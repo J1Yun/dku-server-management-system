@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useQuery } from 'react-apollo';
 import SnackMessage from './components/SnackMessage';
 import PageTitle from '../components/PageTitle';

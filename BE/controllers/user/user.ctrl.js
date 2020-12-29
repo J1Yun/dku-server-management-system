@@ -29,14 +29,21 @@ const makePasswordHashed = (userId, plainPassword) =>
                     userId,
                 },
             })
-            .then((result) => result.salt);
+            .then((result) => (result ? result.salt : reject(new Error('invalid'))));
         crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
             if (err) reject(err);
             resolve(key.toString('base64'));
         });
     });
 
+const createSixRandomPassword = () => {
+    let result = Math.floor(Math.random() * 1000000) + 100000;
+    return result > 1000000 ? result - 100000 : result;
+};
+
 module.exports = {
+    createHashedPassword,
+    makePasswordHashed,
     post_signup: async (req, res) => {
         const { password, salt } = await createHashedPassword(req.body.user.password);
         return await models.user
@@ -49,9 +56,22 @@ module.exports = {
             .catch((error) => res.json({ error }));
     },
 
+    post_reset_password: async (req, res) => {
+        const { name, userId } = req.body.user;
+        const newPassword = createSixRandomPassword();
+        const { password, salt } = await createHashedPassword(newPassword);
+        return await models.user
+            .update({ password, salt }, { where: { userId, name } })
+            .then(() => res.json({ userId: result.dataValues.userId }))
+            .catch((error) => res.status(409).json({ error }));
+    },
+
     post_signin: async (req, res) => {
         const { userId, password: plainPassword } = req.body.user;
         const password = await makePasswordHashed(userId, plainPassword);
+        if (password instanceof Error) {
+            res.status(409).json({ error: { name: 'invalid' } });
+        }
         const secret = req.app.get('jwt-secret');
 
         return await models.user
