@@ -14,6 +14,7 @@ module.exports = {
     getMonthlyReservation: require('./ctrl/client/getMonthlyReservation'),
 
     // POST
+    updateUserPassword: require('./ctrl/client/updateUserPassword'),
     postReservation: require('./ctrl/client/postReservation'),
     postReturn: require('./ctrl/client/postReturn'),
 

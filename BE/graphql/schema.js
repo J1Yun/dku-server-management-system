@@ -241,6 +241,7 @@ module.exports = buildSchema(`
     }
 
     type Mutation {
+        updateUserPassword(currentPassword: String!, newPassword: String!): Boolean
         postReservation(reservation: ReservationInput!): Reservation
         postReturn(myReturn: ReturnInput!): ID
         postHost(host: HostInput!): Host

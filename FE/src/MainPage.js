@@ -132,6 +132,12 @@ export default function MainPage({ location }) {
                         {query.signup && (
                             <SnackMessage message="회원가입이 완료되었습니다. 로그인 후 서비스를 이용하세요." />
                         )}
+                        {query.resetpw && (
+                            <SnackMessage message="새로운 비밀번호를 메일로 전송했습니다." />
+                        )}
+                        {query.updatepw && (
+                            <SnackMessage message="비밀번호를 변경했습니다. 새로운 비밀번호로 다시 로그인하세요." />
+                        )}
                         {query.expired && (
                             <SnackMessage message="로그인 정보가 유실되었습니다. 다시 로그인하세요." />
                         )}
@@ -187,7 +193,12 @@ export default function MainPage({ location }) {
                         >
                             {query.inspire ? '새로운 계정으로 로그인' : '로그인'}
                         </Button>
-                        <Grid container justify="flex-end">
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="/findpw" variant="body2">
+                                    {'비밀번호를 잊으셨나요?'}
+                                </Link>
+                            </Grid>
                             <Grid item>
                                 <Link href="/signup" variant="body2">
                                     {'계정을 만들고 서비스를 이용하세요'}

@@ -12,6 +12,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { menus } from './menus';
 import axios from 'axios';
+import UpdatePassDialog from './user/UpdatePassDialog';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -118,17 +119,14 @@ function UserInfo({ user }) {
 export default function Header({ user }) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const [updatePassOpen, setUpdatePassOpen] = useState(false);
     const [logoutOpen, setLogoutOpen] = useState(false);
 
     const triggerLogout = () => {
         axios
-            .post('/user/logout')
-            .then((result) => {
-                window.location = '/?logout=client';
-            })
-            .catch((err) => {
-                window.location = '/';
-            });
+            .post('/api/user/logout')
+            .then(() => (window.location = '/?logout=client'))
+            .catch((error) => (window.location = '/'));
     };
 
     return (
@@ -136,6 +134,7 @@ export default function Header({ user }) {
             <AppBar position="static" className={classes.header}>
                 <Toolbar>
                     <React.Fragment>
+                        <UpdatePassDialog open={updatePassOpen} setOpen={setUpdatePassOpen} />
                         <Dialog open={logoutOpen} TransitionComponent={Transition} keepMounted>
                             <DialogTitle>로그아웃 할까요?</DialogTitle>
                             <Divider />
@@ -148,14 +147,22 @@ export default function Header({ user }) {
                                 </Button>
                             </DialogActions>
                         </Dialog>
-
                         <Dialog open={open} TransitionComponent={Transition} keepMounted>
                             <DialogTitle>{user.name} 님</DialogTitle>
                             <Divider />
-                            <DialogContent>
+                            <DialogContent style={{ width: 350 }}>
                                 <UserInfo user={user} />
                             </DialogContent>
                             <DialogActions>
+                                <Button
+                                    onClick={() => {
+                                        setOpen(false);
+                                        setUpdatePassOpen(true);
+                                    }}
+                                    color="primary"
+                                >
+                                    비밀번호 변경
+                                </Button>
                                 <Button
                                     onClick={() => {
                                         setOpen(false);

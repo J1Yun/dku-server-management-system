@@ -1,6 +1,7 @@
 const models = require('../../models');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { sendMailOfResetPassword } = require('../../api/mailer');
 
 const createSalt = () =>
     new Promise((resolve, reject) => {
@@ -29,11 +30,14 @@ const makePasswordHashed = (userId, plainPassword) =>
                     userId,
                 },
             })
-            .then((result) => (result ? result.salt : reject(new Error('invalid'))));
-        crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
-            if (err) reject(err);
-            resolve(key.toString('base64'));
-        });
+            .then((result) => (result ? result.salt : reject(new Error('invalid'))))
+            .catch((error) => reject(error));
+        if (salt) {
+            crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+                if (err) reject(err);
+                resolve(key.toString('base64'));
+            });
+        }
     });
 
 const createSixRandomPassword = () => {
@@ -58,19 +62,26 @@ module.exports = {
 
     post_reset_password: async (req, res) => {
         const { name, userId } = req.body.user;
-        const newPassword = createSixRandomPassword();
+        const newPassword = createSixRandomPassword().toString();
         const { password, salt } = await createHashedPassword(newPassword);
         return await models.user
             .update({ password, salt }, { where: { userId, name } })
-            .then(() => res.json({ userId: result.dataValues.userId }))
+            .then((result) => {
+                if (result[0] === 0) {
+                    return res.status(409).json({ error: { name: 'invalid' } });
+                } else {
+                    sendMailOfResetPassword(name, userId, newPassword);
+                    return res.json({ userId });
+                }
+            })
             .catch((error) => res.status(409).json({ error }));
     },
 
     post_signin: async (req, res) => {
         const { userId, password: plainPassword } = req.body.user;
-        const password = await makePasswordHashed(userId, plainPassword);
-        if (password instanceof Error) {
-            res.status(409).json({ error: { name: 'invalid' } });
+        const password = await makePasswordHashed(userId, plainPassword).catch(() => false);
+        if (!password) {
+            return res.status(409).json({ error: { name: 'invalid' } });
         }
         const secret = req.app.get('jwt-secret');
 

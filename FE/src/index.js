@@ -8,6 +8,7 @@ import { AplClient as client } from './conf';
 
 import App from './App';
 import MainPage from './MainPage';
+import FindPass from './user/FindPass';
 import SignUp from './user/SignUp';
 
 import AdminDashboard from './admin/Dashboard';
@@ -48,6 +49,7 @@ ReactDOM.render(
         <ApolloProvider client={client}>
             <Router history={browserHistory}>
                 <Route path="/" component={MainPage} />
+                <Route path="/findpw" component={FindPass} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/admin" component={App}>
                     <IndexRoute component={AdminDashboard} />

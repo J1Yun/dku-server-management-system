@@ -386,6 +386,12 @@ export const DELETE_HOST = gql`
     }
 `;
 
+export const UPDATE_USER_PASSWORD = gql`
+    mutation updateUserPassword($currentPassword: String!, $newPassword: String!) {
+        updateUserPassword(currentPassword: $currentPassword, newPassword: $newPassword)
+    }
+`;
+
 export const UPDATE_RESERVATION_APPLY = gql`
     mutation updateReservationApply($id: ID!, $applyOk: Int!) {
         updateReservationApply(id: $id, applyOk: $applyOk)

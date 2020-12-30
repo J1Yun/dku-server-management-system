@@ -1,9 +1,9 @@
 const models = require('../../../models');
-const { createHashedPassword } = require('../../../controllers/user/user.ctrl');
+const { createHashedPassword, makePasswordHashed } = require('../../../controllers/user/user.ctrl');
 module.exports = async ({ currentPassword, newPassword }, { userId }) => {
     const currentHashedPassword = await makePasswordHashed(userId, currentPassword);
     if (currentHashedPassword instanceof Error) {
-        return new Error('invalid');
+        return false;
     }
     const isValidUser = await models.user
         .findOne({
@@ -16,11 +16,11 @@ module.exports = async ({ currentPassword, newPassword }, { userId }) => {
 
     if (isValidUser) {
         const { password, salt } = await createHashedPassword(newPassword);
-        await models.user
+        return await models.user
             .update({ password, salt }, { where: { userId } })
             .then(() => true)
-            .catch((error) => error);
+            .catch(() => false);
     } else {
-        return new Error('invalid');
+        return false;
     }
 };
