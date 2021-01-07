@@ -62,6 +62,19 @@ module.exports = {
 
     post_reset_password: async (req, res) => {
         const { name, userId } = req.body.user;
+
+        const isValidUser = await models.user
+            .findOne({
+                attributes: ['id', 'userId'],
+                where: { userId, name },
+                raw: true,
+            })
+            .then((user) => (user ? true : false))
+            .catch(() => false);
+        if (!isValidUser) {
+            return res.status(409).json({ error: { name: 'invalid' } });
+        }
+
         const newPassword = createSixRandomPassword().toString();
         const { password, salt } = await createHashedPassword(newPassword);
         return await models.user
