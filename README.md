@@ -20,9 +20,9 @@
 ### 기술 스택
 
 - 벡엔드
-    - Node.js, Express, SSH2, PM2, Sequelize
+    - Node.js, Express, GraphQL, SSH2, PM2, Sequelize
 - 프론트엔드
-    - React, Material UI, HTML5/CSS5/JS
+    - React, Apollo, Material UI, HTML5/CSS5/JS
 - 데이터베이스
     - Redis, MySQL
 - 서버 인프라
