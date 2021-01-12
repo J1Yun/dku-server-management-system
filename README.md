@@ -1,7 +1,8 @@
 # dku-server-management-system
  단국대학교 머신러닝 서버 통합 관리시스템 (DKU-SMS)
  
- 발주/단국대학교 SW중심대학사업단
+ - 발주: 단국대학교 SW중심대학사업단
+ - 개발기간: 2020.11.06 - 2020.12.30
 
  [사용법 핸드북](https://www.notion.so/DKU-SMS-Handbook-07303724c9b84c8dbdee8368a631846f)(Notion)
 
